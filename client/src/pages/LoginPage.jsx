@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, ShieldCheck, Sparkles, AlertCircle, KeyRound, CheckCircle2, X, Lock, Mail, Eye, EyeOff, CalendarCheck, Users, Zap } from 'lucide-react';
 import { api } from '../lib/api';
+import { getCurrentGPSLocation } from '../lib/geo';
 import { supabase, updateSupabasePassword } from '../lib/supabase';
 
 export default function LoginPage({ onLogin, onNavigatePublic }) {
@@ -9,7 +10,9 @@ export default function LoginPage({ onLogin, onNavigatePublic }) {
   const [showPassword, setShowPassword] = useState(false);
   const [capsLock, setCapsLock] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(() => localStorage.getItem('ewf_logout_reason') || '');
+  const [locationChallenge,setLocationChallenge] = useState(null);
+  useEffect(()=>{localStorage.removeItem('ewf_logout_reason');},[]);
   const [successMsg, setSuccessMsg] = useState('');
 
   // Password Recovery State
@@ -61,7 +64,13 @@ export default function LoginPage({ onLogin, onNavigatePublic }) {
     setError('');
     setSuccessMsg('');
     try {
-      const res = await api.post('/auth/login', { identifier: identifier.trim(), password }, { requireOnline: true });
+      let res = locationChallenge ? {location_required:true,challenge:locationChallenge} : await api.post('/auth/login', { identifier: identifier.trim(), password }, { requireOnline: true });
+      if(res.location_required) {
+        setLocationChallenge(res.challenge);
+        const gps=await getCurrentGPSLocation();
+        res=await api.post('/auth/location-login',{challenge:res.challenge,...gps},{requireOnline:true});
+      }
+      if(res.auth_mode==='workplace_session'&&supabase) await supabase.auth.signOut({scope:'local'});
       const userData = res.user;
       let token = res.token;
       if (!token || !userData?.id) throw new Error('Sign-in did not return a valid staff profile. Please try again.');
@@ -74,6 +83,7 @@ export default function LoginPage({ onLogin, onNavigatePublic }) {
       localStorage.setItem('ewf_user', JSON.stringify(userData));
       onLogin?.(userData);
     } catch (err) {
+      if(err.code==='CHALLENGE_EXPIRED')setLocationChallenge(null);
       setError(err.message || 'Invalid login credentials. Please verify your email and password.');
     } finally {
       setLoading(false);
@@ -234,6 +244,7 @@ export default function LoginPage({ onLogin, onNavigatePublic }) {
             </div>
           )}
 
+          {locationChallenge && <p className="text-sm text-orange-200 leading-relaxed">Credentials verified. Enable precise location and return inside your assigned workstation to finish signing in.</p>}
           {capsLock && <p role="status" className="text-sm text-amber-300">Caps Lock is on.</p>}
           <form onSubmit={handleSignIn} className="space-y-5" aria-label="Staff sign in">
             <div>
@@ -249,7 +260,7 @@ export default function LoginPage({ onLogin, onNavigatePublic }) {
                   className="form-input bg-zinc-900 border-zinc-800 text-white text-base py-3.5 pl-10 pr-12"
                   placeholder="name@company.com, 080… or EMP-003"
                   value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
+                  onChange={(e) => {setIdentifier(e.target.value);setLocationChallenge(null);}}
                 />
                 <Mail size={15} className="absolute left-3 top-4 text-zinc-500" />
               </div>
@@ -282,7 +293,7 @@ export default function LoginPage({ onLogin, onNavigatePublic }) {
                   className="form-input bg-zinc-900 border-zinc-800 text-white text-xs py-2.5 pl-9"
                   placeholder="••••••••••••"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {setPassword(e.target.value);setLocationChallenge(null);}}
                 />
                 <button type="button" aria-label={showPassword ? "Hide password" : "Show password"} onClick={() => setShowPassword(v => !v)} className="absolute right-2 top-1 p-3 text-zinc-400 hover:text-white">{showPassword ? <EyeOff size={17} /> : <Eye size={17} />}</button>
                 <Lock size={15} className="absolute left-3 top-3 text-zinc-500" />
@@ -294,7 +305,7 @@ export default function LoginPage({ onLogin, onNavigatePublic }) {
               disabled={loading}
               className="btn-primary w-full py-3.5 text-sm font-bold shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2"
             >
-              <span>{loading ? 'Authenticating…' : 'Let’s get to work'}</span>
+              <span>{loading ? 'Verifying sign-in and workplace…' : locationChallenge ? 'Verify workplace & sign in' : 'Let’s get to work'}</span>
               <ArrowRight size={15} />
             </button>
           </form>

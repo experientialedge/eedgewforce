@@ -4,6 +4,7 @@
 // ==============================================================================
 
 import { db } from '../config/database.js';
+import { workforceNoticeService } from './workforceNoticeService.js';
 import { activityService } from './activityService.js';
 import { collaborationService } from './collaborationService.js';
 
@@ -28,6 +29,7 @@ export const notificationService = {
   async getNotifications(employeeId, user = null) {
     let list = employeeId ? await db.find('notifications', { employee_id: Number(employeeId) }, { order: { column: 'created_at', ascending: false } }) : [];
     if (user) {
+      list = [...await workforceNoticeService.list(user),...list];
       list = list.filter(n => !n.company_id || Number(n.company_id) === Number(user.company_id));
       await collaborationService.processDue(user);
       const activityNotices = await activityService.notices(user);
@@ -46,6 +48,7 @@ export const notificationService = {
    * Marks a notification or all notifications as read.
    */
   async markRead(notificationId, employeeId, user = null) {
+    if (/^(movement|brief):/.test(String(notificationId))) {if(!user)throw new Error('Authentication required.');return workforceNoticeService.markRead(user,notificationId);}
     if (String(notificationId).startsWith('activity:')) {
       if (!user) throw new Error('Authentication required.');
       return activityService.markRead(user, String(notificationId).slice(9));
@@ -60,6 +63,7 @@ export const notificationService = {
         await db.update('notifications', n.id, { read: true });
       }
       if (user) {
+        for (const notice of await workforceNoticeService.list(user)) if(!notice.read)await workforceNoticeService.markRead(user,notice.id);
         for (const notice of await activityService.notices(user)) if (!notice.read_at) await activityService.markRead(user, notice.id);
         const notices = await db.find('collaboration_notices', { user_id: Number(user.id), company_id: Number(user.company_id) });
         for (const notice of notices.filter(n=>!n.read_at)) await collaborationService.markRead(user, notice.id);

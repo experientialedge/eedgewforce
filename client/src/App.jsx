@@ -5,27 +5,34 @@ import FirstLoginPasswordModal from './components/employee/FirstLoginPasswordMod
 import GlobalAlertBanner from './components/layout/GlobalAlertBanner';
 
 // Role & Feature Dashboards
-import CommandCenterDashboard from './dashboards/CommandCenterDashboard';
-import CustomerDirectoryDashboard from './dashboards/CustomerDirectoryDashboard';
-import InventoryDashboard from './dashboards/InventoryDashboard';
-import DeliveryDashboard from './dashboards/DeliveryDashboard';
-import AlertCenterDashboard from './dashboards/AlertCenterDashboard';
-import ReportsCenterDashboard from './dashboards/ReportsCenterDashboard';
-import SupervisorDashboard from './dashboards/SupervisorDashboard';
-import SalesDashboard from './dashboards/SalesDashboard';
-import FieldDashboard from './dashboards/FieldDashboard';
-import AccountingDashboard from './dashboards/AccountingDashboard';
-import ExecutiveDashboard from './dashboards/ExecutiveDashboard';
-import ITAdminDashboard from './dashboards/ITAdminDashboard';
-import HRDashboard from './dashboards/HRDashboard';
-import EmployeeDashboard from './dashboards/EmployeeDashboard';
-import ProjectsDashboard from './dashboards/ProjectsDashboard';
+const CommandCenterDashboard = React.lazy(() => import('./dashboards/CommandCenterDashboard'));
+const CustomerDirectoryDashboard = React.lazy(() => import('./dashboards/CustomerDirectoryDashboard'));
+const InventoryDashboard = React.lazy(() => import('./dashboards/InventoryDashboard'));
+const DeliveryDashboard = React.lazy(() => import('./dashboards/DeliveryDashboard'));
+const AlertCenterDashboard = React.lazy(() => import('./dashboards/AlertCenterDashboard'));
+const ReportsCenterDashboard = React.lazy(() => import('./dashboards/ReportsCenterDashboard'));
+const SupervisorDashboard = React.lazy(() => import('./dashboards/SupervisorDashboard'));
+const SalesDashboard = React.lazy(() => import('./dashboards/SalesDashboard'));
+const FieldDashboard = React.lazy(() => import('./dashboards/FieldDashboard'));
+const AccountingDashboard = React.lazy(() => import('./dashboards/AccountingDashboard'));
+const ExecutiveDashboard = React.lazy(() => import('./dashboards/ExecutiveDashboard'));
+const ITAdminDashboard = React.lazy(() => import('./dashboards/ITAdminDashboard'));
+const HRDashboard = React.lazy(() => import('./dashboards/HRDashboard'));
+const EmployeeDashboard = React.lazy(() => import('./dashboards/EmployeeDashboard'));
+const ProjectsDashboard = React.lazy(() => import('./dashboards/ProjectsDashboard'));
+const NexusDashboard = React.lazy(() => import('./dashboards/NexusDashboard'));
 import EmployeeProfileView from './components/employee/EmployeeProfileView';
 import AgentSOSView from './components/field/AgentSOSView';
 
 import { api } from './lib/api';
 import { syncSessionEvent } from './lib/sessionState';
 import { supabase, getSupabaseSession, signOutSupabase } from './lib/supabase';
+
+class WorkspaceBoundary extends React.Component {
+  state={failed:false};
+  static getDerivedStateFromError(){return {failed:true};}
+  render(){return this.state.failed?<div role="alert" className="surface-card rounded-2xl p-6"><p className="font-semibold">This workspace could not open.</p><p className="text-sm text-zinc-500 mt-2">Check your connection and reload to try again.</p><button className="btn-primary mt-4" onClick={()=>window.location.reload()}>Reload workspace</button></div>:this.props.children;}
+}
 
 export default function App() {
   const [user, setUser] = useState(() => {
@@ -190,6 +197,7 @@ export default function App() {
   };
 
   const handleLogout = async () => {
+    try { await api.post('/auth/logout',{}); } catch {}
     await signOutSupabase();
     setUser(null);
   };
@@ -213,6 +221,7 @@ export default function App() {
   // Render Role & Feature Dashboards with Strict Least-Privilege Routing Guards
   const renderDashboard = () => {
     if (currentTab === 'projects') return <ProjectsDashboard user={user} />;
+    if (currentTab === 'nexus') return <NexusDashboard user={user} onSelectTab={handleSelectTab} />;
     const role = user?.role_code;
     const isAgent = ['FIELD_AGENT', 'SALES_AGENT', 'BRAND_AMBASSADOR', 'PROMOTER'].includes(role);
 
@@ -270,9 +279,9 @@ export default function App() {
       case 'announcements':
       case 'birthdays':
       case 'locations':
-        return <HRDashboard user={user} initialTab={currentTab === 'staff' ? 'people' : currentTab === 'org' ? 'organization' : currentTab} />;
+        return <HRDashboard user={user} onSelectTab={handleSelectTab} initialTab={currentTab === 'staff' ? 'people' : currentTab === 'org' ? 'organization' : currentTab} />;
       case 'hr_schedules':
-        return <HRDashboard user={user} initialTab="schedules" />;
+        return <HRDashboard user={user} onSelectTab={handleSelectTab} initialTab="schedules" />;
       case 'schedule':
       case 'schedules':
         return <EmployeeDashboard user={user} initialTab="schedule" />;
@@ -282,7 +291,7 @@ export default function App() {
         return <EmployeeProfileView user={user} />;
       case 'safety':
       case 'sos':
-        return <HRDashboard user={user} initialTab="safety" />;
+        return <HRDashboard user={user} onSelectTab={handleSelectTab} initialTab="safety" />;
       default:
         return <EmployeeDashboard user={user} initialTab={currentTab} />;
     }
@@ -299,7 +308,7 @@ export default function App() {
         onSelectTab={handleSelectTab}
       >
         <GlobalAlertBanner />
-        {renderDashboard()}
+        <WorkspaceBoundary key={currentTab}><React.Suspense fallback={<div role="status" className="surface-card rounded-2xl p-8 text-sm text-zinc-500">Opening your workspace…</div>}>{renderDashboard()}</React.Suspense></WorkspaceBoundary>
       </Shell>
 
       {/* Force Password Change on First-Time Access */}

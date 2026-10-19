@@ -67,3 +67,12 @@ Activity addition validation: 162 automated tests passed, the production client 
 Session refresh now updates the API token; backend-authenticated sessions are persisted for email, phone and staff-ID login. Authentication requests require a live connection. Sign-in no longer submits the password to two separate authentication flows. Password changes verify the current linked Supabase password rather than a potentially outdated local hash. New workstations require a deliberate GPS/map pin instead of pre-filled office coordinates. No staff, inventory, accounts or historical records are cleared.
 
 The activity scheduler still requires owner/admin verification in Supabase. These workstation and sign-in changes introduce no new database migration beyond the previously installed activity schema.
+
+
+## Market access, NEXUS and account security — 2026-10-19
+
+200 automated tests passed, covering exact Lagos attendance boundaries, late-arrival preservation, HTTP location challenge/re-entry, full server-side departure revocation, HR/admin notice isolation, offline-account isolation, NEXUS calculations/evidence, private-provider output validation, gateway authentication and account password permissions. Production web builds passed with dashboards loaded on demand.
+
+PostgreSQL verification exercised the preserving numeric-ID upgrade, overflow rollback, retained accounts/auth identities/policies, departure/report RPCs, NEXUS snapshots, generation leases and private RPC permissions. On the new Eedgewforce project (kfvtgqigidgazmbfsfuc), the preserving upgrade retained 9 app users, 9 staff and 5 auth identities. Six separate requested role accounts were subsequently added and their provider sign-ins verified. Existing account credentials were not overwritten.
+
+The activity monitor, project reminders and daily executive-report cron jobs are enabled. Active schedules are verified; execution status must be checked separately. The new production environment is configured for this Supabase project. NEXUS private model transport is tested with synthetic responses; no model host has been provisioned. Factual analytics are available independently. See NEXUS_SETUP.md for the requested private-server guide.

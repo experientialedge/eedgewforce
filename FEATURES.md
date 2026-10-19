@@ -27,7 +27,7 @@ The existing modules remain available:
 
 - HR staff directory, CSV/Excel import with preview and downloadable first-login credentials, profile editing and account status management.
 - Office/work location creation, primary replacement, secondary offices, temporary assignments and assignment history.
-- GPS clock-in/out using authoritative Lagos time: morning 06:00–12:00, midday 12:00–16:30 and clock-out 16:30–midnight. A real employee profile and permitted workplace are required. Supervisors can review exceptions.
+- GPS clock-in/out using authoritative Lagos time: morning 08:00–09:00, late morning 09:00–10:00, midday 12:00–13:00 and clock-out 17:00–18:00. A real employee profile and permitted workplace are required. Supervisors can review exceptions.
 - Daily schedule planning, supervisor review and HR roster oversight.
 - Existing individual tasks, acknowledgement, completion and delivery stages.
 - Leave requests and approvals, staff profiles, birthdays, announcements, objectives and key results.
@@ -56,3 +56,10 @@ Passwords are never committed to source. A separate administrator is explicitly 
 ## Workstation readiness and sign-in
 
 Staff can sign in using their work email, registered phone number or exact staff ID. Browser sessions keep refreshed tokens synchronized with API calls. HR can assign a workstation while a staff member remains signed in; attendance refreshes every 15 seconds and when reconnecting or returning to the app. Check my workstation verifies GPS proximity without creating attendance. Clocking rechecks the current assignment, permitted Lagos window and GPS before saving; duplicate requests cannot record twice. New workstation forms require the actual pin, GPS capture or entered coordinates. A workstation's display label alone does not grant attendance permission.
+
+
+## Market security and executive activity brief
+
+Migration 013 adds 300-metre market boundaries, location-gated staff sign-in, confirmed-departure reports, HR/admin dashboard notices, server-side session revocation and assigned-location re-entry. Existing records and features remain. These features require the migration and production activation flags; they are not active merely because the code is deployed.
+
+HR and administrator dashboards include factual attendance, lateness, movement, app activity and shared-task counts, plus evidence-linked executive summaries when an OpenAI provider key and model are configured. Daily factual reports and notices require the Supabase reporting scheduler. See PRODUCTION_SETUP.md for activation and browser-GPS limitations.

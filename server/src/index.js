@@ -33,6 +33,9 @@ import locationRoutes from './routes/locationRoutes.js';
 import scheduleRoutes from './routes/scheduleRoutes.js';
 import collaborationRoutes from './routes/collaborationRoutes.js';
 import activityRoutes from './routes/activityRoutes.js';
+import workplaceAccessRoutes from './routes/workplaceAccessRoutes.js';
+import executiveReportRoutes from './routes/executiveReportRoutes.js';
+import nexusRoutes from './routes/nexusRoutes.js';
 import { requireAuth } from './middleware/auth.js';
 import { employeeService } from './services/employeeService.js';
 import { reminderWorker } from './services/reminderWorker.js';
@@ -122,6 +125,9 @@ app.get('/api/health/ready', async (req, res) => {
     if (db.isCloud) {
       const result = await db.rpc('application_release_readiness', {});
       if (result?.release !== '2026-10-15' || !result?.integer_ids || !result?.collaboration || !result?.activity_monitoring) throw new Error('Database upgrade is required.');
+      if (process.env.WORKFORCE_GEOFENCE_ENFORCED === 'true' && !result.workplace_access) throw new Error('Workplace access migration is required.');
+      if (process.env.WORKFORCE_REPORTS_ENABLED === 'true' && !result.executive_reports) throw new Error('Executive report migration is required.');
+      if (process.env.NEXUS_ENABLED === 'true' && !result.nexus) throw new Error('NEXUS migration is required.');
     } else await db.find('users', {}, { limit: 1 });
     res.json({ ready: true, release: '2026-10-15' });
   } catch (err) {
@@ -132,6 +138,7 @@ app.get('/api/health/ready', async (req, res) => {
 
 // 5. Mount API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/nexus', nexusRoutes);
 app.use('/api/sales', salesRoutes);
 app.use('/api/field', fieldRoutes);
 app.use('/api/employee', employeeRoutes);
@@ -152,6 +159,8 @@ app.use('/api/work-locations', locationRoutes);
 app.use('/api/schedules', scheduleRoutes);
 app.use('/api/collaboration', collaborationRoutes);
 app.use('/api/activity', activityRoutes);
+app.use('/api/workplace-access', workplaceAccessRoutes);
+app.use('/api/executive-reports', executiveReportRoutes);
 
 
 // Compatibility route for idle telemetry

@@ -1,3 +1,4 @@
+import ExecutiveActivityBrief from '../components/hr/ExecutiveActivityBrief';
 import React, { useState, useEffect } from 'react';
 import {
   TrendingUp,
@@ -47,6 +48,7 @@ export default function ExecutiveDashboard({ user, onNavigate }) {
 
   return (
     <div className="space-y-6">
+      <ExecutiveActivityBrief onOpenNexus={()=>onNavigate?.('nexus')} />
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

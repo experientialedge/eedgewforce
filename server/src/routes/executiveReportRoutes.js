@@ -1,0 +1,10 @@
+import express from 'express';
+import rateLimit from 'express-rate-limit';
+import { requireAuth } from '../middleware/auth.js';
+import { executiveReportService as service } from '../services/executiveReportService.js';
+const router=express.Router();router.use(requireAuth);
+router.use(rateLimit({windowMs:60000,max:20,keyGenerator:req=>`${req.user.company_id}:${req.user.id}`,standardHeaders:true,legacyHeaders:false}));
+const handle=fn=>async(req,res,next)=>{try{res.json({data:await fn(req)});}catch(error){next(error);}};
+router.get('/today',handle(req=>service.today(req.user)));
+router.post('/generate',handle(req=>service.generate(req.user)));
+export default router;

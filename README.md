@@ -138,3 +138,6 @@ The database layer is located in `supabase/migrations/`:
 ## Shared projects and task scheduling
 
 Open **Projects & team chat** for private team projects, channels, message threads, mentions, shared task boards and daily/weekly schedules. Project reminders run every minute in Supabase. Existing operational modules remain available. See [FEATURES.md](FEATURES.md) for the complete guide.
+
+
+NEXUS Intelligence is embedded in the existing application. See [NEXUS_SETUP.md](NEXUS_SETUP.md) for evidence definitions, permissions and private model hosting. It needs no OpenAI account. Apply the preserving upgrade for a populated project; never use historical cleanup migration 008 on retained staff data.

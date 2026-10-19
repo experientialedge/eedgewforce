@@ -83,7 +83,7 @@ export default function LocationManagerModal({
           lga: editLocation.lga || '',
           latitude: editLocation.latitude ?? '',
           longitude: editLocation.longitude ?? '',
-          geofence_radius: Number(editLocation.geofence_radius || editLocation.geofence_radius_meters || 150)
+          geofence_radius: editLocation.location_type === 'Market' ? 300 : Number(editLocation.geofence_radius || editLocation.geofence_radius_meters || 150)
         });
       } else {
         setFormData({
@@ -346,7 +346,7 @@ export default function LocationManagerModal({
               </label>
               <select
                 value={formData.location_type}
-                onChange={(e) => setFormData({ ...formData, location_type: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, location_type: e.target.value, geofence_radius: e.target.value === 'Market' ? 300 : formData.geofence_radius })}
                 className="w-full px-3.5 py-2.5 bg-zinc-50 dark:bg-zinc-800/70 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-zinc-100 focus:outline-hidden focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
               >
                 {LOCATION_TYPES.map(type => (
@@ -455,6 +455,7 @@ export default function LocationManagerModal({
 
             <input
               type="range"
+              disabled={formData.location_type === 'Market'}
               min="20"
               max="2000"
               step="10"
@@ -464,12 +465,14 @@ export default function LocationManagerModal({
             />
 
             {/* Radius Preset Quick Buttons */}
+            {formData.location_type === 'Market' && <p className="text-xs text-orange-700 dark:text-orange-300">Market boundaries use the company policy of 300 metres.</p>}
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-[11px] text-zinc-500 font-medium mr-1">Presets:</span>
               {RADIUS_PRESETS.map((rad) => (
                 <button
                   key={rad}
                   type="button"
+                  disabled={formData.location_type === 'Market'}
                   onClick={() => setFormData({ ...formData, geofence_radius: rad })}
                   className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
                     formData.geofence_radius === rad

@@ -1,0 +1,35 @@
+services:
+  ollama:
+    image: ${OLLAMA_IMAGE:?Set a tested Ollama image tag or digest}
+    restart: unless-stopped
+    volumes:
+      - models:/root/.ollama
+    networks: [private]
+  gateway:
+    build: .
+    restart: unless-stopped
+    environment:
+      OLLAMA_UPSTREAM: http://ollama:11434
+      NEXUS_MODEL: ${NEXUS_MODEL:?Choose a compatible installed open-weight model}
+      NEXUS_MODEL_API_KEY: ${NEXUS_MODEL_API_KEY:?Set a unique key of at least 32 characters}
+    depends_on: [ollama]
+    networks: [private,edge]
+  https:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      NEXUS_DOMAIN: ${NEXUS_DOMAIN:?Point a domain at this server}
+    ports: ["80:80","443:443"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - certificates:/data
+      - caddy_config:/config
+    depends_on: [gateway]
+    networks: [edge]
+networks:
+  private:
+  edge:
+volumes:
+  models:
+  certificates:
+  caddy_config:

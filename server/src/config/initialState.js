@@ -479,6 +479,13 @@ export const initialState = {
   "push_subscriptions": [],
   "notifications": [],
   "face_events": []
+  ,"workforce_access_sessions": []
+  ,"nexus_intelligence_runs": []
+  ,"nexus_generation_leases": []
+  ,"workforce_movement_events": []
+  ,"workforce_movement_notices": []
+  ,"workforce_executive_reports": []
+  ,"workforce_report_notices": []
   ,"workforce_activity_presence": []
   ,"workforce_activity_events": []
   ,"workforce_activity_notices": []

@@ -79,9 +79,9 @@ HR/admin users can assign any staff member in their company. History retains the
 
 Attendance uses the server's Africa/Lagos clock for every employee role:
 
-- Morning clock-in: 06:00 up to 12:00.
-- Midday attendance: 12:00 up to 16:30, preserving the first clock-in.
-- Clock-out: 16:30 up to midnight; a previous clock-in is required.
+- Morning clock-in: 08:00–09:00; late clock-in: 09:00–10:00.
+- Midday attendance: 12:00–13:00, preserving the first clock-in and its lateness.
+- Clock-out: 17:00–18:00; a previous clock-in is required. Attendance is closed outside these windows; end boundaries are exclusive.
 
 Clock actions require GPS inside an active assigned office, acceptable GPS accuracy and an online connection. The button follows the server window and disables duplicate or completed actions. Supervisors can explicitly correct exceptions. Migration 010 makes concurrent attendance writes transactional in PostgreSQL.
 
@@ -89,7 +89,7 @@ The repository has `vercel.json` and `api/index.js` for a Vercel deployment from
 
 Configure Supabase Auth's site URL, allowed recovery redirects and email delivery for your live domain. The local backend is available only on one long-running server with DATA_BACKEND=local and EDGEWFORCE_DATA_DIR pointing to durable storage. It is unsuitable for serverless or multiple server processes. Local recovery requires SMTP and a valid expiring recovery code.
 
-Verification on 2026-10-15 includes automated server tests, browser collaboration checks with separate test users, PostgreSQL migration/permission checks and hosted readiness. The active EdgeWForce project is tabuvkmkptaxrgygubjs.supabase.co. A new administrator is provisioned explicitly; the account password is not stored in source. See FEATURES.md and RELEASE_VERIFICATION.md for the feature guide and validation results.
+Verification on 2026-10-15 includes automated server tests, browser collaboration checks with separate test users, PostgreSQL migration/permission checks and hosted readiness. The active EdgeWForce project is kfvtgqigidgazmbfsfuc.supabase.co. A new administrator is provisioned explicitly; the account password is not stored in source. See FEATURES.md and RELEASE_VERIFICATION.md for the feature guide and validation results.
 
 Staff import files are parsed in memory and are not uploaded to storage. Configure file storage policies for other modules appropriately; private HR and payroll files must not be exposed through public buckets.
 
@@ -110,3 +110,18 @@ The edgewforce-activity-monitor job runs every minute independently of Vercel re
 Tracking applies to signed-in active employee profiles, across tabs. Explicit sign-out stops the user's active presence records. Browser close, sleep and network loss are marked as unconfirmed connection gaps. Office/device activity outside EdgeWForce is not visible. The interface discloses monitoring and lets staff explain a flag. This is not a tamper-proof productivity or attendance measurement. Preserve HR event history and restrict access using the existing company role policy.
 
 For one durable local server, HR queue reads and staff heartbeats process due flags. Automatic unattended checks require a worker calling activityService.processDue for each company; the production Vercel deployment uses Supabase pg_cron instead.
+
+
+## Market access and executive reports (migration 013)
+
+Apply supabase/migrations/013_workplace_access_and_reports.sql on the EdgeWforced project before setting WORKFORCE_GEOFENCE_ENFORCED=true and WORKFORCE_REPORTS_ENABLED=true in Vercel. The readiness endpoint checks the additional RPCs when these flags are enabled. The migration is additive; it sets existing Market boundaries to 300 metres without clearing records. Other workplace types retain their configured radius. Configure each real market pin and its staff assignments before activation.
+
+Staff credentials first issue a five-minute, one-use location challenge, without an application access or provider refresh token. An accurate, fresh GPS fix must be confidently within an assigned workplace. The resulting server session is anchored to that location. Two accurate outside fixes at least 15 seconds apart confirm a departure, record the last observed location and known market if available, alert same-company HR/admin accounts, and revoke all workplace sessions for that user. Changing to another assigned market still requires a fresh sign-in there. Managers retain access to review incidents and manage assignments.
+
+The app checks location while signed in. Missing verification expires the session after two minutes, including a server check on every authenticated request. Loss of GPS or connectivity is not recorded as a confirmed departure. A browser cannot continuously track a person after it is closed or after sign-out; reports do not invent subsequent destinations. Browser-provided GPS is not tamper-proof device attestation. Staff see the location-verification status.
+
+Run supabase/enable_workplace_reporting.sql with project-owner database access. It schedules the existing ten-minute inactivity detector every minute and factual executive reports at 18:05 Africa/Lagos. Verify cron.job and cron.job_run_details. Database cron produces factual reports and dashboard notices; it does not call an external AI provider.
+
+For real AI summaries, set EXECUTIVE_AI_PROVIDER=openai, OPENAI_API_KEY and AI_EXECUTIVE_MODEL in Vercel, then redeploy. Never put the key in client variables or source. The server calls the OpenAI Responses API with structured output, store:false, a 20-second timeout, and at most one generation attempt per company every 15 minutes. Only aggregate counts, report date and timezone are sent; employee names, precise GPS, explanations and credentials are excluded. Dashboard loads can generate a due summary, while a clear factual report remains available when the provider is unavailable or unconfigured. An AI report is shown only for its matching facts. Human review is required; summaries do not decide misconduct or employment eligibility.
+
+Offline caches and queued actions are scoped to the signed-in company and user. Older unscoped queued records are retained but never automatically replayed under another account. Authentication, attendance, location enforcement and executive reports require a connection.

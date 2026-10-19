@@ -142,7 +142,7 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
 
   // Telemetry Ping during active shift
   useEffect(() => {
-    if (!shift?.clock_in_time || shift?.clock_out_time) return;
+    if (!shift?.clock_in_time || shift?.clock_out_time || user?.workplace_session_id) return;
 
     const sendPing = async () => {
       if (!agentLocation) return;
@@ -160,7 +160,7 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
 
     const interval = setInterval(sendPing, 45000);
     return () => clearInterval(interval);
-  }, [shift, agentLocation]);
+  }, [shift, agentLocation, user?.workplace_session_id]);
 
   // Working Duration Timer
   useEffect(() => {
@@ -395,7 +395,7 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
             }`}>
               <div className="flex items-center justify-between">
                 <span className="font-bold text-zinc-800 dark:text-zinc-200">Morning Clock-In</span>
-                <span className="text-[10px] font-bold text-zinc-400 font-mono">06:00 AM – 12:00 PM</span>
+                <span className="text-[10px] font-bold text-zinc-400 font-mono">08:00 AM – 09:00 AM (late 09:00–10:00 AM)</span>
               </div>
               <div className="text-[11px] text-zinc-500">Authorized shift commencement window</div>
             </div>
@@ -407,7 +407,7 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
             }`}>
               <div className="flex items-center justify-between">
                 <span className="font-bold text-zinc-800 dark:text-zinc-200">Midday Clock-In</span>
-                <span className="text-[10px] font-bold text-zinc-400 font-mono">12:00 PM – 04:30 PM</span>
+                <span className="text-[10px] font-bold text-zinc-400 font-mono">12:00 PM – 01:00 PM</span>
               </div>
               <div className="text-[11px] text-zinc-500">Midday territory shift verification</div>
             </div>
@@ -419,7 +419,7 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
             }`}>
               <div className="flex items-center justify-between">
                 <span className="font-bold text-zinc-800 dark:text-zinc-200">Evening Clock-Out</span>
-                <span className="text-[10px] font-bold text-zinc-400 font-mono">04:30 PM – 12:00 AM</span>
+                <span className="text-[10px] font-bold text-zinc-400 font-mono">05:00 PM – 06:00 PM</span>
               </div>
               <div className="text-[11px] text-zinc-500">Active Evening Clock-Out window</div>
             </div>

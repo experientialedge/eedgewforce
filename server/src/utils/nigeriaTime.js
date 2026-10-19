@@ -111,9 +111,9 @@ export function isShiftEligibleRole(roleCode, position = '') {
 
 /**
  * Attendance Shift Windows in Africa/Lagos Local Time:
- * 1. Morning Attendance: 06:00 AM – 12:00 PM (360m to 720m)
- * 2. Midday Attendance: 12:00 PM – 04:30 PM (720m to 990m)
- * 3. Evening Clock-Out: 04:30 PM – 11:59 PM (990m to 1439m) [Allows concluding active shift]
+ * 1. Morning: 08:00–09:00; late morning: 09:00–10:00.
+ * 2. Midday: 12:00–13:00.
+ * 3. Evening clock-out: 17:00–18:00. End boundaries are exclusive.
  *
  * @param {Date|string|number} [dateInput=new Date()]
  * @returns {{
@@ -128,64 +128,11 @@ export function isShiftEligibleRole(roleCode, position = '') {
  * }}
  */
 export function determineShiftAttendanceWindow(dateInput = new Date()) {
-  const lagos = getLagosTime(dateInput);
-  const m = lagos.totalMinutes;
-
-  // Window 1: Morning Attendance (06:00 AM - 12:00 PM)
-  // 6:00 AM = 360 mins | 12:00 PM = 720 mins
-  if (m >= 360 && m < 720) {
-    return {
-      allowed: true,
-      attendance_type: 'MORNING_ATTENDANCE',
-      label: 'Morning Attendance',
-      button_label: 'MORNING CLOCK-IN',
-      action_type: 'CLOCK_IN',
-      message: 'Morning attendance window is open (6:00 AM – 12:00 PM).',
-      next_window: 'Midday Attendance opens at 12:00 PM',
-      lagos_time: lagos
-    };
-  }
-
-  // Window 2: Midday Attendance / Afternoon Shift (12:00 PM - 05:00 PM)
-  // 12:00 PM = 720 mins | 5:00 PM = 1020 mins
-  // Allows employees who missed morning clock-in to record midday attendance
-  if (m >= 720 && m < 990) {
-    return {
-      allowed: true,
-      attendance_type: 'MIDDAY_ATTENDANCE',
-      label: 'Midday Attendance',
-      button_label: 'MIDDAY CLOCK-IN',
-      action_type: 'CLOCK_IN',
-      message: 'Midday attendance window is open (12:00 PM – 4:30 PM).',
-      next_window: 'Evening Clock-Out opens at 4:30 PM',
-      lagos_time: lagos
-    };
-  }
-
-  // Window 3: Evening Clock-Out (04:30 PM - 11:59 PM)
-  // 4:30 PM = 990 mins | 11:59 PM = 1439 mins
-  if (m >= 990 && m <= 1439) {
-    return {
-      allowed: true,
-      attendance_type: 'EVENING_CLOCK_OUT',
-      label: 'Evening Clock-Out',
-      button_label: 'EVENING CLOCK-OUT',
-      action_type: 'CLOCK_OUT',
-      message: 'Evening clock-out window is open (4:30 PM – 11:59 PM).',
-      next_window: 'Morning Clock-In tomorrow at 6:00 AM',
-      lagos_time: lagos
-    };
-  }
-
-  // Early Morning before 6:00 AM (m < 360)
-  return {
-    allowed: false,
-    attendance_type: null,
-    label: 'Attendance Closed',
-    button_label: 'ATTENDANCE CLOSED',
-    action_type: 'CLOSED',
-    message: 'Morning attendance has not started. Clock-in opens at 6:00 AM.',
-    next_window: 'Morning Clock-In (06:00 AM – 12:00 PM)',
-    lagos_time: lagos
-  };
+  const lagos = getLagosTime(dateInput), m = lagos.totalMinutes;
+  const base = { lagos_time: lagos, allowed: true, action_type: 'CLOCK_IN', is_late: false };
+  if (m >= 480 && m < 600) return { ...base, attendance_type: 'MORNING_ATTENDANCE', label: m < 540 ? 'Morning Attendance' : 'Late Morning Attendance', button_label: m < 540 ? 'MORNING CLOCK-IN' : 'LATE CLOCK-IN', is_late: m >= 540, message: m < 540 ? 'Morning clock-in is open (8:00 AM – 9:00 AM).' : 'Late clock-in is open (9:00 AM – 10:00 AM). This arrival is recorded as late.', next_window: 'Midday clock-in: 12:00 PM – 1:00 PM' };
+  if (m >= 720 && m < 780) return { ...base, attendance_type: 'MIDDAY_ATTENDANCE', label: 'Midday Attendance', button_label: 'MIDDAY CLOCK-IN', message: 'Midday clock-in is open (12:00 PM – 1:00 PM).', next_window: 'Evening clock-out: 5:00 PM – 6:00 PM' };
+  if (m >= 1020 && m < 1080) return { ...base, action_type: 'CLOCK_OUT', attendance_type: 'EVENING_CLOCK_OUT', label: 'Evening Clock-Out', button_label: 'EVENING CLOCK-OUT', message: 'Evening clock-out is open (5:00 PM – 6:00 PM).', next_window: 'Morning clock-in tomorrow at 8:00 AM' };
+  const next = m < 480 ? 'Morning clock-in opens at 8:00 AM.' : m < 720 ? 'Midday clock-in opens at 12:00 PM.' : m < 1020 ? 'Evening clock-out opens at 5:00 PM.' : 'Morning clock-in opens tomorrow at 8:00 AM.';
+  return { ...base, allowed: false, action_type: 'CLOSED', attendance_type: null, label: 'Attendance Closed', button_label: 'ATTENDANCE CLOSED', message: 'Attendance is closed. ' + next, next_window: next };
 }

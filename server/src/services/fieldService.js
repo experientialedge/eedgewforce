@@ -380,9 +380,10 @@ export const fieldService = {
     const finalDistance = matchedLocation ? shortestDistance : (nearest ? nearest.distance : 0);
     const finalRadius = Number(targetLoc.geofence_radius || targetLoc.geofence_radius_meters || 150.0);
 
-    // Lateness calculation (standard 08:30 AM threshold)
-    const isLate = lagos.hours > 8 || (lagos.hours === 8 && lagos.minutes > 30);
-    const lateMinutes = isLate ? ((lagos.hours - 8) * 60 + (lagos.minutes - 30)) : 0;
+    // Preserve the first arrival classification during midday verification.
+    const firstClockIn = existing?.clock_in || existing?.clock_in_time;
+    const isLate = firstClockIn ? String(existing.status).toLowerCase() === 'late' : Boolean(windowInfo?.is_late);
+    const lateMinutes = isLate ? Math.max(0, (firstClockIn ? getLagosTime(firstClockIn).totalMinutes : lagos.totalMinutes) - 540) : 0;
     const status = isWithin ? (isLate ? 'Late' : 'Present') : (isOverride ? 'Present' : 'Outside Geofence');
 
     const attendanceData = {
@@ -487,7 +488,7 @@ export const fieldService = {
       battery_level: 100
     });
 
-    if (isLate) {
+    if (isLate && !firstClockIn) {
       await db.insert('location_alerts', {
         employee_id: Number(employeeId),
         supervisor_id: employee.supervisor_id || null,
@@ -570,7 +571,7 @@ export const fieldService = {
     if (!employee) throw new Error(`Employee #${employeeId} not found.`);
     validateAttendanceActor(employee, req);
     const window = determineShiftAttendanceWindow(serverNow);
-    if (window.action_type !== 'CLOCK_OUT') throw new Error('Clock-out opens at 4:30 PM and closes at midnight (Africa/Lagos).');
+    if (window.action_type !== 'CLOCK_OUT') throw new Error('Clock-out is open only from 5:00 PM to 6:00 PM (Africa/Lagos).');
     const coordinates = validateCoordinates(latitude, longitude);
     if (!coordinates.valid) throw new Error('Valid device GPS coordinates are required to clock out.');
     if (!Number.isFinite(Number(accuracy)) || Number(accuracy) < 0 || Number(accuracy) > 500) throw new Error('Location accuracy is too low. Enable GPS and try again.');

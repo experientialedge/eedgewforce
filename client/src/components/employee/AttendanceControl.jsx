@@ -48,9 +48,9 @@ export default function AttendanceControl({ onRecorded }) {
     finally { await refresh(); setBusy(false); setChecking(false); actionLock.current = false; }
   };
   const windows = [
-    { label: 'Morning', hours: '6 AM – noon', type: 'MORNING_ATTENDANCE', done: status?.morning_recorded },
-    { label: 'Midday', hours: 'Noon – 4:30 PM', type: 'MIDDAY_ATTENDANCE', done: status?.midday_recorded },
-    { label: 'Clock-out', hours: '4:30 PM – midnight', type: 'EVENING_CLOCK_OUT', done: status?.evening_recorded }
+    { label: 'Morning', hours: '8–9 AM · late 9–10 AM', type: 'MORNING_ATTENDANCE', done: status?.morning_recorded },
+    { label: 'Midday', hours: 'Noon – 1 PM', type: 'MIDDAY_ATTENDANCE', done: status?.midday_recorded },
+    { label: 'Clock-out', hours: '5–6 PM', type: 'EVENING_CLOCK_OUT', done: status?.evening_recorded }
   ];
   const isClockOut = status?.window_info?.action_type === 'CLOCK_OUT';
   const locations = status?.assigned_locations || [];
