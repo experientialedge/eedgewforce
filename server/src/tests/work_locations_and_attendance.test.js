@@ -55,7 +55,7 @@ test('Work Locations & Dynamic Employee Attendance Suite', async (t) => {
     assert.ok(ibadanLoc.id);
     assert.equal(ibadanLoc.name, 'Ibadan Bodija Market Branch');
     assert.equal(ibadanLoc.state, 'Oyo');
-    assert.equal(ibadanLoc.geofence_radius, 200);
+    assert.equal(ibadanLoc.geofence_radius, 300);
 
     // Update location
     const updated = await locationService.updateLocation(ibadanLoc.id, {
@@ -64,7 +64,7 @@ test('Work Locations & Dynamic Employee Attendance Suite', async (t) => {
       geofence_radius: 250
     });
     assert.equal(updated.name, 'Ibadan Bodija Main Depot');
-    assert.equal(updated.geofence_radius, 250);
+    assert.equal(updated.geofence_radius, 300);
 
     // Retrieval
     const fetched = await locationService.getLocationById(ibadanLoc.id, testCompanyId);

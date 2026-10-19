@@ -3,30 +3,42 @@
 // ==============================================================================
 
 import { authService } from '../services/authService.js';
+import { workplaceAccessService } from '../services/workplaceAccessService.js';
 
 export const authController = {
   async login(req, res) {
     try {
       const { email, identifier, phone, password } = req.body;
       const idToUse = identifier || email || phone;
-      const result = await authService.login(idToUse, password, req);
-      res.json({ success: true, data: result, token: result.token, user: result.user, message: 'Signed in successfully.' });
+      const result = await workplaceAccessService.challenge(await authService.login(idToUse, password, req));
+      res.json({ success: true, data: result, token: result.token, user: result.user, message: result.location_required ? result.message : 'Signed in successfully.' });
     } catch (err) {
       res.status(400).json({ success: false, error: { code: 'AUTH_FAILED', message: err.message } });
     }
   },
 
+  async locationLogin(req,res) {
+    try {
+      const access=await workplaceAccessService.complete(req.body.challenge,req.body);
+      const user={...await authService.me(access.userId),workplace_session_id:access.workplace_session_id};
+      res.json({success:true,data:{...access,user}});
+    } catch(error) { res.status(error.status||400).json({success:false,error:{code:error.code||'LOCATION_REQUIRED',message:error.message}}); }
+  },
+
   async me(req, res) {
     try {
-      const user = await authService.me(req.user.id);
+      const user = { ...await authService.me(req.user.id), workplace_session_id: req.user.workplace_session_id };
       res.json({ success: true, data: user, user });
     } catch (err) {
       res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: err.message } });
     }
   },
 
-  async logout(req, res) {
-    res.json({ success: true, message: 'Logged out successfully.' });
+  async logout(req, res, next) {
+    try {
+      await workplaceAccessService.logout(req.user);
+      res.json({ success: true, message: 'Logged out successfully.' });
+    } catch(error) { next(error); }
   },
 
   async changePassword(req, res) {

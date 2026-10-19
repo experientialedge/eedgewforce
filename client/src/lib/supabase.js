@@ -105,6 +105,9 @@ export async function signOutSupabase() {
       // Ignore network errors during logout
     }
   }
+  sessionStorage.removeItem('ewf_token');
+  sessionStorage.removeItem('token');
+  localStorage.removeItem('token');
   localStorage.removeItem('ewf_token');
   localStorage.removeItem('ewf_user');
   localStorage.removeItem('ewf_current_tab');

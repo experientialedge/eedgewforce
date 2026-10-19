@@ -102,7 +102,7 @@ test('Field Force Tracking & Supervisor Monitoring Module Test Suite', async (t)
   });
 
   await t.test('4. Check-Out calculates precise elapsed working duration', async () => {
-    const checkOutResult = await fieldService.checkOut({testDate: '2026-08-22T17:30:00Z',
+    const checkOutResult = await fieldService.checkOut({testDate: '2026-08-22T16:30:00Z',
       employeeId: 5,
       latitude: 6.42815,
       longitude: 3.42195,

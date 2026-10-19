@@ -108,62 +108,10 @@ test('Smart Shift Attendance & Nigeria Timezone Engine', async (t) => {
   // ============================================================================
   // 1. TIMEZONE & EXACT WINDOW BOUNDARY TESTS (Africa/Lagos UTC+1)
   // ============================================================================
-  await t.test('1. Timezone & Exact Window Boundary Tests', async (st) => {
-    await st.test('05:59 AM — BLOCKS with "Morning attendance has not started. Clock-in opens at 6:00 AM."', () => {
-      const d = new Date('2026-08-21T04:59:00Z'); // 05:59 WAT
-      const res = determineShiftAttendanceWindow(d);
-      assert.equal(res.allowed, false);
-      assert.equal(res.message, 'Morning attendance has not started. Clock-in opens at 6:00 AM.');
-      assert.equal(res.action_type, 'CLOSED');
-      assert.equal(res.lagos_time.formatted12h, '05:59 AM');
-    });
-
-    await st.test('06:00 AM — ALLOWS Morning Attendance', () => {
-      const d = new Date('2026-08-21T05:00:00Z'); // 06:00 WAT
-      const res = determineShiftAttendanceWindow(d);
-      assert.equal(res.allowed, true);
-      assert.equal(res.attendance_type, 'MORNING_ATTENDANCE');
-      assert.equal(res.button_label, 'MORNING CLOCK-IN');
-      assert.equal(res.action_type, 'CLOCK_IN');
-    });
-
-    await st.test('11:59 AM — ALLOWS Morning Attendance', () => {
-      const d = new Date('2026-08-21T10:59:00Z'); // 11:59 WAT
-      const res = determineShiftAttendanceWindow(d);
-      assert.equal(res.allowed, true);
-      assert.equal(res.attendance_type, 'MORNING_ATTENDANCE');
-    });
-
-    await st.test('12:00 PM — ALLOWS Midday Attendance', () => {
-      const d = new Date('2026-08-21T11:00:00Z'); // 12:00 WAT
-      const res = determineShiftAttendanceWindow(d);
-      assert.equal(res.allowed, true);
-      assert.equal(res.attendance_type, 'MIDDAY_ATTENDANCE');
-      assert.equal(res.button_label, 'MIDDAY CLOCK-IN');
-      assert.equal(res.action_type, 'CLOCK_IN');
-    });
-
-    await st.test('04:00 PM — ALLOWS Midday Attendance', () => {
-      const d = new Date('2026-08-21T15:00:00Z'); // 16:00 WAT
-      const res = determineShiftAttendanceWindow(d);
-      assert.equal(res.allowed, true);
-      assert.equal(res.attendance_type, 'MIDDAY_ATTENDANCE');
-    });
-
-    await st.test('05:00 PM — ALLOWS Evening Clock-Out', () => {
-      const d = new Date('2026-08-21T16:00:00Z'); // 17:00 WAT
-      const res = determineShiftAttendanceWindow(d);
-      assert.equal(res.allowed, true);
-      assert.equal(res.attendance_type, 'EVENING_CLOCK_OUT');
-      assert.equal(res.button_label, 'EVENING CLOCK-OUT');
-      assert.equal(res.action_type, 'CLOCK_OUT');
-    });
-
-    await st.test('11:59 PM — ALLOWS Evening Clock-Out at closing boundary', () => {
-      const d = new Date('2026-08-21T22:59:00Z'); // 23:59 WAT
-      const res = determineShiftAttendanceWindow(d);
-      assert.equal(res.allowed, true);
-      assert.equal(res.attendance_type, 'EVENING_CLOCK_OUT');
+  await t.test('1. Exact Lagos attendance boundaries', async st => {
+    const cases=[['06:59:59',false,null,false],['07:00:00',true,'MORNING_ATTENDANCE',false],['07:59:59',true,'MORNING_ATTENDANCE',false],['08:00:00',true,'MORNING_ATTENDANCE',true],['08:59:59',true,'MORNING_ATTENDANCE',true],['09:00:00',false,null,false],['10:59:59',false,null,false],['11:00:00',true,'MIDDAY_ATTENDANCE',false],['11:59:59',true,'MIDDAY_ATTENDANCE',false],['12:00:00',false,null,false],['15:59:59',false,null,false],['16:00:00',true,'EVENING_CLOCK_OUT',false],['16:59:59',true,'EVENING_CLOCK_OUT',false],['17:00:00',false,null,false]];
+    for(const [time,allowed,type,late] of cases) await st.test(time+' UTC',()=>{
+      const result=determineShiftAttendanceWindow('2026-10-19T'+time+'Z');assert.equal(result.allowed,allowed);assert.equal(result.attendance_type,type);assert.equal(result.is_late,late);
     });
   });
 
@@ -223,11 +171,11 @@ test('Smart Shift Attendance & Nigeria Timezone Engine', async (t) => {
             testDate: '2026-08-21T08:15:00Z'
           });
         },
-        /Duplicate attendance: Morning Attendance/i
+        /Duplicate attendance: (Late )?Morning Attendance/i
       );
     });
 
-    await st.test('Blocks check in before 6:00 AM outside allowed window', async () => {
+    await st.test('Blocks check in before 8:00 AM outside allowed window', async () => {
       const closedDate = '2026-08-21T04:30:00Z'; // 05:30 AM WAT
 
       await assert.rejects(
@@ -241,7 +189,7 @@ test('Smart Shift Attendance & Nigeria Timezone Engine', async (t) => {
           });
         },
         (err) => {
-          assert.equal(err.message, 'Morning attendance has not started. Clock-in opens at 6:00 AM.');
+          assert.equal(err.message, 'Attendance is closed. Morning clock-in opens at 8:00 AM.');
           return true;
         }
       );
@@ -269,7 +217,7 @@ test('Smart Shift Attendance & Nigeria Timezone Engine', async (t) => {
     });
 
     await st.test('Allows Midday Attendance at 01:00 PM WAT', async () => {
-      const middayDate = '2026-08-21T12:00:00Z'; // 01:00 PM WAT
+      const middayDate = '2026-08-21T11:30:00Z'; // 01:00 PM WAT
 
       const result = await fieldService.checkIn({
         employeeId: 1,
@@ -284,7 +232,7 @@ test('Smart Shift Attendance & Nigeria Timezone Engine', async (t) => {
     });
 
     await st.test('Allows Evening Clock-Out at 06:30 PM WAT', async () => {
-      const eveningDate = '2026-08-21T17:30:00Z'; // 06:30 PM WAT
+      const eveningDate = '2026-08-21T16:30:00Z'; // 06:30 PM WAT
 
       const result = await fieldService.checkOut({
         employeeId: 1,

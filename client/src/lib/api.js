@@ -2,7 +2,7 @@
 // EDGEWFORCE - HTTP REST CLIENT WITH OFFLINE CACHING & AUTO-SYNC
 // ==============================================================================
 
-import { cacheApiResponse, getCachedApiResponse, enqueueOfflineAction } from './offline.js';
+import { cacheApiResponse, getCachedApiResponse, enqueueOfflineAction, offlineOwner } from './offline.js';
 import { getSupabaseSession } from './supabase.js';
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
@@ -30,9 +30,10 @@ async function getAuthToken() {
 
 export async function request(path, options = {}) {
   const method = options.method || 'GET';
-  const requireOnline = options.requireOnline || /^\/(auth|hr|locations|work-locations|collaboration|activity)(\/|\?|$)/.test(path) || /^\/(field\/(shifts|check-in|check-out)|employee\/(attendance|dashboard))/.test(path);
+  const requireOnline = options.requireOnline || /^\/(auth|admin|nexus|hr|locations|work-locations|collaboration|activity|workplace-access|executive-reports)(\/|\?|$)/.test(path) || /^\/(field\/(shifts|check-in|check-out)|employee\/(attendance|dashboard))/.test(path);
   if (requireOnline && !navigator.onLine) throw new Error('Connect to the internet to use this live feature.');
   const token = path === '/auth/login' ? null : await getAuthToken();
+  const owner = offlineOwner();
   const isFormData = options.body instanceof FormData;
 
   const headers = {
@@ -45,7 +46,7 @@ export async function request(path, options = {}) {
 
   // If completely offline and this is a GET request, serve directly from cache
   if (!navigator.onLine && method === 'GET') {
-    const cached = await getCachedApiResponse(path);
+    const cached = await getCachedApiResponse(path, owner);
     if (cached !== null && cached !== undefined) {
       return cached;
     }
@@ -66,7 +67,7 @@ export async function request(path, options = {}) {
       });
     }
 
-    await enqueueOfflineAction(path, method, payload, `Offline ${method} ${path}`);
+    await enqueueOfflineAction(path, method, payload, `Offline ${method} ${path}`, owner);
     return {
       success: true,
       queued: true,
@@ -90,7 +91,8 @@ export async function request(path, options = {}) {
 
     if (!res.ok) {
       if (res.status === 401 && !path.includes('/auth/login') && !path.includes('/auth/me')) {
-        if (json.error?.code === 'TOKEN_EXPIRED' || json.error?.code === 'USER_INACTIVE') {
+        if (json.error?.code === 'TOKEN_EXPIRED' || json.error?.code === 'USER_INACTIVE' || json.error?.code === 'WORKPLACE_SESSION_REVOKED' || json.error?.code === 'LOCATION_REQUIRED') {
+          if (['WORKPLACE_SESSION_REVOKED','LOCATION_REQUIRED'].includes(json.error?.code)) localStorage.setItem('ewf_logout_reason',json.error.message);
           localStorage.removeItem('ewf_token');
           window.dispatchEvent(new CustomEvent('ewf_unauthorized'));
         }
@@ -106,14 +108,14 @@ export async function request(path, options = {}) {
 
     // Cache successful GET responses for offline resilience
     if (method === 'GET' && !requireOnline) {
-      cacheApiResponse(path, data);
+      cacheApiResponse(path, data, owner);
     }
 
     return data;
   } catch (err) {
     // If network failure during GET, attempt cache fallback
     if (method === 'GET' && !requireOnline && !err.status) {
-      const cached = await getCachedApiResponse(path);
+      const cached = await getCachedApiResponse(path, owner);
       if (cached !== null && cached !== undefined) {
         return cached;
       }

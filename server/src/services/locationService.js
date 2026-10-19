@@ -77,7 +77,7 @@ export const locationService = {
       throw new Error(coordCheck.message || 'Valid GPS latitude and longitude are required.');
     }
 
-    const radius = Number(geofence_radius ?? geofence_radius_meters ?? 150);
+    const radius = location_type === 'Market' ? 300 : Number(geofence_radius ?? geofence_radius_meters ?? 150);
     if (isNaN(radius) || radius < 20 || radius > 10000) {
       throw new Error('Permitted radius must be between 20 meters and 10,000 meters.');
     }
@@ -141,7 +141,8 @@ export const locationService = {
       updateFields.longitude = coordCheck.longitude;
     }
 
-    if (data.geofence_radius !== undefined || data.geofence_radius_meters !== undefined) {
+    if ((data.location_type || existing.location_type) === 'Market') { updateFields.geofence_radius=300; updateFields.geofence_radius_meters=300; }
+    if ((data.location_type || existing.location_type) !== 'Market' && (data.geofence_radius !== undefined || data.geofence_radius_meters !== undefined)) {
       const radius = Number(data.geofence_radius ?? data.geofence_radius_meters);
       if (isNaN(radius) || radius < 20 || radius > 10000) {
         throw new Error('Permitted radius must be between 20 meters and 10,000 meters.');
@@ -441,7 +442,7 @@ export const locationService = {
    */
   async getActivePermittedLocations(employeeId, companyId = 1) {
     const details = await this.getEmployeeLocations(employeeId, companyId);
-    return (details.all_active_locations || []).filter(location => validateCoordinates(location.latitude, location.longitude).valid && Number(location.geofence_radius || location.geofence_radius_meters || 150) >= 20 && Number(location.geofence_radius || location.geofence_radius_meters || 150) <= 10000);
+    return (details.all_active_locations || []).map(l => l.location_type === 'Market' ? {...l,geofence_radius:300,geofence_radius_meters:300} : l).filter(location => validateCoordinates(location.latitude, location.longitude).valid && Number(location.geofence_radius || location.geofence_radius_meters || 150) >= 20 && Number(location.geofence_radius || location.geofence_radius_meters || 150) <= 10000);
   },
 
   /**

@@ -5,6 +5,7 @@
 
 import jwt from 'jsonwebtoken';
 import { db, supabase } from '../config/database.js';
+import { workplaceAccessService } from '../services/workplaceAccessService.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || '3458929f44e69c199398c77212600d9f760aabb9b1dda42680556892307277ea';
 
@@ -22,9 +23,16 @@ export async function requireAuth(req, res, next) {
     let user = null;
     let authUserId = null;
     let authEmail = null;
+    let workplaceSessionId = null;
+    if (jwt.decode(token)?.iss === 'edgewforce-workplace') {
+      const decoded = jwt.verify(token, JWT_SECRET, { issuer: 'edgewforce-workplace', algorithms: ['HS256'] });
+      if (decoded.token_use !== 'access') throw new Error('Invalid token purpose.');
+      authUserId = decoded.userId;
+      workplaceSessionId = decoded.workplace_session_id;
+    }
 
     // 1. Attempt Supabase Auth Token Verification
-    if (supabase && typeof supabase.auth?.getUser === 'function') {
+    if (!authUserId && supabase && typeof supabase.auth?.getUser === 'function') {
       try {
         const { data: sbData, error: sbErr } = await supabase.auth.getUser(token);
         if (!sbErr && sbData?.user) {
@@ -40,6 +48,7 @@ export async function requireAuth(req, res, next) {
     if (!authUserId) {
       try {
         const decoded = jwt.verify(token, JWT_SECRET);
+        if (decoded.token_use && decoded.token_use !== 'access') throw new Error('Invalid token purpose.');
         authUserId = decoded.auth_user_id || decoded.uuid || decoded.userId || decoded.id || decoded.sub;
         authEmail = decoded.email?.toLowerCase();
       } catch (error) {
@@ -99,6 +108,9 @@ export async function requireAuth(req, res, next) {
 
     const employee = await db.findOne('employees', { user_id: user.id }) ||
                      (user.auth_user_id ? await db.findOne('employees', { auth_user_id: user.auth_user_id }) : null);
+    const issuedAt = jwt.decode(token)?.iat;
+    if (user.session_invalid_before && (!Number.isFinite(issuedAt) || issuedAt < Math.floor(Date.parse(user.session_invalid_before) / 1000))) return res.status(401).json({success:false,error:{code:'TOKEN_EXPIRED',message:'Your password changed. Sign in again.'}});
+    await workplaceAccessService.validate(user, employee, workplaceSessionId, ['/api/workplace-access/ping','/api/auth/logout'].includes(req.originalUrl?.split('?')[0]));
     
     const [rank, department] = await Promise.all([
       employee?.rank_code ? db.findOne('ranks', { code: employee.rank_code }) : null,
@@ -108,6 +120,7 @@ export async function requireAuth(req, res, next) {
     // Attach complete security context to request
     req.user = {
       ...user,
+      workplace_session_id: workplaceSessionId,
       employee,
       rank,
       department
@@ -115,6 +128,7 @@ export async function requireAuth(req, res, next) {
 
     next();
   } catch (error) {
+    if (['LOCATION_REQUIRED','WORKPLACE_SESSION_REVOKED'].includes(error.code)) return res.status(401).json({ success:false,error:{code:error.code,message:error.message} });
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({
         success: false,

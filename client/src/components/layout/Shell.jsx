@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useWorkplaceFence } from '../../hooks/useWorkplaceFence';
 import { useActivityMonitor } from '../../hooks/useActivityMonitor';
 import TopHeader from './TopHeader';
 import Sidebar from './Sidebar';
@@ -37,6 +38,7 @@ export default function Shell({
 
 
   const activity = useActivityMonitor(user?.id);
+  const workplaceFence = useWorkplaceFence(user);
   const idleModalOpen = Boolean(activity.event);
   const [idleReason, setIdleReason] = useState('Break');
   const [idleExplanation, setIdleExplanation] = useState('');
@@ -194,6 +196,7 @@ export default function Shell({
         <span className={activity.status === 'connected' ? 'text-emerald-600 font-semibold' : 'text-amber-600 font-semibold'}>{activity.status === 'connected' ? 'App activity monitoring connected' : activity.status === 'connecting' ? 'Connecting activity monitor…' : 'Activity monitor disconnected — reconnect to sync'}</span>
         <span>HR is flagged after 10 minutes without app interaction. Connection gaps are marked unconfirmed.</span>
       </div>}
+      {workplaceFence && <div role="status" className={`px-4 py-2 text-xs border-b ${workplaceFence.ok ? "text-emerald-600 border-emerald-500/20" : "text-amber-600 border-amber-500/20"}`}>{workplaceFence.message}</div>}
       {/* Sync Success Toast Banner */}
       {syncSuccessToast && (
         <div className="bg-emerald-600 text-white text-xs font-bold py-2 px-4 flex items-center justify-between shadow-md animate-fade-in">

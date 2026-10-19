@@ -4,6 +4,7 @@
 
 import express from 'express';
 import { adminController } from '../controllers/adminController.js';
+import { adminService } from '../services/adminService.js';
 import { requireAuth } from '../middleware/auth.js';
 import { hasRole } from '../middleware/rbac.js';
 
@@ -24,6 +25,8 @@ router.put('/settings/:companyId', hasRole('SUPER_ADMIN', 'ADMIN', 'CEO', 'IT_AD
 // 3. Staff Password Reset
 router.post('/employees/:id/reset-password', hasRole('SUPER_ADMIN', 'ADMIN', 'IT_ADMIN'), adminController.resetStaffPassword);
 router.post('/staff-password', hasRole('SUPER_ADMIN', 'ADMIN', 'IT_ADMIN'), adminController.resetStaffPassword);
+router.get('/access-accounts', hasRole('SUPER_ADMIN', 'ADMIN', 'IT_ADMIN'), async(req,res,next)=>{try {res.json({data:await adminService.listAccessAccounts(req.user)});}catch(error){next(error);}});
+router.post('/access-accounts/:id/reset-password', hasRole('SUPER_ADMIN', 'ADMIN', 'IT_ADMIN'), async(req,res,next)=>{try {res.json({data:await adminService.resetAccountPassword(req.params.id,req.body.password,req.user)});}catch(error){next(error);}});
 
 // 4. Organization Structure (Regions, Territories, Teams, Branches, Warehouses)
 router.get('/structure', hasRole('SUPER_ADMIN', 'ADMIN', 'CEO', 'IT_ADMIN', 'HR_MANAGER', 'HR', 'MANAGER'), adminController.getStructure);

@@ -181,57 +181,35 @@ export const adminService = {
     return settings;
   },
 
-  async resetStaffPassword(employeeId, newPassword, adminUser) {
-    if (!newPassword || newPassword.trim().length < 6) {
-      throw new Error('New password must be at least 6 characters.');
+  async passwordAdministrator(actor) {
+    const user=actor?.id?await db.findById('users',actor.id):null;
+    if(!user||user.status!=='active'||!['SUPER_ADMIN','ADMIN','IT_ADMIN'].includes(user.role_code)||Number(user.company_id)!==Number(actor.company_id))throw Object.assign(new Error('Administrator access is required.'),{status:403});
+    return user;
+  },
+  async listAccessAccounts(actor) {
+    const admin=await this.passwordAdministrator(actor);
+    return (await db.find('users',{company_id:admin.company_id})).map(u=>({id:u.id,full_name:u.full_name,email:u.email,role_code:u.role_code,status:u.status,can_reset:u.id!==admin.id&&(admin.role_code==='SUPER_ADMIN'||!['SUPER_ADMIN','ADMIN'].includes(u.role_code))}));
+  },
+  async resetAccountPassword(userId,newPassword,actor) {
+    const admin=await this.passwordAdministrator(actor),user=await db.findById('users',Number(userId));
+    if(!user||Number(user.company_id)!==Number(admin.company_id))throw new Error('Account not found in your company.');
+    if(user.id===admin.id)throw new Error('Use Change my password to update your own credentials.');
+    if(admin.role_code!=='SUPER_ADMIN'&&['SUPER_ADMIN','ADMIN'].includes(user.role_code))throw Object.assign(new Error('A superadmin must reset administrator accounts.'),{status:403});
+    if(typeof newPassword!=='string'||newPassword.length<12||newPassword.length>128||newPassword!==newPassword.trim())throw new Error('Use a password of 12–128 characters without surrounding spaces.');
+    if(db.isCloud){
+      if(!user.auth_user_id)throw new Error('This account needs its Supabase identity linked before a password can be reset.');
+      if(!await supabaseAuthService.updatePassword(user.auth_user_id,newPassword))throw new Error('Supabase did not confirm the password change. No success was recorded.');
     }
-    const emp = await db.findById('employees', employeeId);
-    if (!emp) throw new Error('Employee not found');
-
-    const bcrypt = (await import('bcryptjs')).default;
-    const passwordHash = bcrypt.hashSync(newPassword.trim(), 10);
-
-    // Find linked user by user_id, email, work_email or phone
-    let user = emp.user_id ? await db.findById('users', emp.user_id) : null;
-    if (!user) {
-      const users = await db.find('users');
-      user = users.find(u =>
-        (emp.email && u.email && u.email.toLowerCase() === emp.email.toLowerCase()) ||
-        (emp.work_email && u.email && u.email.toLowerCase() === emp.work_email.toLowerCase()) ||
-        (emp.personal_email && u.email && u.email.toLowerCase() === emp.personal_email.toLowerCase()) ||
-        (emp.phone && u.phone === emp.phone)
-      );
-    }
-
-    if (user) {
-      if (!isTestMode && user.auth_user_id) {
-        try {
-          await supabaseAuthService.updatePassword(user.auth_user_id, newPassword.trim());
-        } catch (sbErr) {
-          logger.warn(`Supabase admin password update note: ${sbErr.message}`);
-        }
-      }
-      await db.update('users', user.id, {
-        password_hash: passwordHash,
-        requires_password_change: false
-      });
-    }
-
-    await db.insert('audit_logs', {
-      company_id: emp.company_id || 1,
-      user_id: adminUser?.id || null,
-      user_email: adminUser?.email || 'it_admin',
-      action: 'STAFF_PASSWORD_RESET',
-      entity: 'employees',
-      entity_id: String(emp.id),
-      previous_value: {},
-      new_value: { employee_code: emp.employee_code, email: emp.email }
-    });
-
-    return {
-      success: true,
-      message: `Password successfully updated for ${emp.first_name} ${emp.last_name} (${emp.employee_code}).`
-    };
+    await db.update('users',user.id,{password_hash:await bcrypt.hash(newPassword,12),requires_password_change:true,password_changed_at:new Date().toISOString(),session_invalid_before:new Date().toISOString()});
+    if(process.env.WORKFORCE_GEOFENCE_ENFORCED==='true')for(const session of await db.find('workforce_access_sessions',{company_id:admin.company_id,user_id:user.id}))if(['active','pending'].includes(session.state))await db.update('workforce_access_sessions',session.id,{state:'revoked',revoked_at:new Date().toISOString(),revoke_reason:'administrator_password_reset'});
+    await db.insert('audit_logs',{company_id:admin.company_id,user_id:admin.id,user_email:admin.email,action:'STAFF_PASSWORD_RESET',entity:'users',entity_id:String(user.id),previous_value:{},new_value:{email:user.email,requires_password_change:true}});
+    return {success:true,message:'Password reset confirmed. The account must choose a new password on its next sign-in.'};
+  },
+  async resetStaffPassword(employeeId,newPassword,actor) {
+    const admin=await this.passwordAdministrator(actor),employee=await db.findById('employees',Number(employeeId));
+    if(!employee||Number(employee.company_id)!==Number(admin.company_id))throw new Error('Staff member not found in your company.');
+    if(!employee.user_id)throw new Error('Link this staff profile to an account before resetting its password.');
+    return this.resetAccountPassword(employee.user_id,newPassword,admin);
   },
 
   async getStructure(companyId) {

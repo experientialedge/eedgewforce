@@ -39,6 +39,7 @@ import OrgChartTree from '../components/hr/OrgChartTree';
 import StaffProfileDrawer from '../components/hr/StaffProfileDrawer';
 import { formatMoney, formatDate, formatTime } from '../lib/formatters';
 import { api } from '../lib/api';
+import AccountAccessPanel from '../components/admin/AccountAccessPanel';
 
 export default function ITAdminDashboard({ user, onSelectTab }) {
   const [employees, setEmployees] = useState([]);
@@ -55,6 +56,7 @@ export default function ITAdminDashboard({ user, onSelectTab }) {
 
   // Active Sub-Tab
   const [activeTab, setActiveTab] = useState('staff'); // 'staff' | 'inventory' | 'receipt' | 'hierarchy' | 'locations' | 'system'
+  const canManagePasswords = ['SUPER_ADMIN','ADMIN','IT_ADMIN'].includes(user?.role_code);
 
   // Loading & Feedback
   const [loading, setLoading] = useState(false);
@@ -226,8 +228,8 @@ export default function ITAdminDashboard({ user, onSelectTab }) {
   // 2. Staff Password Reset
   const handleChangePassword = async (e) => {
     e.preventDefault();
-    if (!newStaffPassword || newStaffPassword.trim().length < 6) {
-      setErrorMsg('Password must be at least 6 characters.');
+    if (!newStaffPassword || newStaffPassword.trim().length < 12) {
+      setErrorMsg('Password must be at least 12 characters.');
       return;
     }
     setSavingPassword(true);
@@ -400,6 +402,7 @@ export default function ITAdminDashboard({ user, onSelectTab }) {
 
       {/* Super Admin Navigation Sub-Tabs */}
       <div className="flex border-b border-zinc-200 dark:border-zinc-800 gap-2 sm:gap-6 text-xs font-bold overflow-x-auto pb-1">
+        {canManagePasswords&&<button onClick={()=>setActiveTab('access')} className={`pb-2.5 whitespace-nowrap ${activeTab==='access'?'text-orange-600 border-b-2 border-orange-500':'text-zinc-500'}`}>Account access & passwords</button>}
         <button
           onClick={() => setActiveTab('staff')}
           className={`pb-2.5 transition relative flex items-center gap-2 whitespace-nowrap ${
@@ -473,6 +476,7 @@ export default function ITAdminDashboard({ user, onSelectTab }) {
         </button>
       </div>
 
+      {activeTab === 'access' && canManagePasswords && <AccountAccessPanel />}
       {/* SUB-TAB 1: STAFF DIRECTORY & PASSWORD MANAGEMENT */}
       {activeTab === 'staff' && (
         <div className="surface-card rounded-xl p-5 space-y-4">
@@ -1201,14 +1205,14 @@ export default function ITAdminDashboard({ user, onSelectTab }) {
             <input
               type="text"
               required
-              minLength="6"
+              minLength="12"
               placeholder="e.g. SalesTeam2026! or Operations99#"
               value={newStaffPassword}
               onChange={(e) => setNewStaffPassword(e.target.value)}
               className="form-input font-mono font-bold"
             />
             <span className="text-[10px] text-zinc-400 mt-1 block">
-              Enter a new secure password (minimum 6 characters). This will overwrite ChangeMe123!.
+              Use a temporary password of at least 12 characters. The account owner must change it after signing in.
             </span>
           </div>
 

@@ -5,6 +5,14 @@
 
 import localforage from 'localforage';
 
+export function offlineOwner() {
+  try {
+    if (!localStorage.getItem('ewf_token')) return null;
+    const user = JSON.parse(localStorage.getItem('ewf_user') || 'null');
+    return user?.id && user?.company_id ? `${user.company_id}:${user.id}` : null;
+  } catch { return null; }
+}
+
 // 1. Configure Offline Queue Store
 export const queueStore = localforage.createInstance({
   name: 'EdgeWForce',
@@ -29,9 +37,10 @@ export function generateIdempotencyKey(actionType = 'ACTION') {
 /**
  * Cache an API GET response locally for offline browsing.
  */
-export async function cacheApiResponse(endpoint, data) {
+export async function cacheApiResponse(endpoint, data, owner = offlineOwner()) {
   try {
-    const key = `cache:${endpoint}`;
+    if (!owner) return;
+    const key = `cache:${owner}:${endpoint}`;
     await dataCacheStore.setItem(key, {
       data,
       cachedAt: new Date().toISOString()
@@ -44,9 +53,10 @@ export async function cacheApiResponse(endpoint, data) {
 /**
  * Retrieve cached API GET response when offline.
  */
-export async function getCachedApiResponse(endpoint) {
+export async function getCachedApiResponse(endpoint, owner = offlineOwner()) {
   try {
-    const key = `cache:${endpoint}`;
+    if (!owner || owner !== offlineOwner()) return null;
+    const key = `cache:${owner}:${endpoint}`;
     const item = await dataCacheStore.getItem(key);
     return item ? item.data : null;
   } catch {
@@ -57,11 +67,13 @@ export async function getCachedApiResponse(endpoint) {
 /**
  * Enqueues an action to be executed when the network recovers.
  */
-export async function enqueueOfflineAction(path, method = 'POST', payload = {}, actionName = 'Action') {
+export async function enqueueOfflineAction(path, method = 'POST', payload = {}, actionName = 'Action', owner = offlineOwner()) {
+  if (!owner || owner !== offlineOwner()) throw new Error('Sign in again before saving an offline action.');
   const idempotencyKey = payload.idempotency_key || generateIdempotencyKey(actionName);
   const queueItem = {
     id: `queue:${Date.now()}:${Math.random().toString(36).substring(2, 7)}`,
     path,
+    owner,
     method,
     payload: { ...payload, idempotency_key: idempotencyKey },
     actionName,
@@ -78,13 +90,15 @@ export async function enqueueOfflineAction(path, method = 'POST', payload = {}, 
  * Retrieves all currently queued offline actions.
  */
 export async function getQueuedActions() {
+  const owner = offlineOwner();
+  if (!owner) return [];
   const keys = await queueStore.keys();
   const queueKeys = keys.filter(k => k.startsWith('queue:'));
   const items = [];
 
   for (const k of queueKeys) {
     const item = await queueStore.getItem(k);
-    if (item) items.push(item);
+    if (item?.owner === owner) items.push(item);
   }
 
   return items.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
@@ -105,23 +119,23 @@ export async function flushOfflineQueue(apiInstance) {
   let failed = 0;
 
   for (const item of items) {
+    if (offlineOwner() !== item.owner) break;
     try {
+      let result;
       if (item.method === 'POST') {
-        await apiInstance.post(item.path, item.payload);
+        result = await apiInstance.post(item.path, item.payload);
       } else if (item.method === 'PUT') {
-        await apiInstance.put(item.path, item.payload);
+        result = await apiInstance.put(item.path, item.payload);
       }
+      if (result?.queued) break;
       await queueStore.removeItem(item.id);
       synced++;
     } catch (err) {
+      if (err.status === 401 || err.status === 403) break;
       failed++;
       item.retries = (item.retries || 0) + 1;
       item.lastError = err.message;
-      if (item.retries > 5) {
-        await queueStore.removeItem(item.id); // Drop broken item after 5 retries
-      } else {
-        await queueStore.setItem(item.id, item);
-      }
+      await queueStore.setItem(item.id, item);
     }
   }
 

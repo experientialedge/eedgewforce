@@ -337,7 +337,7 @@ export default function SupervisorLiveMap({
           }`}
         >
           <div className="w-2 h-2 rounded-full border border-white" />
-          150m Geofences
+          Store boundaries
         </button>
 
         {/* Toggle Stores */}

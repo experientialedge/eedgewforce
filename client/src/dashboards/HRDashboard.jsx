@@ -1,3 +1,4 @@
+import ExecutiveActivityBrief from '../components/hr/ExecutiveActivityBrief';
 import React, { useState, useEffect } from 'react';
 import {
   Users,
@@ -53,7 +54,7 @@ import { formatMoney, formatDate, formatTime } from '../lib/formatters';
 import { api } from '../lib/api';
 
 
-export default function HRDashboard({ user, initialTab = 'overview' }) {
+export default function HRDashboard({ user, initialTab = 'overview', onSelectTab }) {
   const [tab, setTab] = useState(initialTab || 'overview');
 
   const userRole = String(user?.role_code || user?.role || '').toUpperCase();
@@ -485,6 +486,7 @@ export default function HRDashboard({ user, initialTab = 'overview' }) {
       {/* TAB 1: OVERVIEW */}
       {tab === 'overview' && (
         <div className="space-y-6">
+          <ExecutiveActivityBrief onOpenNexus={onSelectTab?()=>onSelectTab('nexus'):undefined} />
           <ActivityReviewPanel />
           {/* Active Critical SOS Panic Beacon Callout */}
           {sosEvents.filter(s => s.status === 'active').map((sos) => (

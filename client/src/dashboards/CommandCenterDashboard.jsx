@@ -1,3 +1,4 @@
+import ExecutiveActivityBrief from '../components/hr/ExecutiveActivityBrief';
 import React, { useState, useEffect } from 'react';
 import {
   Building2,
@@ -244,6 +245,7 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
 
   return (
     <div className="p-4 lg:p-8 max-w-7xl mx-auto space-y-6 animate-in fade-in duration-200">
+      <ExecutiveActivityBrief onOpenNexus={()=>onNavigate?.('nexus')} />
       {/* 1. Header & Greeting */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -475,7 +477,7 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
         <div className="p-3.5 bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-transparent border border-orange-500/20 rounded-2xl space-y-2">
           <div className="flex items-center gap-2 text-xs font-black text-orange-700 dark:text-orange-300">
             <Sparkles size={16} className="text-orange-500 animate-pulse" />
-            AI Operational Sentry Observations
+            Operational observations
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs text-zinc-700 dark:text-zinc-300">
             {insights.map((ins, idx) => (
@@ -575,7 +577,7 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
               Live Operations Map & Fleet Radar
             </h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Real-time pulsars for Field & Sales officers with 150m perimeter validation and customer locations.
+              Field and sales locations with customer stop boundaries. Confirmed workplace departures appear in the executive activity brief.
             </p>
           </div>
           <div className="flex items-center gap-2 text-xs">

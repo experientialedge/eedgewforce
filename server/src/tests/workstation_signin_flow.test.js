@@ -75,10 +75,10 @@ test('Staff sign in, receive a workstation live, verify GPS and complete attenda
       assert.equal((await call('/employee/attendance/clock',staffToken,gps)).status,200);
       assert.equal((await call('/employee/attendance/clock',staffToken,gps)).status,400);
       const morning=(await db.find('attendance'))[0].clock_in_time;
-      mock.timers.setTime(Date.parse('2026-10-18T12:00:00Z'));
+      mock.timers.setTime(Date.parse('2026-10-18T11:30:00Z'));
       assert.equal((await call('/employee/attendance/clock',staffToken,gps)).status,200);
       assert.equal((await db.find('attendance'))[0].clock_in_time,morning);
-      mock.timers.setTime(Date.parse('2026-10-18T15:30:00Z'));
+      mock.timers.setTime(Date.parse('2026-10-18T16:00:00Z'));
       assert.equal((await call('/employee/attendance/clock',staffToken,gps)).status,200);
       assert.equal((await call('/field/shifts/window-status',staffToken)).body.data.can_record,false);
       assert.ok((await db.find('attendance'))[0].clock_out_time);

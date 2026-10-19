@@ -10,9 +10,10 @@ import { requireAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 30, standardHeaders: true, legacyHeaders: false, message: { success: false, error: { message: 'Too many authentication attempts. Try again later.' } } });
-router.use(['/login', '/forgot-password', '/reset-password'], authLimiter);
+router.use(['/login', '/location-login', '/forgot-password', '/reset-password'], authLimiter);
 
 router.post('/login', authController.login);
+router.post('/location-login', authController.locationLogin);
 router.post('/register', requireAuth, hasRole('HR', 'HR_MANAGER', 'CEO', 'CTO', 'ADMIN', 'IT_ADMIN', 'SUPER_ADMIN'), authController.register);
 router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password', authController.resetPassword);

@@ -22,7 +22,7 @@ import {
   User,
   Award,
   LogOut
-  ,MessagesSquare
+  ,MessagesSquare, Sparkles
 } from 'lucide-react';
 
 export default function Sidebar({ user, currentTab, onSelectTab, onLogout, isMobile, onCloseMobile }) {
@@ -46,6 +46,7 @@ export default function Sidebar({ user, currentTab, onSelectTab, onLogout, isMob
 
   if (isManagement) {
     const complianceItems = [
+      ...(['SUPER_ADMIN','ADMIN','IT_ADMIN','HR','HR_MANAGER','CEO','CTO'].includes(role) ? [{id:'nexus',label:'NEXUS Intelligence',icon:Sparkles}] : []),
       { id: 'people', label: 'Staff Directory', icon: Users },
       { id: 'hr_schedules', label: 'Daily Schedules Roster', icon: CalendarCheck },
       { id: 'alerts', label: 'Alerts & Red Flag Center', icon: AlertTriangle },
