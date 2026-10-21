@@ -17,7 +17,11 @@ function getTransporter() {
       host,
       port,
       secure,
+      requireTLS: !secure,
       auth: { user, pass },
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 15000,
       tls: { rejectUnauthorized: true }
     });
     logger.info(`Email service initialized with SMTP host: ${host}:${port} (${user})`);
@@ -29,6 +33,28 @@ function getTransporter() {
 }
 
 export const emailService = {
+  reportConfiguration() {
+    const configured=Boolean((process.env.SMTP_USER||process.env.EMAIL_USER)&&(process.env.SMTP_PASS||process.env.EMAIL_PASS)&&process.env.EMAIL_FROM);
+    return {configured, status:configured?'configured_not_delivery_verified':'missing_smtp_configuration'};
+  },
+  async sendDailyWorkbook(recipient,day,content,runId) {
+    if(!this.reportConfiguration().configured) throw Object.assign(new Error('Email delivery is not configured.'),{definitive:true});
+    const client=getTransporter();
+    try {
+      const info=await client.sendMail({
+        from:process.env.EMAIL_FROM,to:recipient,
+        subject:`EdgeWForce daily HR and operations report — ${day}`,
+        text:`Attached is your EdgeWForce Excel report for ${day} (Africa/Lagos). It includes named attendance and work locations, sales orders, incomplete shared tasks, project status, leave requests and HR alerts. Open tasks and leave statuses reflect the report generation time. Review the Overview sheet for definitions.`,
+        attachments:[{filename:`EdgeWForce-daily-${day}.xlsx`,content,contentType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}],
+        headers:{'X-EdgeWForce-Report':String(runId)}
+      });
+      if(!(info.accepted||[]).some(a=>String(a).toLowerCase()===recipient.toLowerCase()))throw Object.assign(new Error('Recipient rejected.'),{definitive:true});
+      return {messageId:info.messageId};
+    } catch(error) {
+      error.definitive=error.definitive||['EAUTH','EENVELOPE','EMESSAGE'].includes(error.code)||Number(error.responseCode)>=500;
+      throw error;
+    }
+  },
   /**
    * Sends password reset verification PIN email.
    */

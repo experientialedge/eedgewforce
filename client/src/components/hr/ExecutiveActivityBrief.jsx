@@ -1,6 +1,7 @@
 import React,{useEffect,useState} from 'react';
 import {Sparkles,RefreshCw,MapPin,CheckCircle2,AlertTriangle} from 'lucide-react';
 import {api} from '../../lib/api';
+import DailyReportPanel from './DailyReportPanel';
 const labels={active_staff:'Active staff profiles',staff_clocked_in:'Staff clocked in',late_arrivals:'Late arrivals',clock_outs:'Clock-outs',confirmed_departures:'Confirmed departures',completed_project_tasks:'Shared tasks completed',overdue_project_tasks:'Overdue shared tasks',unconfirmed_connection_gaps:'Unconfirmed connection gaps'};
 export default function ExecutiveActivityBrief({onOpenNexus}){
   const [data,setData]=useState(null),[error,setError]=useState(''),[busy,setBusy]=useState(false);
@@ -9,7 +10,7 @@ export default function ExecutiveActivityBrief({onOpenNexus}){
   useEffect(()=>{load();const timer=setInterval(()=>{api.get('/executive-reports/today').then(setData).catch(e=>setError(e.message));},60000);return()=>clearInterval(timer);},[]);
   if(data?.enabled===false)return <section className="surface-card rounded-2xl p-5 text-sm text-zinc-500">Executive activity reporting is awaiting database activation.</section>;
   let narrative=null;try{narrative=data?.report?.source==='openai'?JSON.parse(data.report.narrative):null;}catch{}
-  return <section className="surface-card rounded-3xl border border-zinc-200 dark:border-zinc-800 overflow-hidden" aria-label="Executive activity report">
+  return <div className="space-y-6"><DailyReportPanel/><section className="surface-card rounded-3xl border border-zinc-200 dark:border-zinc-800 overflow-hidden" aria-label="Executive activity report">
     <div className="p-5 sm:p-6 bg-gradient-to-br from-orange-500/10 via-transparent to-amber-500/5 border-b border-zinc-200 dark:border-zinc-800 flex flex-wrap justify-between gap-4"><div><div className="flex items-center gap-2 mb-2"><Sparkles size={18} className="text-orange-500"/><span className="text-xs font-semibold uppercase tracking-widest">Executive activity brief</span></div><h3 className="text-xl font-bold">Your workforce, in focus.</h3><p className="text-xs text-zinc-500 mt-2">{data?.report?.report_date||'Today'} · Lagos time · {narrative?'AI summary with verified evidence':'Verified factual summary'}</p></div><div className="flex gap-2 items-start"><button onClick={load} aria-label="Refresh executive report" className="p-3 rounded-xl bg-zinc-100 dark:bg-zinc-800"><RefreshCw size={16}/></button>{onOpenNexus&&<button onClick={onOpenNexus} className="btn-secondary text-xs">Explore NEXUS</button>}{data?.ai_configured&&<button onClick={generate} disabled={busy||!data?.ai_configured||!data?.ai_generation_due} className="btn-primary text-xs">{busy?'Preparing AI summary…':'Generate AI summary'}</button>}</div></div>
     <div className="p-5 sm:p-6 space-y-5">
       {error&&<p role="alert" className="rounded-xl p-3 bg-amber-500/10 text-amber-700 dark:text-amber-300 text-sm">{error}</p>}
@@ -23,5 +24,5 @@ export default function ExecutiveActivityBrief({onOpenNexus}){
       <div className="border-t border-zinc-200 dark:border-zinc-800 pt-5"><h4 className="text-sm font-semibold mb-3 flex gap-2"><MapPin size={16}/>Recent workplace movements</h4>{!data.movements.length?<p className="text-sm text-zinc-500">No workplace movements recorded yet.</p>:<div className="space-y-3 max-h-80 overflow-y-auto">{data.movements.map(m=><article key={m.id} className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-3 text-sm"><div className="flex flex-wrap justify-between gap-2"><strong>{m.employee_name}</strong><span className="text-xs text-zinc-500">{new Date(m.observed_at).toLocaleString('en-NG',{timeZone:'Africa/Lagos'})} WAT</span></div><p className="mt-1">{m.kind==='workplace_departure'?`Left ${m.details.location_name}. Sessions ended.`:`Signed in at ${m.details.location_name}.`}</p>{m.kind==='workplace_departure'&&<p className="text-xs text-zinc-500 mt-1">{m.details.detected_location_name?`Observed at ${m.details.detected_location_name}`:'Destination unconfirmed'} · GPS accuracy ±{Math.round(m.details.accuracy)}m</p>}</article>)}</div>}</div>
       </>}
     </div>
-  </section>;
+  </section></div>;
 }

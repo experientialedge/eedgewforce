@@ -1,0 +1,14 @@
+import express from 'express';
+import rateLimit from 'express-rate-limit';
+import { requireAuth } from '../middleware/auth.js';
+import { hrDailyReportService as service, reportDay } from '../services/hrDailyReportService.js';
+const router=express.Router();
+router.use(requireAuth);
+router.use(rateLimit({windowMs:60000,max:20,keyGenerator:req=>`${req.user.company_id}:${req.user.id}`,standardHeaders:true,legacyHeaders:false}));
+router.use((req,res,next)=>{res.set('Cache-Control','private, no-store');next();});
+const handle=fn=>async(req,res,next)=>{try{res.json({data:await fn(req)});}catch(e){next(e);}};
+router.get('/settings',handle(req=>service.settings(req.user)));
+router.put('/settings',handle(req=>service.save(req.user,req.body)));
+router.post('/send',rateLimit({windowMs:300000,max:3,keyGenerator:req=>`${req.user.company_id}`,standardHeaders:true,legacyHeaders:false}),handle(req=>service.send(req.user,req.body.date)));
+router.get('/download',async(req,res,next)=>{try{const day=reportDay(req.query.date),bytes=await service.download(req.user,day);res.set('Content-Type','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');res.set('Content-Disposition',`attachment; filename="EdgeWForce-daily-${day}.xlsx"`);res.send(bytes);}catch(e){next(e);}});
+export default router;

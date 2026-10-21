@@ -139,16 +139,18 @@ export const db = {
       let q = cloud.from(cloudTable(table)).select(options.select || '*');
       for (const [key, value] of Object.entries(filter)) if (value !== undefined && value !== null) q = q.eq(process.env.SUPABASE_SCHEMA_LAYOUT === 'canonical' && table === 'attendance' && key === 'date' ? 'attendance_date' : key, value);
       for (const [key, value] of Object.entries(options.gt || {})) q = q.gt(key, value);
+      for (const [key, value] of Object.entries(options.gte || {})) q = q.gte(key, value);
       for (const [key, value] of Object.entries(options.lt || {})) q = q.lt(key, value);
       if (options.order) q = q.order(options.order.column, { ascending: options.order.ascending !== false });
       if (options.limit) q = q.limit(options.limit);
+      if (options.offset !== undefined) q = q.range(options.offset, options.offset + (options.limit || 1000) - 1);
       const data = await cloudResult(q);
       return (data || []).map(item => table === 'attendance' ? { ...item, date: item.attendance_date || item.date, clock_in_time: item.clock_in || item.clock_in_time, clock_out_time: item.clock_out || item.clock_out_time, clock_in_lat: item.clock_in_latitude ?? item.clock_in_lat, clock_in_lng: item.clock_in_longitude ?? item.clock_in_lng } : item);
     }
 
     const targetList = store[canonicalTable] || store[table] || [];
     let items = targetList.filter(item => {
-      if (Object.entries(options.gt || {}).some(([k,v]) => !(item[k] > v)) || Object.entries(options.lt || {}).some(([k,v]) => !(item[k] < v))) return false;
+      if (Object.entries(options.gt || {}).some(([k,v]) => !(item[k] > v)) || Object.entries(options.gte || {}).some(([k,v]) => !(item[k] >= v)) || Object.entries(options.lt || {}).some(([k,v]) => !(item[k] < v))) return false;
       return Object.entries(filter).every(([k, v]) => {
         if (v === undefined || v === null) return true;
         const itemVal = item[k] !== undefined ? item[k] : (k === 'date' ? item.attendance_date : (k === 'attendance_date' ? item.date : undefined));
@@ -169,6 +171,7 @@ export const db = {
       });
     }
 
+    if (options.offset) items = items.slice(options.offset);
     if (options.limit) {
       items = items.slice(0, options.limit);
     }
@@ -179,6 +182,18 @@ export const db = {
   async findOne(table, filter = {}) {
     const list = await this.find(table, filter, { limit: 1 });
     return list[0] || null;
+  },
+
+  // Explicitly paginate exports; PostgREST otherwise silently caps results at 1,000.
+  async findAll(table, filter = {}, options = {}) {
+    const rows = [];
+    for (let offset = 0; offset <= 50000; offset += 1000) {
+      const page = await this.find(table, filter, { ...options, order: options.order || { column: 'id' }, limit: 1000, offset });
+      rows.push(...page);
+      if (rows.length > 50000) throw Object.assign(new Error('Report exceeds 50,000 records in one category. Narrow the reporting period.'), { status: 413 });
+      if (page.length < 1000) return rows;
+    }
+    throw new Error('Report pagination could not complete.');
   },
 
   async findById(table, id) {

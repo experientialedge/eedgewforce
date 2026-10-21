@@ -30,7 +30,7 @@ async function getAuthToken() {
 
 export async function request(path, options = {}) {
   const method = options.method || 'GET';
-  const requireOnline = options.requireOnline || /^\/(auth|admin|nexus|hr|locations|work-locations|collaboration|activity|workplace-access|executive-reports)(\/|\?|$)/.test(path) || /^\/(field\/(shifts|check-in|check-out)|employee\/(attendance|dashboard))/.test(path);
+  const requireOnline = options.requireOnline || /^\/(auth|admin|nexus|hr|hr-reports|locations|work-locations|collaboration|activity|workplace-access|executive-reports)(\/|\?|$)/.test(path) || /^\/(field\/(shifts|check-in|check-out)|employee\/(attendance|dashboard))/.test(path);
   if (requireOnline && !navigator.onLine) throw new Error('Connect to the internet to use this live feature.');
   const token = path === '/auth/login' ? null : await getAuthToken();
   const owner = offlineOwner();
@@ -81,6 +81,7 @@ export async function request(path, options = {}) {
       headers
     });
 
+    if (res.ok && options.responseType === 'blob') return res.blob();
     const text = await res.text();
     let json = {};
     try {

@@ -36,6 +36,9 @@ import activityRoutes from './routes/activityRoutes.js';
 import workplaceAccessRoutes from './routes/workplaceAccessRoutes.js';
 import executiveReportRoutes from './routes/executiveReportRoutes.js';
 import nexusRoutes from './routes/nexusRoutes.js';
+import hrDailyReportRoutes from './routes/hrDailyReportRoutes.js';
+import { hrDailyReportService } from './services/hrDailyReportService.js';
+import { timingSafeEqual } from 'node:crypto';
 import { requireAuth } from './middleware/auth.js';
 import { employeeService } from './services/employeeService.js';
 import { reminderWorker } from './services/reminderWorker.js';
@@ -128,6 +131,7 @@ app.get('/api/health/ready', async (req, res) => {
       if (process.env.WORKFORCE_GEOFENCE_ENFORCED === 'true' && !result.workplace_access) throw new Error('Workplace access migration is required.');
       if (process.env.WORKFORCE_REPORTS_ENABLED === 'true' && !result.executive_reports) throw new Error('Executive report migration is required.');
       if (process.env.NEXUS_ENABLED === 'true' && !result.nexus) throw new Error('NEXUS migration is required.');
+      if (process.env.HR_DAILY_REPORTS_ENABLED === 'true' && !await db.rpc('hr_reporting_readiness', {})) throw new Error('Daily HR reporting migration is required.');
     } else await db.find('users', {}, { limit: 1 });
     res.json({ ready: true, release: '2026-10-15' });
   } catch (err) {
@@ -161,6 +165,13 @@ app.use('/api/collaboration', collaborationRoutes);
 app.use('/api/activity', activityRoutes);
 app.use('/api/workplace-access', workplaceAccessRoutes);
 app.use('/api/executive-reports', executiveReportRoutes);
+app.use('/api/hr-reports', hrDailyReportRoutes);
+app.get('/api/cron/hr-daily-report', async (req,res,next)=>{
+  res.set('Cache-Control','no-store');
+  const expected=process.env.CRON_SECRET,provided=req.get('authorization')||'';
+  if(!expected||expected.length<32||Buffer.byteLength(provided)!==Buffer.byteLength(`Bearer ${expected}`)||!timingSafeEqual(Buffer.from(provided),Buffer.from(`Bearer ${expected}`))) return res.status(401).json({error:{message:'Unauthorized scheduler.'}});
+  try{const results=await hrDailyReportService.daily();res.status(results.some(r=>r.error||r.results?.some(d=>['failed','uncertain'].includes(d.state)))?503:200).json({results});}catch(e){next(e);}
+});
 
 
 // Compatibility route for idle telemetry
