@@ -1,6 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import {useMapTiles} from '../../hooks/useMapTiles';
+import {mapPoint,mapRadius,escapeMapText as esc} from '../../lib/mapSupport';
+import MapTileStatus from './MapTileStatus';
 
 // Custom SVG map icons
 const createCustomIcon = (color = '#F57C00', label = '') => {
@@ -59,6 +62,8 @@ const agentRadarIcon = L.divIcon({
 export default function FieldMap({ route = [], agentLocation = null, height = '400px' }) {
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
+  const dataLayerRef=useRef(null),lastFitRef=useRef(null),boundsRef=useRef([]);
+  const {tileState,connectMap,retryMap}=useMapTiles();
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -73,49 +78,55 @@ export default function FieldMap({ route = [], agentLocation = null, height = '4
     const defaultCenter = [6.4281, 3.4219];
     const map = L.map(mapContainerRef.current, {
       zoomControl: true,
-      attributionControl: false
+      attributionControl: true
     }).setView(defaultCenter, 13);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19
-    }).addTo(map);
+    connectMap(map);
+    dataLayerRef.current=L.layerGroup().addTo(map);
+    mapInstanceRef.current=map;
+    return ()=>{map.remove();mapInstanceRef.current=null;dataLayerRef.current=null;lastFitRef.current=null;};
+  }, [connectMap]);
+
+  useEffect(()=>{
+    const map=mapInstanceRef.current,layer=dataLayerRef.current;
+    if(!map||!layer)return;
+    layer.clearLayers();
 
     const latLngPoints = [];
 
     // 1. Plot Agent Live Location
-    if (agentLocation?.latitude && agentLocation?.longitude) {
-      const agentLatLng = [Number(agentLocation.latitude), Number(agentLocation.longitude)];
-      L.marker(agentLatLng, { icon: agentRadarIcon })
-        .addTo(map)
-        .bindPopup(`<b>Your Live GPS Location</b><br>Accuracy: ±${Math.round(agentLocation.accuracy || 10)}m`);
+    const agentLatLng=mapPoint(agentLocation?.latitude,agentLocation?.longitude);
+    if (agentLatLng) {
+      L.marker(agentLatLng, { icon: agentRadarIcon,title:'Your latest recorded location' })
+        .addTo(layer)
+        .bindPopup(`<b>Your latest recorded GPS location</b><br>Accuracy: ${Number.isFinite(Number(agentLocation.accuracy))?`±${Math.round(Number(agentLocation.accuracy))}m`:'not recorded'}`);
       latLngPoints.push(agentLatLng);
     }
 
     // 2. Plot Route Customer Stops & 150m Geofence Circles
     route.forEach((stop, index) => {
       const cust = stop.customer;
-      if (cust?.latitude && cust?.longitude) {
-        const lat = Number(cust.latitude);
-        const lng = Number(cust.longitude);
-        const point = [lat, lng];
+      const point=mapPoint(cust?.latitude,cust?.longitude);
+      if (point) {
+        const [lat,lng]=point;
         latLngPoints.push(point);
 
-        const isCompleted = stop.status === 'completed';
+        const isCompleted = String(stop.status).toLowerCase() === 'completed';
         const markerColor = isCompleted ? '#10B981' : (stop.priority === 'URGENT' ? '#EF4444' : '#F57C00');
 
         const marker = L.marker(point, {
-          icon: createCustomIcon(markerColor, String(index + 1))
-        }).addTo(map);
+          icon: createCustomIcon(markerColor, String(index + 1)),title:`Stop ${index+1}: ${cust.name||'Customer'}`
+        }).addTo(layer);
 
         marker.bindPopup(`
           <div style="font-family: sans-serif; font-size: 12px; line-height: 1.4;">
-            <b style="font-size: 13px; color: #111;">${cust.name}</b><br>
-            <span style="color: #666;">${cust.address || 'Lagos territory'}</span><br>
+            <b style="font-size: 13px; color: #111;">${esc(cust.name)}</b><br>
+            <span style="color: #666;">${esc(cust.address || 'Address not recorded')}</span><br>
             <div style="margin-top: 4px;">
-              <b>Status:</b> ${stop.status} | <b>Priority:</b> ${stop.priority || 'Normal'}
+              <b>Status:</b> ${esc(stop.status)} | <b>Priority:</b> ${esc(stop.priority || 'Normal')}
             </div>
             <div style="margin-top: 6px;">
-              <a href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" target="_blank" style="color: #F57C00; font-weight: bold; text-decoration: none;">
+              <a href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" target="_blank" rel="noopener noreferrer" style="color: #F57C00; font-weight: bold; text-decoration: none;">
                 🧭 Open Directions
               </a>
             </div>
@@ -124,12 +135,12 @@ export default function FieldMap({ route = [], agentLocation = null, height = '4
 
         // Draw 150-Meter Geofence Circle
         L.circle(point, {
-          radius: 150,
+          radius: mapRadius(cust),
           color: markerColor,
           weight: 1.5,
           fillColor: markerColor,
           fillOpacity: 0.08
-        }).addTo(map);
+        }).addTo(layer);
       }
     });
 
@@ -140,26 +151,22 @@ export default function FieldMap({ route = [], agentLocation = null, height = '4
         weight: 3,
         opacity: 0.7,
         dashArray: '6, 6'
-      }).addTo(map);
+      }).addTo(layer);
     }
 
     // 4. Fit bounds
-    if (latLngPoints.length > 0) {
-      map.fitBounds(latLngPoints, { padding: [40, 40] });
+    const routeKey=JSON.stringify(route.map(stop=>[stop.id,stop.customer?.latitude,stop.customer?.longitude]));
+    boundsRef.current=latLngPoints;
+    if (latLngPoints.length > 0 && lastFitRef.current!==routeKey) {
+      map.fitBounds(latLngPoints, { padding: [40, 40],maxZoom:16 });
+      lastFitRef.current=routeKey;
     }
-
-    mapInstanceRef.current = map;
-
-    return () => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
-      }
-    };
   }, [route, agentLocation]);
 
   return (
-    <div className="surface-card rounded-xl overflow-hidden shadow-sm border border-zinc-200 dark:border-zinc-800">
+    <div className="relative z-0 isolate surface-card rounded-xl overflow-hidden shadow-sm border border-zinc-200 dark:border-zinc-800">
+      <div className="flex justify-end border-b border-zinc-200 dark:border-zinc-700 px-3 py-2"><button type="button" onClick={()=>{if(boundsRef.current.length)mapInstanceRef.current?.fitBounds(boundsRef.current,{padding:[40,40],maxZoom:16});}} className="text-xs font-semibold text-orange-700 dark:text-orange-300">Recenter route</button></div>
+      <MapTileStatus state={tileState} onRetry={retryMap}/>
       <div ref={mapContainerRef} style={{ height, width: '100%' }} />
     </div>
   );

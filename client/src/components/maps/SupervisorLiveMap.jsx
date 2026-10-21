@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import {useMapTiles} from '../../hooks/useMapTiles';
+import {mapPoint,mapRadius,escapeMapText as esc} from '../../lib/mapSupport';
+import MapTileStatus from './MapTileStatus';
 import { Layers, Store, Users, Eye, RefreshCw, ZoomIn, ZoomOut, Navigation } from 'lucide-react';
 
 // Status color definitions
@@ -40,7 +43,7 @@ const createAgentIcon = (statusColor = '#10B981', initials = 'FA', isSales = fal
           border: 2.5px solid white;
           box-shadow: 0 4px 12px rgba(0,0,0,0.35);
         ">
-          ${initials}
+          ${esc(initials)}
         </div>
         <div style="
           position: absolute;
@@ -106,6 +109,8 @@ export default function SupervisorLiveMap({
   const mapInstanceRef = useRef(null);
   const markersGroupRef = useRef(null);
   const geofencesGroupRef = useRef(null);
+  const boundsRef=useRef([]),lastFitRef=useRef(null);
+  const {tileState,connectMap,retryMap}=useMapTiles();
 
   const [showGeofences, setShowGeofences] = useState(true);
   const [showStores, setShowStores] = useState(true);
@@ -124,12 +129,10 @@ export default function SupervisorLiveMap({
     const defaultCenter = [6.4350, 3.4300]; // Lagos Victoria Island / Lekki Corridor
     const map = L.map(mapContainerRef.current, {
       zoomControl: false,
-      attributionControl: false
+      attributionControl: true
     }).setView(defaultCenter, 12);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19
-    }).addTo(map);
+    connectMap(map);
 
     markersGroupRef.current = L.layerGroup().addTo(map);
     geofencesGroupRef.current = L.layerGroup().addTo(map);
@@ -139,9 +142,10 @@ export default function SupervisorLiveMap({
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
+        markersGroupRef.current=null;geofencesGroupRef.current=null;lastFitRef.current=null;boundsRef.current=[];
       }
     };
-  }, []);
+  }, [connectMap]);
 
   // Update Layers & Markers
   useEffect(() => {
@@ -155,11 +159,11 @@ export default function SupervisorLiveMap({
 
     // 1. Render Stores & Geofence Perimeters
     stores.forEach(store => {
-      if (!store.latitude || !store.longitude) return;
-      const point = [Number(store.latitude), Number(store.longitude)];
-      boundsPoints.push(point);
+      const point = mapPoint(store.latitude,store.longitude);
+      if (!point) return;
+      if(showStores||showGeofences)boundsPoints.push(point);
 
-      const radius = Number(store.geofence_radius || 150);
+      const radius = mapRadius(store);
 
       // Draw Geofence Radius Circle
       if (showGeofences) {
@@ -170,29 +174,29 @@ export default function SupervisorLiveMap({
           dashArray: '5, 5',
           fillColor: '#F57C00',
           fillOpacity: 0.08
-        }).bindTooltip(`${store.name} Geofence (${radius}m)`, { sticky: true, className: 'text-xs font-semibold' });
+        }).bindTooltip(`${esc(store.name)} Geofence (${radius}m)`, { sticky: true, className: 'text-xs font-semibold' });
         geofencesGroupRef.current.addLayer(circle);
       }
 
       // Draw Store Marker
       if (showStores) {
         const storeMarker = L.marker(point, {
-          icon: createStoreIcon(store.name, radius)
+          icon: createStoreIcon(store.name, radius),title:store.name||'Work location'
         });
 
         const storePopupHtml = `
           <div style="font-family: system-ui, sans-serif; font-size: 12px; line-height: 1.4; min-width: 220px;">
             <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-              <span style="background: #F57C00; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px;">${store.code || 'STORE'}</span>
-              <span style="font-weight: 700; color: #111827; font-size: 13px;">${store.name}</span>
+              <span style="background: #F57C00; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px;">${esc(store.code || 'STORE')}</span>
+              <span style="font-weight: 700; color: #111827; font-size: 13px;">${esc(store.name)}</span>
             </div>
-            <div style="color: #6B7280; font-size: 11px; margin-bottom: 6px;">📍 ${store.address || 'Address'}</div>
+            <div style="color: #6B7280; font-size: 11px; margin-bottom: 6px;">📍 ${esc(store.address || 'Address not recorded')}</div>
             <div style="border-top: 1px solid #E5E7EB; padding-top: 6px; font-size: 11px; margin-bottom: 8px;">
-              <div><b>Territory:</b> ${store.territory || 'Lagos Mainland'}</div>
+              <div><b>Territory:</b> ${esc(store.territory || 'Not recorded')}</div>
               <div><b>Geofence:</b> <span style="color: #F57C00; font-weight: bold;">${radius}m radius</span></div>
-              <div><b>Contact:</b> ${store.contact_person || 'Manager'} (${store.phone || 'N/A'})</div>
+              <div><b>Contact:</b> ${esc(store.contact_person || 'Not recorded')} (${esc(store.phone || 'N/A')})</div>
             </div>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=${store.latitude},${store.longitude}" target="_blank" rel="noopener noreferrer" style="
+            <a href="https://www.google.com/maps/dir/?api=1&destination=${point[0]},${point[1]}" target="_blank" rel="noopener noreferrer" style="
               display: flex;
               align-items: center;
               justify-content: center;
@@ -223,9 +227,8 @@ export default function SupervisorLiveMap({
       if (!isSales && !showFieldAgents) return;
 
       const coords = agent.latest_coordinates;
-      if (!coords || !coords.latitude || !coords.longitude) return;
-
-      const point = [Number(coords.latitude), Number(coords.longitude)];
+      const point = mapPoint(coords?.latitude,coords?.longitude);
+      if (!point) return;
       boundsPoints.push(point);
 
       const statusColorHex = STATUS_COLORS[agent.status_color] || STATUS_COLORS.GREEN;
@@ -233,28 +236,29 @@ export default function SupervisorLiveMap({
 
       const marker = L.marker(point, {
         icon: createAgentIcon(statusColorHex, initials, isSales),
+        title:agent.name||'Team member',
         zIndexOffset: agent.id === selectedEmployee?.id ? 1000 : 100
       });
 
       const popupHtml = `
         <div style="font-family: system-ui, sans-serif; font-size: 12px; line-height: 1.4; min-width: 220px;">
           <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px;">
-            <b style="font-size: 13px; color: #111827;">${agent.name || `${agent.first_name || ''} ${agent.last_name || ''}`}</b>
+            <b style="font-size: 13px; color: #111827;">${esc(agent.name || `${agent.first_name || ''} ${agent.last_name || ''}`)}</b>
             <span style="background: ${statusColorHex}; color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 9999px;">
-              ${agent.status_label || (agent.status_color === 'GREEN' ? 'Active' : 'On Duty')}
+              ${esc(agent.status_label || (agent.status_color === 'GREEN' ? 'Active' : 'On Duty'))}
             </span>
           </div>
           <div style="color: #6B7280; font-size: 11px; margin-bottom: 6px;">
-            ${agent.role || agent.role_code || 'Officer'} &bull; ${agent.employee_code || 'EMP'}
+            ${esc(agent.role || agent.role_code || 'Officer')} &bull; ${esc(agent.employee_code || 'EMP')}
           </div>
           <div style="background: #F3F4F6; border-radius: 6px; padding: 6px 8px; font-size: 11px; margin-bottom: 8px;">
-            <div><b>Assigned Outlet:</b> ${agent.store?.name || 'Assigned Beat'}</div>
-            <div><b>Check-In:</b> ${agent.check_in_time ? new Date(agent.check_in_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'On Field'}</div>
+            <div><b>Assigned Outlet:</b> ${esc(agent.store?.name || 'Not assigned')}</div>
+            <div><b>Check-In:</b> ${agent.check_in_time ? new Date(agent.check_in_time).toLocaleTimeString('en-GB', { timeZone:'Africa/Lagos',hour: '2-digit', minute: '2-digit' })+' WAT' : 'Not recorded'}</div>
             <div><b>Coordinates:</b> ${Number(coords.latitude).toFixed(5)}, ${Number(coords.longitude).toFixed(5)}</div>
-            <div><b>Distance to Store:</b> ${agent.distance_meters ? `${agent.distance_meters}m` : 'Inside Geofence'}</div>
+            <div><b>Distance to Store:</b> ${agent.distance_meters != null ? `${esc(agent.distance_meters)}m` : 'Not recorded'}</div>
           </div>
           <div style="display: flex; flex-direction: column; gap: 4px;">
-            <a href="https://www.google.com/maps/dir/?api=1&destination=${coords.latitude},${coords.longitude}" target="_blank" rel="noopener noreferrer" style="
+            <a href="https://www.google.com/maps/dir/?api=1&destination=${point[0]},${point[1]}" target="_blank" rel="noopener noreferrer" style="
               display: flex;
               align-items: center;
               justify-content: center;
@@ -302,26 +306,31 @@ export default function SupervisorLiveMap({
 
 
     // Auto fit bounds if points exist
-    if (boundsPoints.length > 0) {
+    boundsRef.current=boundsPoints;
+    const fitKey=JSON.stringify([stores.map(s=>s.id),team.map(a=>a.id),showStores,showGeofences,showFieldAgents,showSalesAgents,selectedEmployee?.id]);
+    if (boundsPoints.length > 0 && lastFitRef.current!==fitKey) {
       map.fitBounds(boundsPoints, { padding: [50, 50], maxZoom: 14 });
+      lastFitRef.current=fitKey;
     }
-  }, [team, stores, showGeofences, showStores, showFieldAgents, showSalesAgents, selectedEmployee]);
+  }, [team, stores, showGeofences, showStores, showFieldAgents, showSalesAgents, selectedEmployee,onSelectEmployee]);
 
   const handleZoomIn = () => mapInstanceRef.current?.zoomIn();
   const handleZoomOut = () => mapInstanceRef.current?.zoomOut();
   const handleRecenter = () => {
     if (mapInstanceRef.current) {
-      mapInstanceRef.current.setView([6.4350, 3.4300], 12);
+      if(boundsRef.current.length)mapInstanceRef.current.fitBounds(boundsRef.current,{padding:[50,50],maxZoom:14});else mapInstanceRef.current.setView([6.4350, 3.4300], 12);
     }
   };
 
   return (
-    <div className="relative surface-card rounded-2xl overflow-hidden shadow-sm border border-zinc-200 dark:border-zinc-800">
+    <div className="relative z-0 isolate surface-card rounded-2xl overflow-hidden shadow-sm border border-zinc-200 dark:border-zinc-800">
+      <MapTileStatus state={tileState} onRetry={retryMap}/>
       {/* Map Container */}
       <div ref={mapContainerRef} style={{ height, width: '100%' }} />
 
       {/* Top Floating Controls & Toggles */}
-      <div className="absolute top-3 left-3 z-[1000] flex flex-wrap items-center gap-2 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md px-3 py-2 rounded-xl shadow-md border border-zinc-200 dark:border-zinc-800 text-xs font-semibold">
+      <div className="absolute top-3 left-3 right-3 z-[1000] flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between pointer-events-none">
+      <div className="pointer-events-auto flex flex-wrap items-center gap-2 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md px-3 py-2 rounded-xl shadow-md border border-zinc-200 dark:border-zinc-800 text-xs font-semibold">
         <span className="text-zinc-500 uppercase tracking-wider text-[10px] mr-1 flex items-center gap-1">
           <Layers className="w-3.5 h-3.5 text-primary" /> Layers:
         </span>
@@ -384,13 +393,13 @@ export default function SupervisorLiveMap({
       </div>
 
       {/* Top Right Live Radar Indicator & Refresh */}
-      <div className="absolute top-3 right-3 z-[1000] flex items-center gap-2">
+      <div className="pointer-events-auto flex items-center gap-2 shrink-0">
         <div className="flex items-center gap-2 bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-xl shadow-md text-xs font-bold backdrop-blur-md">
           <span className="relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
           </span>
-          LIVE RADAR ACTIVE
+          {tileState==='error'?'MAP CONNECTION ISSUE':'LATEST REPORTED LOCATIONS'}
         </div>
 
         {onRefresh && (
@@ -405,8 +414,10 @@ export default function SupervisorLiveMap({
         )}
       </div>
 
+      </div>
+
       {/* Bottom Left Status Legend */}
-      <div className="absolute bottom-4 left-4 z-[1000] bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md px-3 py-2 rounded-xl shadow-md border border-zinc-200 dark:border-zinc-800 flex items-center gap-3 text-[11px] font-semibold text-zinc-700 dark:text-zinc-300">
+      <div className="absolute bottom-6 left-3 right-16 sm:right-auto z-[1000] bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md px-3 py-2 rounded-xl shadow-md border border-zinc-200 dark:border-zinc-800 flex flex-wrap items-center gap-3 text-[11px] font-semibold text-zinc-700 dark:text-zinc-300">
         <span className="text-zinc-400 font-bold uppercase text-[9px]">Status:</span>
         <div className="flex items-center gap-1.5">
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
@@ -447,7 +458,7 @@ export default function SupervisorLiveMap({
         <button
           type="button"
           onClick={handleRecenter}
-          title="Recenter Lagos Region"
+          title="Recenter reported locations"
           className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg text-primary transition-all"
         >
           <Navigation className="w-4 h-4" />

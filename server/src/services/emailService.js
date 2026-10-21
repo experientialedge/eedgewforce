@@ -1,16 +1,13 @@
 import nodemailer from 'nodemailer';
 import { logger } from '../utils/logger.js';
+import {smtpConfiguration} from '../utils/smtpConfiguration.js';
 
 let transporter = null;
 
 function getTransporter() {
   if (transporter) return transporter;
 
-  const host = process.env.SMTP_HOST || 'smtp.resend.com';
-  const port = Number(process.env.SMTP_PORT || 465);
-  const secure = port === 465; // true for 465, false for 587
-  const user = process.env.SMTP_USER || process.env.EMAIL_USER;
-  const pass = process.env.SMTP_PASS || process.env.EMAIL_PASS;
+  const {host,port,secure,user,pass}=smtpConfiguration();
 
   if (user && pass) {
     transporter = nodemailer.createTransport({
@@ -34,8 +31,14 @@ function getTransporter() {
 
 export const emailService = {
   reportConfiguration() {
-    const configured=Boolean((process.env.SMTP_USER||process.env.EMAIL_USER)&&(process.env.SMTP_PASS||process.env.EMAIL_PASS)&&process.env.EMAIL_FROM);
-    return {configured, status:configured?'configured_not_delivery_verified':'missing_smtp_configuration'};
+    const config=smtpConfiguration();
+    return {configured:config.configured,provider:config.gmail?'gmail':'smtp',host:config.host,sender:config.from||null,issue:config.issue,status:config.configured?'configured_not_delivery_verified':'missing_smtp_configuration'};
+  },
+  async verifyReportSender() {
+    const config=smtpConfiguration();
+    if(!config.configured)throw Object.assign(new Error(config.issue),{status:503});
+    try {await getTransporter().verify();return {verified:true,provider:config.gmail?'gmail':'smtp',message:'SMTP connection and authentication succeeded. Send a report to verify recipient acceptance and inbox delivery.'};}
+    catch {throw Object.assign(new Error(config.gmail?'Gmail SMTP verification failed. Check the full sender email, Google app password and whether your Workspace administrator allows app passwords.':'SMTP verification failed. Check the sender credentials, TLS port and provider settings.'),{status:502});}
   },
   async sendDailyWorkbook(recipient,day,content,runId) {
     if(!this.reportConfiguration().configured) throw Object.assign(new Error('Email delivery is not configured.'),{definitive:true});

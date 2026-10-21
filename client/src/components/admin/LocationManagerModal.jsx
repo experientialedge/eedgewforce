@@ -7,6 +7,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import {useMapTiles} from '../../hooks/useMapTiles';
+import MapTileStatus from '../maps/MapTileStatus';
 import {
   MapPin,
   Crosshair,
@@ -66,6 +68,7 @@ export default function LocationManagerModal({
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null);
   const circleRef = useRef(null);
+  const {tileState,connectMap,retryMap}=useMapTiles();
 
   // Initialize or populate form on open/edit
   useEffect(() => {
@@ -113,12 +116,10 @@ export default function LocationManagerModal({
       const map = L.map(mapContainerRef.current, {
         center: [lat, lng],
         zoom: 15,
-        attributionControl: false
+        attributionControl: true
       });
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19
-      }).addTo(map);
+      connectMap(map);
 
       const pinIcon = L.divIcon({
         className: 'custom-pin-marker',
@@ -144,6 +145,7 @@ export default function LocationManagerModal({
 
       const marker = L.marker([lat, lng], {
         draggable: true,
+        title:'Workstation location pin',
         icon: pinIcon
       }).addTo(map);
 
@@ -192,7 +194,7 @@ export default function LocationManagerModal({
     return () => {
       // Map cleanup handled on unmount
     };
-  }, [isOpen, formData.latitude, formData.longitude, formData.geofence_radius]);
+  }, [isOpen, formData.latitude, formData.longitude, formData.geofence_radius,connectMap]);
 
   // Clean map instance on close
   useEffect(() => {
@@ -203,6 +205,8 @@ export default function LocationManagerModal({
       circleRef.current = null;
     }
   }, [isOpen]);
+
+  useEffect(()=>()=>{mapInstanceRef.current?.remove();mapInstanceRef.current=null;markerRef.current=null;circleRef.current=null;},[]);
 
   const handleUseCurrentLocation = async () => {
     setLoadingGps(true);
@@ -284,9 +288,9 @@ export default function LocationManagerModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto">
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-3xl shadow-2xl overflow-hidden my-6">
+      <div role="dialog" aria-modal="true" aria-label="Workstation editor" className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-3xl max-h-[calc(100dvh-2rem)] flex flex-col shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-zinc-800/50">
+        <div className="shrink-0 px-6 py-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-zinc-800/50">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 flex items-center justify-center">
               <Building2 size={20} />
@@ -302,6 +306,7 @@ export default function LocationManagerModal({
           </div>
           <button
             onClick={onClose}
+            aria-label="Close workstation editor"
             className="p-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
           >
             <X size={18} />
@@ -309,7 +314,7 @@ export default function LocationManagerModal({
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="min-h-0 overflow-y-auto p-6 space-y-5">
           {errorMsg && (
             <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 rounded-xl text-xs text-red-700 dark:text-red-300 flex items-start gap-2">
               <AlertCircle size={15} className="shrink-0 mt-0.5" />
@@ -401,6 +406,7 @@ export default function LocationManagerModal({
 
             <p className="text-xs text-zinc-500 leading-relaxed">Choose the actual workstation pin, enter its coordinates, or capture GPS while you are there. The starting map view is only a guide.</p>
             {/* Map Container */}
+            <MapTileStatus state={tileState} onRetry={retryMap}/>
             <div
               ref={mapContainerRef}
               className="w-full h-56 rounded-xl border border-zinc-300 dark:border-zinc-700 overflow-hidden shadow-inner relative z-0"
@@ -412,6 +418,7 @@ export default function LocationManagerModal({
                 <span className="block text-[11px] text-zinc-500 font-medium mb-1">Latitude</span>
                 <input
                   type="number"
+                  aria-label="Workstation latitude"
                   step="any"
                   required
                   value={formData.latitude}
@@ -427,6 +434,7 @@ export default function LocationManagerModal({
                   step="any"
                   required
                   value={formData.longitude}
+                  aria-label="Workstation longitude"
                   onChange={(e) => setFormData({ ...formData, longitude: e.target.value === '' ? '' : Number(e.target.value) })}
                   className="w-full px-3 py-1.5 bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg text-xs font-mono text-zinc-800 dark:text-zinc-200"
                 />
