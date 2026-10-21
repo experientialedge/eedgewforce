@@ -77,8 +77,8 @@ export const hrController = {
 
   async getAttendance(req, res) {
     try {
-      const attendance = await db.find('attendance', {}, { order: { column: 'date', ascending: false } });
-      const employees = await db.find('employees');
+      const attendance = await db.findAll('attendance', {company_id:req.user.company_id}, { order: { column: 'id', ascending: false } });
+      const employees = await db.findAll('employees',{company_id:req.user.company_id});
       const data = attendance.map(a => ({
         ...a,
         employee: employees.find(e => Number(e.id) === Number(a.employee_id))
@@ -105,8 +105,8 @@ export const hrController = {
 
   async getLeave(req, res) {
     try {
-      const requests = await db.find('leave_requests', {}, { order: { column: 'created_at', ascending: false } });
-      const employees = await db.find('employees');
+      const requests = await db.findAll('leave_requests', {company_id:req.user.company_id}, { order: { column: 'id', ascending: false } });
+      const employees = await db.findAll('employees',{company_id:req.user.company_id});
       const data = requests.map(r => ({
         ...r,
         employee: employees.find(e => Number(e.id) === Number(r.employee_id))
@@ -137,8 +137,8 @@ export const hrController = {
 
   async getTasks(req, res) {
     try {
-      const tasks = await db.find('tasks', {}, { order: { column: 'created_at', ascending: false } });
-      const employees = await db.find('employees');
+      const tasks = await db.findAll('tasks', {company_id:req.user.company_id}, { order: { column: 'id', ascending: false } });
+      const employees = await db.findAll('employees',{company_id:req.user.company_id});
       const data = tasks.map(t => ({
         ...t,
         assignee: employees.find(e => Number(e.id) === Number(t.assigned_to))
@@ -160,8 +160,8 @@ export const hrController = {
 
   async getSOS(req, res) {
     try {
-      const list = await db.find('sos', {}, { order: { column: 'created_at', ascending: false } });
-      const employees = await db.find('employees');
+      const list = await db.findAll('sos', {company_id:req.user.company_id}, { order: { column: 'id', ascending: false } });
+      const employees = await db.findAll('employees',{company_id:req.user.company_id});
       const data = list.map(s => ({
         ...s,
         agent: employees.find(e => Number(e.id) === Number(s.agent_id))

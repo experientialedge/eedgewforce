@@ -3,6 +3,8 @@
   "installCommand": "npm ci --include=dev --include=optional",
   "buildCommand": "npm --workspace client run build",
   "outputDirectory": "client/dist",
+  "functions": {"api/index.js": {"maxDuration": 300}},
+  "crons": [{ "path": "/api/cron/hr-daily-report", "schedule": "0 17 * * *" }],
   "rewrites": [
     {
       "source": "/api/(.*)",

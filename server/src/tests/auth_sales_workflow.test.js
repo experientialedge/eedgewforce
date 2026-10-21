@@ -216,7 +216,7 @@ test('EdgeWForce Core Workflow Tests', async (t) => {
     assert.equal(request.status, 'pending');
 
     // HR approves
-    const approved = await hrService.approveLeave(request.id, { id: 6, email: 'hr@edgewforce.com' });
+    const approved = await hrService.approveLeave(request.id, await db.findById('users',3));
     assert.equal(approved.status, 'approved');
 
     // Verify balance reduced

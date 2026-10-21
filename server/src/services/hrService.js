@@ -13,6 +13,7 @@ import { recordAudit } from '../middleware/auditLogger.js';
 import { normalizePhone, normalizeEmail, isEmail } from '../utils/phoneNormalizer.js';
 import { locationService } from './locationService.js';
 import { logger } from '../utils/logger.js';
+import {reviewLeave} from './leaveReviewService.js';
 
 const isTestMode = process.env.NODE_ENV === 'test' || Boolean(process.env.TEST_MODE) || Boolean(process.env.NODE_TEST_CONTEXT);
 
@@ -25,10 +26,10 @@ export const hrService = {
     const todayStr = getLagosTime().dateStr;
     const employees = await db.find('employees', { status: 'active', company_id: actor?.company_id || 1 });
     const attendance = await db.find('attendance', { date: todayStr, company_id: actor?.company_id || 1 });
-    const idleRecords = (await db.find('idle_alerts', { resolved: false })).filter(r => employees.some(e => Number(e.id) === Number(r.employee_id)));
+    const idleRecords = (await db.find('idle_alerts', {company_id:actor?.company_id||1})).filter(r => r.resolved !== true && !r.reviewed_at && !['resolved','dismissed'].includes(String(r.status).toLowerCase()) && employees.some(e => Number(e.id) === Number(r.employee_id)));
     const activityRecords = await db.find('workforce_activity_events', { company_id: Number(actor?.company_id || 1) }, { order: { column: 'detected_at', ascending: false }, limit: 200 });
-    const openSOS = (await db.find('sos', { status: 'active' })).filter(r => employees.some(e => Number(e.id) === Number(r.agent_id)));
-    const leaveRequests = (await db.find('leave_requests', { status: 'pending' })).filter(r => employees.some(e => Number(e.id) === Number(r.employee_id)));
+    const openSOS = (await db.find('sos', { status: 'active',company_id:actor?.company_id||1 })).filter(r => employees.some(e => Number(e.id) === Number(r.agent_id)));
+    const leaveRequests = (await db.find('leave_requests', { status: 'pending',company_id:actor?.company_id||1 })).filter(r => employees.some(e => Number(e.id) === Number(r.employee_id)));
     const tasks = await db.find('tasks', {company_id:actor?.company_id||1});
     const activeTasks = tasks.filter(t => t.status !== 'completed' && t.status !== 'Cancelled');
 
@@ -286,65 +287,12 @@ export const hrService = {
    * Reviews and approves a leave application, deducting days from the leave balance.
    */
   async approveLeave(requestId, actor = null, req = null) {
-    const request = await db.findById('leave_requests', requestId);
-    if (!request) throw new Error('Leave request not found');
-
-    const year = new Date(request.start_date).getFullYear();
-    const balance = await db.findOne('leave_balances', { employee_id: Number(request.employee_id), year });
-    const balanceKey = request.leave_type.toLowerCase();
-
-    if (balance && balance[balanceKey] !== undefined) {
-      const newBal = Math.max(0, balance[balanceKey] - request.days);
-      await db.update('leave_balances', balance.id, { [balanceKey]: newBal });
-    }
-
-    const updated = await db.update('leave_requests', request.id, {
-      status: 'approved',
-      reviewed_by: actor?.employee?.id || actor?.id,
-      reviewed_at: new Date().toISOString()
-    });
-
-    // Notify employee
-    await db.insert('notifications', {
-      employee_id: request.employee_id,
-      type: 'Leave',
-      title: 'Leave Approved',
-      body: `Your ${request.leave_type} leave for ${request.days} day(s) starting ${request.start_date} has been approved.`
-    });
-
-    await recordAudit(actor, 'LEAVE_APPROVED', 'leave_requests', request.id, { days: request.days }, req);
-    return updated;
+    return reviewLeave(actor,requestId,true,'',req);
   },
-
-  /**
-   * Rejects a leave application with notes.
-   */
   async rejectLeave(requestId, reason = 'Operational requirements', actor = null, req = null) {
-    const request = await db.findById('leave_requests', requestId);
-    if (!request) throw new Error('Leave request not found');
-
-    const updated = await db.update('leave_requests', request.id, {
-      status: 'rejected',
-      reviewed_by: actor?.employee?.id || actor?.id,
-      reviewed_at: new Date().toISOString(),
-      review_notes: reason
-    });
-
-    // Notify employee
-    await db.insert('notifications', {
-      employee_id: request.employee_id,
-      type: 'Leave',
-      title: 'Leave Request Update',
-      body: `Your ${request.leave_type} leave request was not approved: ${reason}`
-    });
-
-    await recordAudit(actor, 'LEAVE_REJECTED', 'leave_requests', request.id, { reason }, req);
-    return updated;
+    return reviewLeave(actor,requestId,false,reason,req);
   },
 
-  /**
-   * Assigns a task enforcing hierarchy validation (superiors assign down, never upward).
-   */
   async assignTask(taskData, assignerUser, req = null) {
     const { title, description, assigned_to, priority, due_date, department } = taskData;
 
