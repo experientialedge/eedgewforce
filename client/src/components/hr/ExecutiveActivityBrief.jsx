@@ -7,7 +7,7 @@ export default function ExecutiveActivityBrief({onOpenNexus}){
   const [data,setData]=useState(null),[error,setError]=useState(''),[busy,setBusy]=useState(false);
   const generate=async()=>{setBusy(true);try{setData(await api.post('/executive-reports/generate',{}, {signal:AbortSignal.timeout(28000)}));setError('');}catch(e){setError(e.message);}finally{setBusy(false);}};
   const load=async()=>{try{const next=await api.get('/executive-reports/today');setData(next);setError('');if(next.enabled&&next.ai_configured&&next.ai_generation_due)generate();}catch(e){setError(e.message);}};
-  useEffect(()=>{load();const timer=setInterval(()=>{api.get('/executive-reports/today').then(setData).catch(e=>setError(e.message));},60000);return()=>clearInterval(timer);},[]);
+  useEffect(()=>{load();const timer=setInterval(()=>{api.get('/executive-reports/today').then(next=>{setData(next);setError('');}).catch(e=>setError(e.message));},60000);return()=>clearInterval(timer);},[]);
   if(data?.enabled===false)return <section className="surface-card rounded-2xl p-5 text-sm text-zinc-500">Executive activity reporting is awaiting database activation.</section>;
   let narrative=null;try{narrative=data?.report?.source==='openai'?JSON.parse(data.report.narrative):null;}catch{}
   return <div className="space-y-6"><DailyReportPanel/><section className="surface-card rounded-3xl border border-zinc-200 dark:border-zinc-800 overflow-hidden" aria-label="Executive activity report">
