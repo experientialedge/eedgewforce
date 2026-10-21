@@ -6,25 +6,28 @@ import {
 } from 'lucide-react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import {useMapTiles} from '../../hooks/useMapTiles';
+import {mapPoint,mapRadius,escapeMapText as esc} from '../../lib/mapSupport';
+import MapTileStatus from '../maps/MapTileStatus';
 import { api } from '../../lib/api';
 
 // Interactive Location Map Modal for View Location
 function LocationMapModal({ item, onClose }) {
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
+  const {tileState,connectMap,retryMap}=useMapTiles();
 
   useEffect(() => {
     if (!mapContainerRef.current || !item) return;
 
-    const agentLat = Number(item.latitude);
-    const agentLng = Number(item.longitude);
+    const agentPoint=mapPoint(item.latitude,item.longitude);
+    const [agentLat,agentLng]=agentPoint||[null,null];
     const assignedLoc = item.assigned_location;
-    const assignedLat = assignedLoc ? Number(assignedLoc.latitude) : null;
-    const assignedLng = assignedLoc ? Number(assignedLoc.longitude) : null;
-    const radius = Number(item.permitted_radius || 150);
+    const assignedPoint=mapPoint(assignedLoc?.latitude,assignedLoc?.longitude);
+    const [assignedLat,assignedLng]=assignedPoint||[null,null];
+    const radius = mapRadius(assignedLoc,item.permitted_radius||150);
 
-    const initialLat = agentLat || assignedLat || 6.5244;
-    const initialLng = agentLng || assignedLng || 3.3792;
+    const [initialLat,initialLng] = agentPoint || assignedPoint || [6.5244,3.3792];
 
     const map = L.map(mapContainerRef.current, {
       center: [initialLat, initialLng],
@@ -33,15 +36,12 @@ function LocationMapModal({ item, onClose }) {
     });
     mapInstanceRef.current = map;
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
-      maxZoom: 19
-    }).addTo(map);
+    connectMap(map);
 
     const bounds = [];
 
     // 1. Plot Assigned Work Location Geofence
-    if (assignedLat && assignedLng) {
+    if (assignedPoint) {
       bounds.push([assignedLat, assignedLng]);
 
       // Circle for Geofence radius
@@ -69,8 +69,8 @@ function LocationMapModal({ item, onClose }) {
       L.marker([assignedLat, assignedLng], { icon: storeIcon })
         .bindPopup(`
           <div style="font-family: sans-serif; padding: 4px;">
-            <div style="font-weight: 800; font-size: 13px; color: #065F46;">${assignedLoc.name || 'Assigned Location'}</div>
-            <div style="font-size: 11px; color: #6B7280; margin-top: 2px;">${assignedLoc.address || 'Field Territory'}</div>
+            <div style="font-weight: 800; font-size: 13px; color: #065F46;">${esc(assignedLoc.name || 'Assigned Location')}</div>
+            <div style="font-size: 11px; color: #6B7280; margin-top: 2px;">${esc(assignedLoc.address || 'Field Territory')}</div>
             <div style="font-size: 11px; font-weight: 700; color: #10B981; margin-top: 4px;">Permitted Geofence Radius: ${radius}m</div>
           </div>
         `)
@@ -78,14 +78,14 @@ function LocationMapModal({ item, onClose }) {
     }
 
     // 2. Plot Recorded Agent GPS Location
-    if (agentLat && agentLng) {
+    if (agentPoint) {
       bounds.push([agentLat, agentLng]);
 
       const isVerified = item.geofence_status === 'Verified';
       const markerColor = isVerified ? '#F57C00' : '#DC2626';
 
       // Accuracy circle
-      if (item.accuracy) {
+      if (Number.isFinite(Number(item.accuracy))&&Number(item.accuracy)>0) {
         L.circle([agentLat, agentLng], {
           color: markerColor,
           fillColor: markerColor,
@@ -109,13 +109,13 @@ function LocationMapModal({ item, onClose }) {
       L.marker([agentLat, agentLng], { icon: agentIcon })
         .bindPopup(`
           <div style="font-family: sans-serif; padding: 4px;">
-            <div style="font-weight: 800; font-size: 13px; color: #1F2937;">${item.agent_name}</div>
-            <div style="font-size: 11px; color: #4B5563;">${item.designation} &bull; ${item.activity}</div>
+            <div style="font-weight: 800; font-size: 13px; color: #1F2937;">${esc(item.agent_name)}</div>
+            <div style="font-size: 11px; color: #4B5563;">${esc(item.designation)} &bull; ${esc(item.activity)}</div>
             <div style="font-size: 11px; color: #9CA3AF; margin-top: 2px;">GPS: ${agentLat.toFixed(6)}, ${agentLng.toFixed(6)}</div>
             <div style="font-size: 11px; font-weight: 700; color: ${isVerified ? '#059669' : '#DC2626'}; margin-top: 4px;">
-              Distance: ${item.distance_formatted} (${isVerified ? 'Inside Geofence' : 'Outside Geofence'})
+              Distance: ${esc(item.distance_formatted)} (${isVerified ? 'Inside Geofence' : 'Outside Geofence'})
             </div>
-            <div style="font-size: 10px; color: #6B7280; margin-top: 2px;">Lagos Time: ${item.server_time}</div>
+            <div style="font-size: 10px; color: #6B7280; margin-top: 2px;">Lagos Time: ${esc(item.server_time)}</div>
           </div>
         `)
         .addTo(map)
@@ -123,7 +123,7 @@ function LocationMapModal({ item, onClose }) {
     }
 
     // 3. Connect with Polyline line if both exist
-    if (agentLat && agentLng && assignedLat && assignedLng) {
+    if (agentPoint && assignedPoint) {
       L.polyline([[agentLat, agentLng], [assignedLat, assignedLng]], {
         color: '#6366F1',
         weight: 2,
@@ -131,7 +131,7 @@ function LocationMapModal({ item, onClose }) {
       }).addTo(map);
 
       if (bounds.length > 1) {
-        map.fitBounds(bounds, { padding: [40, 40] });
+        map.fitBounds(bounds, { padding: [40, 40],maxZoom:18 });
       }
     }
 
@@ -141,7 +141,7 @@ function LocationMapModal({ item, onClose }) {
         mapInstanceRef.current = null;
       }
     };
-  }, [item]);
+  }, [item,connectMap]);
 
   if (!item) return null;
 
@@ -170,6 +170,7 @@ function LocationMapModal({ item, onClose }) {
           </div>
           <button
             onClick={onClose}
+            aria-label="Close location map"
             className="w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
           >
             <X size={18} />
@@ -177,6 +178,7 @@ function LocationMapModal({ item, onClose }) {
         </div>
 
         {/* Map Container */}
+        <MapTileStatus state={tileState} onRetry={retryMap}/>
         <div className="relative w-full h-[400px] sm:h-[460px] bg-zinc-100 dark:bg-zinc-950">
           <div ref={mapContainerRef} className="w-full h-full" />
 

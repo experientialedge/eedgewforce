@@ -7,6 +7,27 @@ Administrators and superadministrators can enable daily delivery and save up to 
 
 The receiving HR mailbox is not automatically a sending account. Use an SMTP account authorized to send mail for your business. No paid provider account is provisioned by this application.
 
+### Gmail or Google Workspace
+
+1. Sign in to the Google account that will send reports. Turn on **2-Step Verification** under [Google Account security](https://myaccount.google.com/security).
+2. Open [App passwords](https://myaccount.google.com/apppasswords) and create one named **EdgeWForce**. If this option is unavailable, your Google Workspace administrator or account security policy may prohibit it; use an administrator-approved SMTP provider instead. Use the generated app password, not your normal Gmail password.
+3. In **Vercel → edgeforce-server → Settings → Environment Variables**, add these to **Production**:
+
+| Variable | Value |
+| --- | --- |
+| `SMTP_HOST` | `smtp.gmail.com` |
+| `SMTP_PORT` | `465` (TLS), or `587` (STARTTLS) |
+| `SMTP_USER` | The full Gmail/Workspace sending email address |
+| `SMTP_PASS` | The private 16-character Google app password |
+| `EMAIL_FROM` | The same Gmail address, or an alias Google has authorized for this account |
+
+4. Redeploy. In the administrator's **HR reporting** panel, choose **Verify sender connection**. This authenticates to SMTP without emailing anyone. It does not prove inbox delivery or authorize an arbitrary From alias.
+5. Choose yesterday's date to test a report before 18:00 Lagos. Send to the saved authorized recipients, inspect per-recipient delivery history and check the receiving inbox/spam folder.
+
+The Gmail address is the **sender**; the configured recipients may include `hr@experiential-edge.com` and other addresses. Gmail applies its own sending limits and account policies. Do not put app passwords in `.env.production.example`, GitHub, client `VITE_` variables, or chat. Gmail passwords containing Google's visual grouping spaces are normalized on the server. Changing your Google account password may revoke app passwords.
+
+Official instructions: [Google app passwords](https://support.google.com/mail/answer/185833?hl=en), [Google SMTP settings](https://support.google.com/mail/answer/7104828?hl=en).
+
 ### Resend
 
 1. Create/sign in to your Resend account. Add a domain you control and complete its DNS verification. Your domain administrator may need to add the records.
