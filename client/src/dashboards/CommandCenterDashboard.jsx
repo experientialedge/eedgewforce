@@ -1,5 +1,6 @@
 import ExecutiveActivityBrief from '../components/hr/ExecutiveActivityBrief';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import {commandCenterMetrics} from '../lib/commandCenterMetrics';
 import {
   Building2,
   Users,
@@ -48,13 +49,11 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
   const [territoryFilter, setTerritoryFilter] = useState('all');
 
   // Core Data
-  const [metrics, setMetrics] = useState({
-    workforce: { totalAgents: 0, activeAgents: 0, checkedIn: 0, notCheckedIn: 0, onField: 0, idle: 0, avgHours: '0h' },
-    field: { plannedVisits: 0, completedVisits: 0, missedVisits: 0, shortVisits: 0, completionPercent: 0, newCustomers: 0 },
-    sales: { salesToday: 0, targetToday: 10000000, achievementPercent: 0, totalOrders: 0, approvedOrders: 0, avgOrderValue: 0 },
-    payments: { totalReceivable: 0, collectedToday: 0, outstanding: 0, overdue: 0, dueToday: 0 }
-  });
-
+  const [metrics, setMetrics] = useState(()=>commandCenterMetrics({}).metrics);
+  const [loadError,setLoadError] = useState('');
+  const [loadedAt,setLoadedAt] = useState(null);
+  const [loadedScope,setLoadedScope] = useState('');
+  const requestVersion = useRef(0);
   const [teamMembers, setTeamMembers] = useState([]);
   const [stores, setStores] = useState([]);
   const [alerts, setAlerts] = useState([]);
@@ -76,132 +75,37 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
 
   // Time of day greeting
   const getGreeting = () => {
-    const hour = new Date().getHours();
+    const hour = Number(new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Lagos',hour:'2-digit',hourCycle:'h23'}).format(new Date()));
     if (hour < 12) return 'Good morning';
     if (hour < 17) return 'Good afternoon';
     return 'Good evening';
   };
 
   const loadCommandCenterData = async () => {
+    const version=++requestVersion.current;
     setLoading(true);
     try {
-      const [supRes, ordersRes, alertsRes, hrDashRes, hrSosRes, hrLeaveRes, storesRes, teamRes] = await Promise.all([
-        api.get('/field/supervisor/metrics').catch(() => ({})),
-        api.get('/sales/orders').catch(() => []),
-        api.get('/field/supervisor/alerts').catch(() => []),
-        api.get('/hr/dashboard').catch(() => null),
-        api.get('/hr/sos').catch(() => []),
-        api.get('/hr/leave').catch(() => []),
-        api.get('/field/stores').catch(() => []),
-        api.get('/field/supervisor/team').catch(() => [])
-      ]);
-
-      const supData = supRes?.data || supRes || {};
-      const orderList = Array.isArray(ordersRes?.data) ? ordersRes.data : (Array.isArray(ordersRes) ? ordersRes : []);
-      const alertList = Array.isArray(alertsRes?.data) ? alertsRes.data : (Array.isArray(alertsRes) ? alertsRes : []);
-      const storesList = Array.isArray(storesRes?.data) ? storesRes.data : (Array.isArray(storesRes?.stores) ? storesRes.stores : (Array.isArray(storesRes) ? storesRes : (supData.stores || [])));
-      const rawTeam = Array.isArray(teamRes?.data) ? teamRes.data : (Array.isArray(teamRes?.team) ? teamRes.team : (Array.isArray(teamRes) ? teamRes : (supData.team || [])));
-
-      setStores(storesList);
-      setAlerts(alertList);
-      setOrders(orderList);
-
-      // HR Overview stats
-      if (hrDashRes) setHrStats(hrDashRes);
-      if (Array.isArray(hrSosRes)) setSosEvents(hrSosRes);
-      if (hrLeaveRes) {
-        const lvList = Array.isArray(hrLeaveRes) ? hrLeaveRes : (hrLeaveRes?.requests || hrLeaveRes?.data || []);
-        setPendingLeaves(lvList.filter(l => (l.status || '').toLowerCase() === 'pending'));
-      }
-      if (hrDashRes?.idle_records) {
-        setIdleAlerts(hrDashRes.idle_records || []);
-      }
-
-      // Compute dynamic team members list for the map & leaderboard
-      const teamList = rawTeam.map(m => ({
-        ...m,
-        id: m.id || m.employee_id,
-        first_name: m.first_name || m.name?.split(' ')[0] || 'Agent',
-        last_name: m.last_name || m.name?.split(' ')[1] || '',
-        status_color: m.status_color || (m.shift_status === 'Checked In' ? 'GREEN' : m.shift_status === 'Late' ? 'YELLOW' : 'GREY'),
-        performance_score: m.performance_score || 88
-      }));
-      setTeamMembers(teamList);
-
-      // Compute dynamic Executive KPIs
-      const todayTotalSales = orderList.reduce((sum, o) => sum + (Number(o.total_amount) || 0), 0);
-      const approvedCount = orderList.filter(o => ['APPROVED', 'DELIVERED', 'PAID'].includes(o.status)).length;
-      const checkedInCount = Number(supData.checked_in || supData.summary_counts?.checked_in_count) || teamList.filter(t => t.status_color === 'GREEN').length || 0;
-      const totalTeamCount = Number(supData.total_field_force || supData.summary_counts?.total_team_members) || teamList.length || 0;
-      const outsideGeofence = Number(supData.outside_geofence || supData.summary_counts?.outside_geofence_count) || 0;
-      const notCheckedIn = Number(supData.not_checked_in || supData.summary_counts?.not_checked_in_count) || Math.max(0, totalTeamCount - checkedInCount);
-      const activeVisits = Number(supData.active_store_visits || supData.summary_counts?.active_store_visits) || 0;
-
-      setMetrics({
-        workforce: {
-          totalAgents: totalTeamCount,
-          activeAgents: checkedInCount,
-          checkedIn: checkedInCount,
-          notCheckedIn: notCheckedIn,
-          onField: Math.max(0, checkedInCount - outsideGeofence),
-          idle: Number(supData.summary_counts?.late_arrivals_count) || 0,
-          avgHours: checkedInCount > 0 ? '6.8h' : '0h'
-        },
-        field: {
-          plannedVisits: activeVisits,
-          completedVisits: Math.round(activeVisits * 0.85),
-          missedVisits: 0,
-          shortVisits: 0,
-          completionPercent: activeVisits > 0 ? 85 : 0,
-          newCustomers: Number(supData.summary_counts?.pending_store_requests) || 0
-        },
-        sales: {
-          salesToday: todayTotalSales,
-          targetToday: 10000000,
-          achievementPercent: todayTotalSales > 0 ? Math.min(100, Math.round((todayTotalSales / 10000000) * 100)) : 0,
-          totalOrders: orderList.length,
-          approvedOrders: approvedCount,
-          avgOrderValue: orderList.length ? Math.round(todayTotalSales / orderList.length) : 0
-        },
-        payments: {
-          totalReceivable: 0,
-          collectedToday: 0,
-          outstanding: 0,
-          overdue: 0,
-          dueToday: 0
-        }
-      });
-
-      // Generate deterministic AI operational observations
-      const autoInsights = [];
-      if (todayTotalSales > 0) {
-        autoInsights.push({
-          type: 'sales',
-          text: `Daily sales volume is at ₦${todayTotalSales.toLocaleString()} (${Math.round((todayTotalSales / 10000000) * 100)}% of monthly target).`
-        });
-      }
-      if (alertList.filter(a => a.status === 'active' || a.status === 'OPEN').length > 0) {
-        autoInsights.push({
-          type: 'alert',
-          text: `${alertList.filter(a => a.status === 'active' || a.status === 'OPEN').length} active exception flags detected (geofence deviations and missing checkouts requiring supervisor review).`
-        });
-      }
-      if (hrSosRes.filter(s => s.status === 'active').length > 0) {
-        autoInsights.push({
-          type: 'sos',
-          text: `🚨 EMERGENCY: ${hrSosRes.filter(s => s.status === 'active').length} active Field SOS panic beacon(s) active right now.`
-        });
-      }
-      autoInsights.push({
-        type: 'workforce',
-        text: `Workforce field compliance is monitored live. ${teamList.filter(t => t.status_color === 'GREEN').length} agents currently active.`
-      });
-      setInsights(autoInsights);
-
+      const sources=[['Orders','/sales/orders'],['Field alerts','/field/supervisor/alerts'],['HR overview','/hr/dashboard'],['Emergency reports','/hr/sos'],['Leave requests','/hr/leave'],['Stores','/field/stores'],['Team','/field/supervisor/team'],['Payments','/sales/payments'],['Customers','/sales/customers']];
+      const results=await Promise.allSettled(sources.map(([,path])=>api.get(path,{requireOnline:true,signal:AbortSignal.timeout(25000)})));
+      if(version!==requestVersion.current)return;
+      const failures=results.flatMap((result,i)=>result.status==='rejected'?[sources[i][0]]:[]);
+      if(failures.length)throw Error('Could not refresh '+failures.join(', ')+'. Previously loaded information is retained. Retry when connected.');
+      const values=results.map(r=>r.value);
+      const list=value=>Array.isArray(value)?value:Array.isArray(value?.data)?value.data:[];
+      const [ordersRes,alertsRes,hrDashRes,hrSosRes,hrLeaveRes,storesRes,teamRes,paymentsRes,customersRes]=values;
+      const next=commandCenterMetrics({orders:list(ordersRes),team:list(teamRes),stores:list(storesRes),payments:list(paymentsRes),customers:list(customersRes)},{dateFilter,regionFilter});
+      setStores(next.stores);setAlerts(list(alertsRes));setOrders(next.orders);setTeamMembers(next.team);setMetrics(next.metrics);
+      setHrStats(hrDashRes);setSosEvents(list(hrSosRes));setPendingLeaves(list(hrLeaveRes?.requests||hrLeaveRes).filter(l=>String(l.status).toLowerCase()==='pending'));setIdleAlerts(hrDashRes?.idle_records||[]);
+      const activeAlerts=list(alertsRes).filter(a=>['active','open'].includes(String(a.status).toLowerCase())).length;
+      const activeSos=list(hrSosRes).filter(s=>String(s.status).toLowerCase()==='active').length;
+      const observations=[{type:'sales',text:'Recorded order value: ₦'+next.metrics.sales.salesToday.toLocaleString()+' for '+next.period.start+' to '+next.period.end+'. Cancelled and rejected orders are excluded.'},{type:'workforce',text:next.metrics.workforce.activeAgents+' staff have an open recorded shift today. Missing attendance does not establish absence.'}];
+      if(activeAlerts)observations.push({type:'alert',text:activeAlerts+' open field alerts require supervisor review.'});
+      if(activeSos)observations.push({type:'sos',text:activeSos+' active emergency report(s) need attention.'});
+      setInsights(observations);setLoadedAt(new Date());setLoadedScope(next.period.start+' to '+next.period.end+' · Region: '+(regionFilter==='all'?'All regions':regionFilter));setLoadError('');
     } catch (err) {
-      console.error('Failed to load command center data:', err);
+      if(version===requestVersion.current)setLoadError(err.message);
     } finally {
-      setLoading(false);
+      if(version===requestVersion.current)setLoading(false);
     }
   };
 
@@ -239,6 +143,7 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
 
   useEffect(() => {
     loadCommandCenterData();
+    return ()=>{requestVersion.current++;};
   }, [dateFilter, regionFilter]);
 
   const activeSosList = Array.isArray(sosEvents) ? sosEvents.filter(s => s.status === 'active') : [];
@@ -246,6 +151,8 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
   return (
     <div className="p-4 lg:p-8 max-w-7xl mx-auto space-y-6 animate-in fade-in duration-200">
       <ExecutiveActivityBrief onOpenNexus={()=>onNavigate?.('nexus')} />
+      {loadError&&<div role="alert" className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm">{loadError}<button onClick={loadCommandCenterData} disabled={loading} className="btn-secondary ml-3 text-xs">Retry dashboard</button></div>}
+      <p role="status" className="text-xs text-zinc-500">{loading?'Refreshing recorded operations…':loadedAt?'Updated '+loadedAt.toLocaleTimeString('en-GB',{timeZone:'Africa/Lagos'})+' WAT':'Operational data has not loaded yet.'} · Workforce and visits: today. Sales and collections: {loadedScope||'waiting for records'}. Receivables: current balance. Regional filters omit records without matching regional information.</p>
       {/* 1. Header & Greeting */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -261,7 +168,7 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
             {getGreeting()}, {user?.full_name || 'Chief Executive Officer'}
           </h1>
           <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-            {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} &bull; Africa/Lagos (GMT+1) &bull; Full Executive & Workforce Authority
+            {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Africa/Lagos' })} &bull; Africa/Lagos (GMT+1) &bull; Full Executive & Workforce Authority
           </p>
         </div>
 
@@ -439,7 +346,7 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
       {/* 2. Contextual Filters Bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-xs">
         <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-zinc-600 dark:text-zinc-400">
-          <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-xl">
+          <div className="flex flex-wrap items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-xl">
             {['today', 'yesterday', 'this_week', 'this_month'].map(d => (
               <button
                 key={d}
@@ -456,6 +363,7 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
           </div>
 
           <select
+            aria-label="Filter operations by region"
             value={regionFilter}
             onChange={(e) => setRegionFilter(e.target.value)}
             className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-xs"
@@ -499,11 +407,11 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
           </div>
           <div>
             <div className="text-2xl font-black text-zinc-900 dark:text-zinc-100">
-              {metrics.workforce.checkedIn} <span className="text-sm font-normal text-zinc-400">/ {metrics.workforce.totalAgents} on duty</span>
+              {metrics.workforce.activeAgents} <span className="text-sm font-normal text-zinc-400">/ {metrics.workforce.totalAgents} recorded open shifts</span>
             </div>
             <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-zinc-100 dark:border-zinc-800 text-[11px] text-zinc-500">
               <div>Checked In: <strong className="text-emerald-600">{metrics.workforce.checkedIn}</strong></div>
-              <div>Off Field: <strong className="text-rose-500">{metrics.workforce.notCheckedIn}</strong></div>
+              <div>No clock-in: <strong className="text-rose-500">{metrics.workforce.notCheckedIn}</strong></div>
               <div>Inside Geo: <strong className="text-emerald-600">{metrics.workforce.onField}</strong></div>
               <div>Avg Shift: <strong className="text-zinc-700 dark:text-zinc-300">{metrics.workforce.avgHours}</strong></div>
             </div>
@@ -518,13 +426,13 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
           </div>
           <div>
             <div className="text-2xl font-black text-zinc-900 dark:text-zinc-100">
-              {metrics.field.completionPercent}% <span className="text-sm font-normal text-zinc-400">visit completion</span>
+              {metrics.field.completionPercent===null?'Not recorded':metrics.field.completionPercent+'%'} <span className="text-sm font-normal text-zinc-400">visit completion</span>
             </div>
             <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-zinc-100 dark:border-zinc-800 text-[11px] text-zinc-500">
               <div>Completed: <strong className="text-emerald-600">{metrics.field.completedVisits}</strong></div>
-              <div>Planned: <strong className="text-zinc-700 dark:text-zinc-300">{metrics.field.plannedVisits}</strong></div>
-              <div>New Stores: <strong className="text-orange-600">+{metrics.field.newCustomers}</strong></div>
-              <div>Short Visits: <strong className="text-amber-500">{metrics.field.shortVisits}</strong></div>
+              <div>Recorded visits: <strong className="text-zinc-700 dark:text-zinc-300">{metrics.field.plannedVisits}</strong></div>
+              <div>New Stores: <strong className="text-orange-600">Not recorded</strong></div>
+              <div>Short Visits: <strong className="text-amber-500">{metrics.field.shortVisits??'Not recorded'}</strong></div>
             </div>
           </div>
         </div>
@@ -540,8 +448,8 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
               ₦{metrics.sales.salesToday.toLocaleString()}
             </div>
             <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-zinc-100 dark:border-zinc-800 text-[11px] text-zinc-500">
-              <div>Target: <strong>₦{metrics.sales.targetToday.toLocaleString()}</strong></div>
-              <div>Achieved: <strong className="text-emerald-600">{metrics.sales.achievementPercent}%</strong></div>
+              <div>Target: <strong>{metrics.sales.targetToday===null?'Not configured':'₦'+metrics.sales.targetToday.toLocaleString()}</strong></div>
+              <div>Achieved: <strong className="text-emerald-600">{metrics.sales.achievementPercent===null?'Not available':metrics.sales.achievementPercent+'%'}</strong></div>
               <div>Total Orders: <strong className="text-zinc-800 dark:text-zinc-200">{metrics.sales.totalOrders}</strong></div>
               <div>Approved: <strong className="text-emerald-600">{metrics.sales.approvedOrders}</strong></div>
             </div>
@@ -561,8 +469,8 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
             <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-zinc-100 dark:border-zinc-800 text-[11px] text-zinc-500">
               <div>Receivable: <strong>₦{(metrics.payments.totalReceivable / 1000000).toFixed(1)}M</strong></div>
               <div>Outstanding: <strong>₦{(metrics.payments.outstanding / 1000000).toFixed(1)}M</strong></div>
-              <div>Overdue: <strong className="text-rose-500">₦{(metrics.payments.overdue / 1000000).toFixed(1)}M</strong></div>
-              <div>Due Today: <strong className="text-amber-500">₦{(metrics.payments.dueToday / 1000000).toFixed(1)}M</strong></div>
+              <div>Overdue: <strong className="text-rose-500">{metrics.payments.overdue===null?'Not recorded':'₦'+(metrics.payments.overdue/1000000).toFixed(1)+'M'}</strong></div>
+              <div>Due Today: <strong className="text-amber-500">{metrics.payments.dueToday===null?'Not recorded':'₦'+(metrics.payments.dueToday/1000000).toFixed(1)+'M'}</strong></div>
             </div>
           </div>
         </div>
@@ -580,7 +488,7 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
               Field and sales locations with customer stop boundaries. Confirmed workplace departures appear in the executive activity brief.
             </p>
           </div>
-          <div className="flex items-center gap-2 text-xs">
+          <div className="flex flex-wrap items-center gap-2 text-xs">
             <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Active (Green)</span>
             <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Late/Idle (Yellow)</span>
             <span className="inline-flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Alert (Red)</span>
@@ -605,7 +513,7 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xs space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <TrendingUp size={16} className="text-orange-500" /> Team Performance Leaderboard
+              <TrendingUp size={16} className="text-orange-500" /> Team Performance Overview
             </h3>
             <button
               onClick={() => onNavigate && onNavigate('supervisor_dashboard')}
@@ -615,8 +523,10 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
             </button>
           </div>
 
+          <p className="text-xs text-zinc-500">Scores appear only when recorded. A score does not establish compliance or productivity.</p>
+          {!loading&&!teamMembers.length&&<p className="text-sm text-zinc-500">No field or sales staff match this region.</p>}
           <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
-            {teamMembers.slice(0, 5).map((agent, rank) => (
+            {[...teamMembers].sort((a,b)=>(b.performance_score??-1)-(a.performance_score??-1)).slice(0, 5).map((agent, rank) => (
               <div key={agent.id} className="py-3 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-3">
                   <div className={`w-6 h-6 rounded-full flex items-center justify-center font-black text-xs ${
@@ -626,14 +536,14 @@ export default function CommandCenterDashboard({ user, onNavigate, initialView =
                   </div>
                   <div>
                     <span className="font-bold text-zinc-900 dark:text-zinc-100 block">{agent.first_name} {agent.last_name}</span>
-                    <span className="text-[11px] text-zinc-400">{agent.role_code || 'Agent'} &bull; {agent.territory || 'Lagos'}</span>
+                    <span className="text-[11px] text-zinc-400">{agent.role_code || 'Agent'} &bull; {agent.territory || 'Territory not recorded'}</span>
                   </div>
                 </div>
                 <div className="text-right">
                   <span className="font-black text-emerald-600 dark:text-emerald-400 text-xs block">
-                    {agent.performance_score || 88.5}% Score
+                    {agent.performance_score===null?'Not scored':agent.performance_score+'% recorded score'}
                   </span>
-                  <span className="text-[10px] text-zinc-400">Excellent Compliance</span>
+                  <span className="text-[10px] text-zinc-400">Recorded operational data</span>
                 </div>
               </div>
             ))}
