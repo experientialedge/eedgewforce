@@ -8,8 +8,10 @@ import {
 } from 'lucide-react';
 import SupervisorLiveMap from '../components/maps/SupervisorLiveMap';
 import SupervisorScheduleReview from '../components/schedule/SupervisorScheduleReview';
+import Modal from '../components/common/Modal';
 import { apiRequest } from '../utils/api';
 import { formatDistance } from '../lib/formatters';
+const responseList=(value,key)=>Array.isArray(value)?value:Array.isArray(value?.data)?value.data:Array.isArray(value?.[key])?value[key]:[];
 
 export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
   const [metrics, setMetrics] = useState({
@@ -33,6 +35,9 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
   const [alerts, setAlerts] = useState([]);
   const [storeRequests, setStoreRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError,setLoadError]=useState('');
+  const [profileError,setProfileError]=useState('');
+  const [reportError,setReportError]=useState('');
 
   // Filters
   const [roleFilter, setRoleFilter] = useState('ALL'); // 'ALL' | 'FIELD_AGENT' | 'SALES_AGENT'
@@ -58,6 +63,9 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
   const [isOverrideModalOpen, setIsOverrideModalOpen] = useState(false);
   const [overrideAttendanceRecord, setOverrideAttendanceRecord] = useState(null);
   const [overrideNotes, setOverrideNotes] = useState('');
+  const [overrideTime,setOverrideTime]=useState('');
+  const [overrideBusy,setOverrideBusy]=useState(false);
+  const [overrideError,setOverrideError]=useState('');
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [reportType, setReportType] = useState('attendance');
   const [reportData, setReportData] = useState([]);
@@ -76,12 +84,13 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
       ]);
 
       setMetrics(metricsRes.data || metricsRes);
-      setTeam(teamRes.data || teamRes.team || []);
-      setStores(storesRes.data || storesRes.stores || []);
-      setAlerts(alertsRes.data || alertsRes.alerts || []);
-      setStoreRequests(reqsRes.data || reqsRes.requests || []);
+      setTeam(responseList(teamRes,'team'));
+      setStores(responseList(storesRes,'stores'));
+      setAlerts(responseList(alertsRes,'alerts'));
+      setStoreRequests(responseList(reqsRes,'requests'));
+      setLoadError('');
     } catch (err) {
-      console.error('Failed to load supervisor telemetry:', err);
+      setLoadError('Supervisor information could not refresh. Previously loaded records are retained. '+err.message);
     } finally {
       setLoading(false);
     }
@@ -97,11 +106,12 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
   const openEmployeeProfile = async (emp) => {
     setSelectedEmployee(emp);
     setProfileLoading(true);
+    setProfileData(null);setProfileError('');
     try {
       const res = await apiRequest(`/field/supervisor/employee/${emp.id}`);
-      setProfileData(res.data);
+      setProfileData(res.data||res);
     } catch (err) {
-      console.error('Failed to load profile data:', err);
+      setProfileError(err.message||'Employee details could not load. Close and reopen to retry.');
     } finally {
       setProfileLoading(false);
     }
@@ -151,18 +161,22 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
   // Submit Attendance Override
   const handleSubmitOverride = async () => {
     if (!overrideAttendanceRecord) return;
+    setOverrideBusy(true);setOverrideError('');
     try {
       await apiRequest('/field/supervisor/override-attendance', 'POST', {
         attendance_id: overrideAttendanceRecord.id,
         action: 'APPROVE_MISSING_CHECKOUT',
-        notes: overrideNotes || 'Supervisor manual shift completion override'
+        clock_out_time:new Date(overrideTime+':00+01:00').toISOString(),
+        notes: overrideNotes.trim()
       });
       setIsOverrideModalOpen(false);
       setOverrideAttendanceRecord(null);
       fetchDashboardData();
       if (selectedEmployee) openEmployeeProfile(selectedEmployee);
     } catch (err) {
-      alert(err.message || 'Failed to override attendance');
+      setOverrideError(err.message || 'Failed to override attendance');
+    } finally {
+      setOverrideBusy(false);
     }
   };
 
@@ -170,7 +184,8 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
   const handleGenerateEODSummary = async () => {
     try {
       const res = await apiRequest('/field/supervisor/daily-summary', 'POST');
-      alert(`✓ Daily Team Summary Generated!\nTotal Team: ${res.data.total_members} | Present: ${res.data.present} | Visits: ${res.data.store_visits} | Sales: ₦${Number(res.data.sales_generated).toLocaleString()}`);
+      const summary=res.data||res;
+      alert(`✓ Daily Team Summary Generated!\nTotal Team: ${summary.total_members} | Present: ${summary.present} | Visits: ${summary.store_visits} | Sales: ₦${Number(summary.sales_generated).toLocaleString()}`);
       fetchDashboardData();
     } catch (err) {
       alert(err.message || 'Failed to generate EOD summary');
@@ -182,11 +197,12 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
     setReportType(type);
     setIsReportModalOpen(true);
     setReportLoading(true);
+    setReportError('');setReportData([]);
     try {
       const res = await apiRequest(`/field/reports?reportType=${type}`);
-      setReportData(res.data || []);
+      setReportData(responseList(res));
     } catch (err) {
-      console.error('Failed to load reports:', err);
+      setReportError(err.message||'The report could not load. Reopen it to retry.');
     } finally {
       setReportLoading(false);
     }
@@ -217,6 +233,7 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
+      {loadError&&<div role="alert" className="rounded-xl bg-amber-500/10 p-4 text-sm">{loadError}<button className="btn-secondary ml-3 text-xs" onClick={fetchDashboardData} disabled={loading}>Retry supervisor data</button></div>}
       {/* Top Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -227,7 +244,7 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
             Field & Sales Operations Visibility
           </h1>
           <p className="text-sm text-zinc-500">
-            Real-time GPS tracking, 150m store geofencing, team presence & automated telemetry
+            Reported GPS locations, 300m market boundaries and configured workplace attendance
           </p>
         </div>
 
@@ -362,7 +379,7 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
             {metrics.late}
           </div>
           <div className="text-[10px] text-amber-600/70 mt-0.5">
-            Arrived past 08:30 AM
+            Recorded from 09:00 to 10:00 Lagos
           </div>
         </div>
 
@@ -376,7 +393,7 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
             {metrics.outside_geofence}
           </div>
           <div className="text-[10px] text-rose-600/70 mt-0.5">
-            &gt; 150m from store
+            Beyond the assigned workplace boundary
           </div>
         </div>
 
@@ -407,7 +424,7 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
               </h2>
             </div>
             <span className="text-xs text-zinc-500">
-              Showing {stores.length} Geofenced Stores &bull; {filteredTeam.length} Active Agents
+              Showing {stores.length} Geofenced Stores &bull; {filteredTeam.length} Team Members
             </span>
           </div>
 
@@ -443,7 +460,7 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
             <div className="mt-3 space-y-2.5 max-h-[320px] overflow-y-auto">
               {alerts.length === 0 ? (
                 <div className="text-center py-8 text-xs text-zinc-400">
-                  ✓ Zero active alerts. All field agents operating within assigned geofence boundaries.
+                  No active alerts are recorded. Missing GPS updates do not establish that staff are inside a workplace.
                 </div>
               ) : (
                 alerts.map(alert => (
@@ -657,7 +674,7 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
                           {emp.store?.name || 'Unassigned Store'}
                         </div>
                         <div className="text-[10px] text-zinc-400">
-                          Radius: {emp.store?.radius || 150}m
+                          Radius: {emp.store?`${emp.store.radius}m`:'Not assigned'}
                         </div>
                       </td>
 
@@ -757,6 +774,7 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
               </div>
               <button
                 type="button"
+                aria-label="Close employee profile"
                 onClick={() => setSelectedEmployee(null)}
                 className="p-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 rounded-xl"
               >
@@ -766,6 +784,7 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
 
             {/* Drawer Content */}
             <div className="flex-1 overflow-y-auto p-5 space-y-6">
+              {profileError&&<p role="alert" className="text-sm text-rose-600">{profileError}</p>}
               {profileLoading ? (
                 <div className="py-20 text-center text-xs text-zinc-400 flex flex-col items-center gap-2">
                   <RefreshCw className="w-6 h-6 animate-spin text-primary" />
@@ -794,10 +813,11 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
                       <div className="p-2.5 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl">
                         <div className="text-zinc-400 text-[10px]">Lateness</div>
                         <div className="font-bold text-amber-600 mt-0.5">
-                          {profileData.attendance?.late_duration || '0m'}
+                          {profileData.attendance?.late_duration ?? 'Not recorded'}
                         </div>
                       </div>
                     </div>
+                    {profileData.attendance?.id&&profileData.attendance?.check_in_time&&!profileData.attendance?.check_out_time&&<button className="btn-secondary text-xs" onClick={()=>{setOverrideAttendanceRecord(profileData.attendance);setOverrideTime('');setOverrideNotes('');setOverrideError('');setIsOverrideModalOpen(true);}}>Correct missing checkout</button>}
                   </div>
 
                   {/* Section 2: Location Telemetry */}
@@ -817,7 +837,7 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
                       <div className="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800">
                         <span className="text-zinc-500">Distance from Geofence:</span>
                         <span className={`font-bold ${profileData.location?.distance_from_store > 150 ? 'text-rose-600' : 'text-emerald-600'}`}>
-                          {profileData.location?.distance_from_store ? `${Math.round(profileData.location.distance_from_store)}m` : '0m'}
+                          {profileData.location?.distance_from_store==null?'Not recorded':`${Math.round(profileData.location.distance_from_store)}m`}
                         </span>
                       </div>
                     </div>
@@ -833,11 +853,11 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
                         <div className="p-3 bg-blue-50/50 dark:bg-blue-950/20 rounded-xl border border-blue-100 dark:border-blue-900/40">
                           <div className="text-zinc-500 text-[10px]">Monthly Target</div>
                           <div className="text-lg font-black text-blue-600 dark:text-blue-400 mt-0.5">
-                            ₦{Number(profileData.sales_activity?.sales_target || 10000000).toLocaleString()}
+                            {profileData.sales_activity?.sales_target==null?'Not configured':'₦'+Number(profileData.sales_activity.sales_target).toLocaleString()}
                           </div>
                         </div>
                         <div className="p-3 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-xl border border-emerald-100 dark:border-emerald-900/40">
-                          <div className="text-zinc-500 text-[10px]">Sales Achieved ({profileData.sales_activity?.achievement_percentage}%)</div>
+                          <div className="text-zinc-500 text-[10px]">Recorded sales {profileData.sales_activity?.achievement_percentage!=null&&`(${profileData.sales_activity.achievement_percentage}%)`}</div>
                           <div className="text-lg font-black text-emerald-600 dark:text-emerald-400 mt-0.5">
                             ₦{Number(profileData.sales_activity?.sales_achieved || 0).toLocaleString()}
                           </div>
@@ -962,6 +982,13 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
       )}
 
       {/* Reports & Export Modal */}
+      {isOverrideModalOpen&&<div className="relative z-[2601]"><Modal title="Correct missing checkout" subtitle="Record the actual time confirmed with the staff member. Times are Africa/Lagos." onClose={()=>{if(!overrideBusy)setIsOverrideModalOpen(false);}} maxWidth="max-w-lg"><form className="space-y-4" onSubmit={e=>{e.preventDefault();handleSubmitOverride();}}>
+        {overrideError&&<p role="alert" className="text-sm text-rose-600">{overrideError}</p>}
+        <label className="block text-sm">Actual checkout time (Lagos)<input aria-label="Actual checkout time (Lagos)" type="datetime-local" required value={overrideTime} max={new Date(Date.now()+3600000).toISOString().slice(0,16)} onChange={e=>setOverrideTime(e.target.value)} disabled={overrideBusy} className="mt-2 w-full p-3 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-transparent"/></label>
+        <label className="block text-sm">Correction reason<textarea aria-label="Correction reason" required minLength={5} maxLength={2000} value={overrideNotes} onChange={e=>setOverrideNotes(e.target.value)} disabled={overrideBusy} rows={3} className="mt-2 w-full p-3 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-transparent"/></label>
+        <p className="text-xs text-zinc-500">The correction is audited. No checkout time is estimated automatically.</p>
+        <button className="btn-primary w-full" disabled={overrideBusy||!overrideTime||overrideNotes.trim().length<5}>{overrideBusy?'Saving correction…':'Save verified checkout'}</button>
+      </form></Modal></div>}
       {isReportModalOpen && (
         <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="surface-card rounded-2xl max-w-4xl w-full p-6 shadow-2xl border border-zinc-200 dark:border-zinc-800 max-h-[90vh] overflow-y-auto">
@@ -992,6 +1019,7 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
             </div>
 
             {/* Report Table */}
+            {reportError&&<p role="alert" className="mt-4 text-sm text-rose-600">{reportError}</p>}
             <div className="mt-4 overflow-x-auto border border-zinc-200 dark:border-zinc-800 rounded-xl max-h-[400px]">
               <table className="w-full text-left text-xs">
                 <thead className="bg-zinc-100/60 dark:bg-zinc-800/60 text-zinc-500 font-bold uppercase text-[10px] sticky top-0">
@@ -1058,7 +1086,7 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
                             <td className="p-3">{row.store_name}</td>
                             <td className="p-3 font-mono">{row.check_in_time ? new Date(row.check_in_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—'}</td>
                             <td className="p-3 font-mono">{row.check_out_time ? new Date(row.check_out_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—'}</td>
-                            <td className="p-3 font-bold">{row.working_duration_text || `${row.working_hours}h`}</td>
+                            <td className="p-3 font-bold">{row.working_duration_text || (row.working_hours==null?'Not recorded':`${row.working_hours}h`)}</td>
                             <td className="p-3 font-bold text-emerald-600">{row.status}</td>
                           </>
                         )}
@@ -1118,7 +1146,7 @@ export default function SupervisorDashboard({ user, initialTab = 'radar' }) {
                 className="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
               >
                 <Download className="w-4 h-4" />
-                Export JSON / CSV Dataset
+                Export JSON
               </button>
             </div>
           </div>

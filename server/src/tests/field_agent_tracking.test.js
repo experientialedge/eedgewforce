@@ -225,6 +225,7 @@ test('Field Force Tracking & Supervisor Monitoring Module Test Suite', async (t)
     if (attendanceRecords.length > 0) {
       const overridden = await fieldService.overrideAttendance({
         attendanceId: attendanceRecords[0].id,
+        clockOutTime: new Date(Date.parse(attendanceRecords[0].clock_in_time)+60000).toISOString(),
         notes: 'Supervisor manual sign-off for missed GPS exit',
         reviewerId: 7
       });

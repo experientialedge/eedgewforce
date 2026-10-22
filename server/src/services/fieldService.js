@@ -22,6 +22,15 @@ function validateAttendanceActor(employee, req, override = false) {
 }
 
 
+const monitoringDay = value => {
+  if(!value)return getLagosTime().dateStr;
+  if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(value)||!Number.isFinite(Date.parse(value))||new Date(value).toISOString().slice(0,10)!==value)throw Object.assign(new Error('Use a valid YYYY-MM-DD monitoring date.'),{status:400});
+  return value;
+};
+const observationDay=value=>value&&Number.isFinite(Date.parse(value))?getLagosTime(value).dateStr:null;
+const attendanceTimes=record=>({...record,clock_in_time:record.clock_in_time||record.clock_in||null,clock_out_time:record.clock_out_time||record.clock_out||null});
+const workplaceRadius=location=>String(location?.location_type).toLowerCase()==='market'?300:Number(location?.geofence_radius||location?.geofence_radius_meters||150);
+
 export const fieldService = {
   /**
    * Retrieves today's assigned route stops / stores with geofence metrics.
@@ -1201,24 +1210,25 @@ export const fieldService = {
   /**
    * SUPERVISOR VISIBILITY & LIVE MONITORING METRICS
    */
-  async getSupervisorDashboardMetrics(supervisorId = null, date = null) {
-    const todayStr = (date || new Date().toISOString()).slice(0, 10);
-    const employees = await db.find('employees');
-    const attendance = await db.find('attendance');
-    const visits = await db.find('visits');
-    const alerts = await db.find('location_alerts');
+  async getSupervisorDashboardMetrics(supervisorId = null, date = null, companyId = 1) {
+    const todayStr = monitoringDay(date);
+    const company={company_id:Number(companyId)};
+    const employees = await db.find('employees',company);
+    const attendance = (await db.find('attendance',company)).map(attendanceTimes);
+    const visits = await db.find('visits',company);
+    const alerts = await db.find('location_alerts',company);
 
     // Filter agents belonging to supervisor if specified
     const teamEmployees = employees.filter(e => {
       const isFieldOrSales = ['Commercial Sales', 'Field Operations'].includes(e.department) ||
         ['SALES_AGENT', 'FIELD_AGENT'].includes(e.rank_code) ||
-        (e.position && (e.position.includes('Sales') || e.position.includes('Field')));
+        (e.position && (String(e.position||'').includes('Sales') || String(e.position||'').includes('Field')));
       const matchSupervisor = !supervisorId || Number(e.supervisor_id) === Number(supervisorId) || Number(e.id) === Number(supervisorId);
       return isFieldOrSales && matchSupervisor;
     });
 
-    const fieldAgents = teamEmployees.filter(e => e.department === 'Field Operations' || e.position.includes('Field'));
-    const salesAgents = teamEmployees.filter(e => e.department === 'Commercial Sales' || e.position.includes('Sales'));
+    const fieldAgents = teamEmployees.filter(e => e.department === 'Field Operations' || String(e.position||'').includes('Field'));
+    const salesAgents = teamEmployees.filter(e => e.department === 'Commercial Sales' || String(e.position||'').includes('Sales'));
 
     const todayAttendance = attendance.filter(a => String(a.date).slice(0, 10) === todayStr);
 
@@ -1239,13 +1249,13 @@ export const fieldService = {
       } else {
         // Currently active shift
         checkedInCount++;
-        if (att.status === 'Late') lateCount++;
-        if (att.status === 'Outside Geofence' || !att.is_geofence_verified) outsideGeofenceCount++;
+        if (String(att.status).toLowerCase() === 'late') lateCount++;
+        if (att.status === 'Outside Geofence' || att.is_geofence_verified === false) outsideGeofenceCount++;
       }
     }
 
     // Check yesterday's missing check-outs
-    const yesterdayStr = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    const yesterdayStr = getLagosTime(Date.parse(todayStr+'T12:00:00+01:00')-86400000).dateStr;
     const yestAttendance = attendance.filter(a => String(a.date).slice(0, 10) === yesterdayStr);
     for (const emp of teamEmployees) {
       const att = yestAttendance.find(a => Number(a.employee_id) === Number(emp.id));
@@ -1255,7 +1265,7 @@ export const fieldService = {
     }
 
     // Active store visits today
-    const activeVisits = visits.filter(v => v.status === 'in_progress' && String(v.check_in_time || v.created_at).slice(0, 10) === todayStr).length;
+    const activeVisits = visits.filter(v => teamEmployees.some(e=>Number(e.id)===Number(v.agent_id)) && v.status === 'in_progress' && observationDay(v.check_in_time || v.created_at) === todayStr).length;
 
     return {
       total_field_force: teamEmployees.length,
@@ -1271,7 +1281,7 @@ export const fieldService = {
       gps_offline: 0,
       missing_checkout: missingCheckoutCount,
       active_store_visits: activeVisits,
-      active_alerts_count: alerts.filter(a => a.status === 'active').length
+      active_alerts_count: alerts.filter(a => a.status === 'active' && (!supervisorId||Number(a.supervisor_id)===Number(supervisorId))).length
     };
   },
 
@@ -1279,31 +1289,32 @@ export const fieldService = {
    * Retrieves detailed supervisor team table with live employee status.
    */
   async getSupervisorTeamTable(filters = {}) {
-    const todayStr = (filters.date || new Date().toISOString()).slice(0, 10);
-    const employees = await db.find('employees');
-    const attendance = await db.find('attendance');
-    const stores = await db.find('stores');
-    const workLocations = await db.find('work_locations');
-    const assignments = await db.find('employee_location_assignments', { is_active: true });
-    const locationLogs = await db.find('location_logs', {}, { order: { column: 'timestamp', ascending: false } });
-    const visits = await db.find('visits');
-    const orders = await db.find('orders');
+    const todayStr = monitoringDay(filters.date);
+    const company={company_id:Number(filters.company_id||1)};
+    const employees = await db.find('employees',company);
+    const attendance = (await db.find('attendance',company)).map(attendanceTimes);
+    const stores = await db.find('stores',company);
+    const workLocations = await db.find('work_locations',company);
+    const assignments = await db.find('employee_location_assignments', { ...company, is_active: true });
+    const locationLogs = await db.find('location_logs', company, { order: { column: 'timestamp', ascending: false } });
+    const visits = await db.find('visits',company);
+    const orders = await db.find('orders',company);
 
     // Filter relevant field & sales staff
     const team = employees.filter(e => {
       const isFieldOrSales = ['Commercial Sales', 'Field Operations'].includes(e.department) ||
         ['SALES_AGENT', 'FIELD_AGENT'].includes(e.rank_code) ||
-        (e.position && (e.position.includes('Sales') || e.position.includes('Field')));
+        (e.position && (String(e.position||'').includes('Sales') || String(e.position||'').includes('Field')));
       if (!isFieldOrSales) return false;
       if (filters.supervisor_id && Number(e.supervisor_id) !== Number(filters.supervisor_id)) return false;
       if (filters.territory && e.territory !== filters.territory) return false;
       if (filters.role) {
-        if (filters.role === 'FIELD_AGENT' && !e.position.includes('Field')) return false;
-        if (filters.role === 'SALES_AGENT' && !e.position.includes('Sales')) return false;
+        if (filters.role === 'FIELD_AGENT' && !String(e.position||'').includes('Field')) return false;
+        if (filters.role === 'SALES_AGENT' && !String(e.position||'').includes('Sales')) return false;
       }
       if (filters.search) {
         const q = filters.search.toLowerCase();
-        const match = `${e.first_name} ${e.last_name}`.toLowerCase().includes(q) || e.employee_code.toLowerCase().includes(q);
+        const match = `${e.first_name} ${e.last_name}`.toLowerCase().includes(q) || String(e.employee_code||'').toLowerCase().includes(q);
         if (!match) return false;
       }
       return true;
@@ -1315,7 +1326,7 @@ export const fieldService = {
       const roleLabel = isSales ? 'Sales Agent' : 'Field Agent';
 
       // Find assigned work location or store (NO hardcoded universal fallback)
-      const empAssignments = assignments.filter(a => Number(a.employee_id) === Number(emp.id));
+      const empAssignments = assignments.filter(a => Number(a.employee_id) === Number(emp.id)&&(!a.start_date||a.start_date<=todayStr)&&(!a.end_date||a.end_date>=todayStr));
       const primaryAssign = empAssignments.find(a => a.is_primary) || empAssignments[0];
 
       let assignedLoc = null;
@@ -1337,10 +1348,10 @@ export const fieldService = {
 
       // Calculate working duration
       let durationText = '—';
-      let statusColor = 'RED'; // GREEN, YELLOW, RED, GREY
+      let statusColor = 'GREY'; // GREEN, YELLOW, RED, GREY
       let statusLabel = assignedLoc ? 'Not Checked In' : 'Not Assigned';
-      let locationLabel = 'Offline';
-      let distanceMeters = latestPing ? latestPing.distance_from_store : (att?.distance_meters || 0);
+      let locationLabel = latestPing ? 'Latest reported location' : 'Not reported';
+      let distanceMeters = latestPing?.distance_from_store ?? att?.distance_meters ?? null;
 
       if (att && att.clock_in_time) {
         if (att.clock_out_time) {
@@ -1357,28 +1368,29 @@ export const fieldService = {
           const diffMins = Math.floor((diffMs % 3600000) / 60000);
           durationText = `${diffHours}h ${String(diffMins).padStart(2, '0')}m`;
 
-          if (att.status === 'Outside Geofence' || (distanceMeters && distanceMeters > (assignedLoc?.geofence_radius || assignedLoc?.geofence_radius_meters || 150))) {
+          if (att.status === 'Outside Geofence' || (distanceMeters && distanceMeters > workplaceRadius(assignedLoc))) {
             statusColor = 'RED';
             statusLabel = 'Alert (Outside Geofence)';
-            locationLabel = `${formatDistance(distanceMeters || 420)} Outside`;
-          } else if (att.status === 'Late') {
+            locationLabel = `${distanceMeters==null?'Distance unconfirmed':formatDistance(distanceMeters)} Outside`;
+          } else if (String(att.status).toLowerCase() === 'late') {
             statusColor = 'YELLOW';
             statusLabel = 'Attention (Late)';
-            locationLabel = 'At Location';
+            locationLabel = distanceMeters!=null||att.is_geofence_verified===true?'At Location':'Not reported';
           } else {
-            statusColor = 'GREEN';
-            statusLabel = 'Active';
-            locationLabel = 'At Location';
+            const locationRecorded=distanceMeters!=null||att.is_geofence_verified===true;
+            statusColor = locationRecorded?'GREEN':'GREY';
+            statusLabel = locationRecorded?'Active':'Open shift; location unconfirmed';
+            locationLabel = locationRecorded?'At Location':'Not reported';
           }
         }
       }
 
       // Compute agent sales today
-      const empOrders = orders.filter(o => Number(o.sales_agent_id) === Number(emp.id) && String(o.order_date).slice(0, 10) === todayStr);
+      const empOrders = orders.filter(o => Number(o.sales_agent_id) === Number(emp.id) && observationDay(o.order_date||o.created_at) === todayStr && !['cancelled','canceled','rejected'].includes(String(o.status).toLowerCase()));
       const salesToday = empOrders.reduce((sum, o) => sum + Number(o.total_amount || 0), 0);
 
       // Compute store visits completed today
-      const empVisits = visits.filter(v => Number(v.agent_id) === Number(emp.id) && String(v.created_at).slice(0, 10) === todayStr);
+      const empVisits = visits.filter(v => Number(v.agent_id) === Number(emp.id) && observationDay(v.check_in_time||v.created_at) === todayStr);
       const visitsCompleted = empVisits.filter(v => v.status === 'completed').length;
 
       return {
@@ -1400,7 +1412,7 @@ export const fieldService = {
           city: assignedLoc.city,
           latitude: assignedLoc.latitude,
           longitude: assignedLoc.longitude,
-          radius: assignedLoc.geofence_radius || assignedLoc.geofence_radius_meters || 150
+          radius: workplaceRadius(assignedLoc)
         } : null,
         check_in_time: att?.clock_in_time || null,
         check_out_time: att?.clock_out_time || null,
@@ -1408,10 +1420,10 @@ export const fieldService = {
         status_color: statusColor,
         status_label: statusLabel,
         location_status: locationLabel,
-        distance_meters: Math.round(distanceMeters || 0),
-        formatted_distance: formatDistance(distanceMeters || 0),
+        distance_meters: distanceMeters==null?null:Math.round(distanceMeters),
+        formatted_distance: distanceMeters==null?'Not recorded':formatDistance(distanceMeters),
         last_update: latestPing?.timestamp || att?.clock_in_time || null,
-        latest_coordinates: latestPing ? { latitude: latestPing.latitude, longitude: latestPing.longitude, accuracy: latestPing.accuracy } : (assignedLoc ? { latitude: assignedLoc.latitude, longitude: assignedLoc.longitude } : null),
+        latest_coordinates: latestPing&&validateCoordinates(latestPing.latitude,latestPing.longitude).valid ? { latitude: latestPing.latitude, longitude: latestPing.longitude, accuracy: latestPing.accuracy } : null,
         sales_today: salesToday,
         visits_completed: visitsCompleted,
         visits_total: empVisits.length
@@ -1422,36 +1434,37 @@ export const fieldService = {
   /**
    * Retrieves complete profile details for an employee for the Supervisor Drawer.
    */
-  async getSupervisorEmployeeProfile(employeeId, date = null) {
-    const todayStr = (date || new Date().toISOString()).slice(0, 10);
+  async getSupervisorEmployeeProfile(employeeId, date = null, companyId = 1) {
+    const todayStr = monitoringDay(date);
     const employee = await db.findById('employees', employeeId);
-    if (!employee) throw new Error(`Employee #${employeeId} not found.`);
+    if (!employee||Number(employee.company_id)!==Number(companyId)) throw new Error(`Employee #${employeeId} not found.`);
 
     const supervisor = employee.supervisor_id ? await db.findById('employees', employee.supervisor_id) : null;
-    const attendanceRecords = await db.find('attendance', { employee_id: Number(employeeId) });
+    const attendanceRecords = (await db.find('attendance', { employee_id: Number(employeeId),company_id:Number(companyId) })).map(attendanceTimes);
     const todayAttendance = attendanceRecords.find(a => String(a.date).slice(0, 10) === todayStr);
 
     const empLocations = await locationService.getEmployeeLocations(employeeId, employee.company_id || 1);
     const primaryLocation = empLocations.primary_location || (empLocations.all_active_locations && empLocations.all_active_locations[0]) || null;
 
-    const locationLogs = await db.find('location_logs', { employee_id: Number(employeeId) }, { order: { column: 'timestamp', ascending: false } });
+    const locationLogs = await db.find('location_logs', { employee_id: Number(employeeId),company_id:Number(companyId) }, { order: { column: 'timestamp', ascending: false } });
     const latestPing = locationLogs[0] || null;
 
     // Field activities & visits
-    const visits = await db.find('visits', { agent_id: Number(employeeId) });
-    const todayVisits = visits.filter(v => String(v.created_at || v.planned_time).slice(0, 10) === todayStr);
-    const fieldActivities = await db.find('field_activities', { employee_id: Number(employeeId) });
-    const tasks = await db.find('tasks', { assigned_to: Number(employeeId) });
+    const visits = await db.find('visits', { agent_id: Number(employeeId),company_id:Number(companyId) });
+    const todayVisits = visits.filter(v => observationDay(v.check_in_time||v.created_at||v.planned_time) === todayStr);
+    const fieldActivities = await db.find('field_activities', { employee_id: Number(employeeId),company_id:Number(companyId) });
+    const tasks = await db.find('tasks', { assigned_to: Number(employeeId),company_id:Number(companyId) });
 
     // Sales metrics for sales agents
-    const orders = await db.find('orders', { sales_agent_id: Number(employeeId) });
-    const todayOrders = orders.filter(o => String(o.order_date).slice(0, 10) === todayStr && o.status !== 'cancelled');
-    const monthOrders = orders.filter(o => String(o.order_date).slice(0, 7) === todayStr.slice(0, 7) && o.status !== 'cancelled');
+    const orders = await db.find('orders', { sales_agent_id: Number(employeeId),company_id:Number(companyId) });
+    const validOrder=o=>!['cancelled','canceled','rejected'].includes(String(o.status).toLowerCase());
+    const todayOrders = orders.filter(o => observationDay(o.order_date||o.created_at) === todayStr && validOrder(o));
+    const monthOrders = orders.filter(o => observationDay(o.order_date||o.created_at)?.slice(0,7) === todayStr.slice(0,7) && validOrder(o));
     const monthlySales = monthOrders.reduce((sum, o) => sum + Number(o.total_amount || 0), 0);
-    const monthlyTarget = 10000000;
+    const monthlyTarget = null; // No configured target is available in this data source.
 
     // Timeline
-    const timeline = await this.getEmployeeTimeline(employeeId, todayStr);
+    const timeline = await this.getEmployeeTimeline(employeeId, todayStr,companyId);
 
     return {
       employee: {
@@ -1465,19 +1478,20 @@ export const fieldService = {
         status: employee.status
       },
       attendance: {
+        id: todayAttendance?.id || null,
         check_in_time: todayAttendance?.clock_in_time || null,
         check_out_time: todayAttendance?.clock_out_time || null,
         working_duration: todayAttendance?.working_duration_text || (todayAttendance?.working_hours ? `${todayAttendance.working_hours}h` : '—'),
-        late_duration: todayAttendance?.status === 'Late' ? '42m' : '0m',
+        late_duration: todayAttendance?.clock_in_time ? (String(todayAttendance.status).toLowerCase()==='late'?Math.max(0,Math.floor((Date.parse(todayAttendance.clock_in_time)-Date.parse(todayStr+'T09:00:00+01:00'))/60000))+'m':'0m') : null,
         attendance_status: todayAttendance?.status || 'Not Checked In',
         is_geofence_verified: todayAttendance?.is_geofence_verified || false
       },
       location: {
-        current_location: latestPing?.address || (todayAttendance ? todayAttendance.clock_in_address : (primaryLocation?.address || 'Location Not Assigned')),
-        latitude: latestPing?.latitude || (todayAttendance ? todayAttendance.clock_in_latitude : (primaryLocation?.latitude || null)),
-        longitude: latestPing?.longitude || (todayAttendance ? todayAttendance.clock_in_longitude : (primaryLocation?.longitude || null)),
-        accuracy: latestPing?.accuracy || 5,
-        distance_from_store: latestPing?.distance_from_store || (todayAttendance?.distance_meters || 0),
+        current_location: latestPing?.address || todayAttendance?.clock_in_address || 'Not reported',
+        latitude: latestPing?.latitude ?? todayAttendance?.clock_in_latitude ?? null,
+        longitude: latestPing?.longitude ?? todayAttendance?.clock_in_longitude ?? null,
+        accuracy: latestPing?.accuracy ?? todayAttendance?.clock_in_accuracy ?? null,
+        distance_from_store: latestPing?.distance_from_store ?? todayAttendance?.distance_meters ?? null,
         last_update: latestPing?.timestamp || todayAttendance?.clock_in_time || null,
         assigned_store: primaryLocation?.name || (todayAttendance?.location_name || 'Not Assigned')
       },
@@ -1494,10 +1508,10 @@ export const fieldService = {
         sales_target: monthlyTarget,
         sales_achieved: monthlySales,
         today_sales: todayOrders.reduce((sum, o) => sum + Number(o.total_amount || 0), 0),
-        units_sold: todayOrders.length * 4,
+        units_sold: null,
         orders_count: todayOrders.length,
         revenue: monthlySales,
-        achievement_percentage: Math.round((monthlySales / monthlyTarget) * 100)
+        achievement_percentage: null
       },
       timeline
     };
@@ -1507,12 +1521,14 @@ export const fieldService = {
   /**
    * Daily Employee Timeline generator.
    */
-  async getEmployeeTimeline(employeeId, date = null) {
-    const targetDate = (date || new Date().toISOString()).slice(0, 10);
+  async getEmployeeTimeline(employeeId, date = null, companyId = 1) {
+    const targetDate = monitoringDay(date);
     const events = [];
+    const employee=await db.findById('employees',employeeId);
+    if(!employee||Number(employee.company_id)!==Number(companyId))throw Object.assign(new Error('Employee not found.'),{status:404});
 
     // 1. Attendance Check-in / Check-out
-    const attendance = await db.find('attendance', { employee_id: Number(employeeId) });
+    const attendance = (await db.find('attendance', { employee_id: Number(employeeId),company_id:Number(companyId) })).map(attendanceTimes);
     const todayAtt = attendance.find(a => String(a.date).slice(0, 10) === targetDate);
 
     if (todayAtt && todayAtt.clock_in_time) {
@@ -1527,8 +1543,8 @@ export const fieldService = {
     }
 
     // 2. Location Logs
-    const logs = await db.find('location_logs', { employee_id: Number(employeeId) });
-    const todayLogs = logs.filter(l => String(l.timestamp).slice(0, 10) === targetDate && l.current_activity !== 'Shift Check-In');
+    const logs = await db.find('location_logs', { employee_id: Number(employeeId),company_id:Number(companyId) });
+    const todayLogs = logs.filter(l => observationDay(l.timestamp) === targetDate && l.current_activity !== 'Shift Check-In');
     for (const log of todayLogs) {
       events.push({
         type: 'LOCATION_UPDATE',
@@ -1541,8 +1557,8 @@ export const fieldService = {
     }
 
     // 3. Store Visits
-    const visits = await db.find('visits', { agent_id: Number(employeeId) });
-    const todayVisits = visits.filter(v => String(v.created_at || v.check_in_time).slice(0, 10) === targetDate);
+    const visits = await db.find('visits', { agent_id: Number(employeeId),company_id:Number(companyId) });
+    const todayVisits = visits.filter(v => observationDay(v.check_in_time||v.created_at) === targetDate);
     for (const v of todayVisits) {
       if (v.check_in_time) {
         events.push({
@@ -1567,7 +1583,7 @@ export const fieldService = {
     }
 
     // 4. Sales Orders
-    const orders = await db.find('orders', { sales_agent_id: Number(employeeId) });
+    const orders = await db.find('orders', { sales_agent_id: Number(employeeId),company_id:Number(companyId) });
     const todayOrders = orders.filter(o => String(o.order_date || o.created_at).slice(0, 10) === targetDate);
     for (const o of todayOrders) {
       events.push({
@@ -1601,8 +1617,8 @@ export const fieldService = {
    * Retrieves active / all supervisor alerts.
    */
   async getSupervisorAlerts(filters = {}) {
-    const alerts = await db.find('location_alerts', {}, { order: { column: 'created_at', ascending: false } });
-    const employees = await db.find('employees');
+    const alerts = await db.find('location_alerts', {company_id:Number(filters.company_id||1)}, { order: { column: 'created_at', ascending: false } });
+    const employees = await db.find('employees',{company_id:Number(filters.company_id||1)});
 
     return alerts.filter(a => {
       if (filters.status && filters.status !== 'all' && a.status !== filters.status) return false;
@@ -1648,17 +1664,22 @@ export const fieldService = {
     if (!record) throw new Error(`Attendance record #${attendanceId} not found.`);
     if (req?.user && (!isManagementUser(req.user) || Number(record.company_id) !== Number(req.user.company_id || 1))) throw new Error('You cannot override this attendance record.');
 
-    const inTime = new Date(record.clock_in_time);
-    const outTime = clockOutTime ? new Date(clockOutTime) : new Date(inTime.getTime() + 8 * 3600000); // default 8h shift
+    if(action!=='APPROVE_MISSING_CHECKOUT')throw new Error('Unsupported attendance correction action.');
+    if(typeof clockOutTime!=='string'||!/(Z|[+-]\d{2}:\d{2})$/.test(clockOutTime))throw new Error('Enter the actual checkout time with a time zone.');
+    if(typeof notes!=='string'||notes.trim().length<5||notes.length>2000)throw new Error('Provide a correction reason of 5 to 2000 characters.');
+    const inTime = new Date(record.clock_in_time||record.clock_in);
+    const outTime = new Date(clockOutTime);
+    if(!Number.isFinite(inTime.getTime())||!Number.isFinite(outTime.getTime())||outTime<inTime||outTime>new Date())throw new Error('Checkout must follow the recorded clock-in and cannot be in the future.');
+    const elapsedMinutes=Math.floor((outTime-inTime)/60000);
     const diffHours = Math.round(((outTime - inTime) / 3600000) * 10) / 10;
-    const diffMinutes = Math.floor(((outTime - inTime) % 3600000) / 60000);
-    const durationText = `${Math.floor(diffHours)}h ${String(diffMinutes).padStart(2, '0')}m`;
+    const durationText = `${Math.floor(elapsedMinutes/60)}h ${String(elapsedMinutes%60).padStart(2,'0')}m`;
 
     const updated = await db.update('attendance', record.id, {
       clock_out_time: outTime.toISOString(),
+      clock_out: outTime.toISOString(),
       working_hours: Math.max(0, diffHours),
       working_duration_text: durationText,
-      status: 'Completed',
+      status: String(record.status).toLowerCase()==='late'?record.status:'Completed',
       is_override: true,
       override_reason: notes
     });
@@ -1678,27 +1699,29 @@ export const fieldService = {
   /**
    * End-of-Day Daily Team Summary generator.
    */
-  async generateDailyTeamSummary(supervisorId = null, date = null) {
-    const targetDate = (date || new Date().toISOString()).slice(0, 10);
-    const metrics = await this.getSupervisorDashboardMetrics(supervisorId, targetDate);
+  async generateDailyTeamSummary(supervisorId = null, date = null, companyId = 1) {
+    const targetDate = monitoringDay(date);
+    const metrics = await this.getSupervisorDashboardMetrics(supervisorId, targetDate,companyId);
 
-    const orders = await db.find('orders');
-    const todayOrders = orders.filter(o => String(o.order_date).slice(0, 10) === targetDate && o.status !== 'cancelled');
+    const team=await this.getSupervisorTeamTable({supervisor_id:supervisorId,company_id:companyId,date:targetDate});
+    const teamIds=new Set(team.map(e=>Number(e.id)));
+    const orders = (await db.find('orders',{company_id:Number(companyId)})).filter(o=>teamIds.has(Number(o.sales_agent_id)));
+    const todayOrders = orders.filter(o => observationDay(o.order_date||o.created_at) === targetDate && !['cancelled','canceled','rejected'].includes(String(o.status).toLowerCase()));
     const totalSales = todayOrders.reduce((sum, o) => sum + Number(o.total_amount || 0), 0);
 
-    const visits = await db.find('visits');
-    const todayVisits = visits.filter(v => String(v.created_at).slice(0, 10) === targetDate && v.status === 'completed');
+    const visits = (await db.find('visits',{company_id:Number(companyId)})).filter(r=>teamIds.has(Number(r.agent_id)));
+    const todayVisits = visits.filter(v => observationDay(v.check_in_time||v.created_at) === targetDate && v.status === 'completed');
 
-    const tasks = await db.find('tasks');
-    const completedTasks = tasks.filter(t => (t.status === 'completed' || t.status === 'Completed') && String(t.completed_at || t.updated_at || '').slice(0, 10) === targetDate);
+    const tasks = (await db.find('tasks',{company_id:Number(companyId)})).filter(r=>teamIds.has(Number(r.assigned_to)));
+    const completedTasks = tasks.filter(t => (t.status === 'completed' || t.status === 'Completed') && observationDay(t.completed_at || t.updated_at) === targetDate);
 
-    const activities = await db.find('field_activities');
-    const todayPhotos = activities.filter(a => a.photo_url && String(a.timestamp).slice(0, 10) === targetDate).length + todayVisits.filter(v => v.photo_evidence_url).length;
+    const activities = (await db.find('field_activities',{company_id:Number(companyId)})).filter(r=>teamIds.has(Number(r.employee_id)));
+    const todayPhotos = activities.filter(a => a.photo_url && observationDay(a.timestamp) === targetDate).length + todayVisits.filter(v => v.photo_evidence_url).length;
 
     const summaryData = {
       date: targetDate,
-      supervisor_id: supervisorId ? Number(supervisorId) : 9,
-      company_id: 1,
+      supervisor_id: supervisorId ? Number(supervisorId) : null,
+      company_id: Number(companyId),
       total_members: metrics.total_field_force,
       field_agents: metrics.total_field_agents,
       sales_agents: metrics.total_sales_agents,
@@ -1713,7 +1736,7 @@ export const fieldService = {
       sales_generated: totalSales
     };
 
-    const existing = await db.findOne('daily_summaries', { date: targetDate, supervisor_id: summaryData.supervisor_id });
+    const existing = await db.findOne('daily_summaries', { company_id:Number(companyId), date: targetDate, supervisor_id: summaryData.supervisor_id });
     if (existing) {
       return await db.update('daily_summaries', existing.id, summaryData);
     }
@@ -1723,16 +1746,20 @@ export const fieldService = {
   /**
    * Reporting Engine: Attendance, Location Presence, Field Activities & Sales Performance.
    */
-  async getReports({ reportType = 'attendance', dateFrom = null, dateTo = null, supervisorId = null, employeeId = null }) {
-    const todayStr = new Date().toISOString().slice(0, 10);
-    const start = (dateFrom || todayStr).slice(0, 10);
-    const end = (dateTo || todayStr).slice(0, 10);
+  async getReports({ reportType = 'attendance', dateFrom = null, dateTo = null, supervisorId = null, employeeId = null, companyId = 1 }) {
+    const todayStr = getLagosTime().dateStr;
+    const start = monitoringDay(dateFrom||todayStr);
+    const end = monitoringDay(dateTo||todayStr);
 
-    const employees = await db.find('employees');
-    const stores = await db.find('stores');
+    if(start>end)throw Object.assign(new Error('Report start date must not follow its end date.'),{status:400});
+    const company={company_id:Number(companyId)};
+    const employees = (await db.find('employees',company)).filter(e=>(!supervisorId||Number(e.supervisor_id)===Number(supervisorId)||Number(e.id)===Number(supervisorId))&&(!employeeId||Number(e.id)===Number(employeeId)));
+    const allowed=new Set(employees.map(e=>Number(e.id)));
+    const during=value=>{const date=observationDay(value);return date&&date>=start&&date<=end;};
+    const stores = await db.find('stores',company);
 
     if (reportType === 'attendance') {
-      const attendance = await db.find('attendance');
+      const attendance = (await db.find('attendance',company)).filter(a=>allowed.has(Number(a.employee_id))).map(attendanceTimes);
       return attendance.filter(a => {
         const d = String(a.date).slice(0, 10);
         if (d < start || d > end) return false;
@@ -1761,9 +1788,9 @@ export const fieldService = {
     }
 
     if (reportType === 'location') {
-      const logs = await db.find('location_logs');
+      const logs = (await db.find('location_logs',company)).filter(l=>allowed.has(Number(l.employee_id)));
       return logs.filter(l => {
-        const d = String(l.timestamp).slice(0, 10);
+        const d = observationDay(l.timestamp);
         if (d < start || d > end) return false;
         if (employeeId && Number(l.employee_id) !== Number(employeeId)) return false;
         return true;
@@ -1787,20 +1814,20 @@ export const fieldService = {
     }
 
     if (reportType === 'activity') {
-      const visits = await db.find('visits');
-      const activities = await db.find('field_activities');
+      const visits = (await db.find('visits',company)).filter(v=>allowed.has(Number(v.agent_id))&&during(v.check_in_time||v.created_at));
+      
 
       return visits.map(v => {
         const emp = employees.find(e => Number(e.id) === Number(v.agent_id));
         const store = stores.find(s => Number(s.id) === Number(v.store_id || v.customer_id));
         return {
           id: v.id,
-          date: String(v.check_in_time || v.created_at).slice(0, 10),
+          date: observationDay(v.check_in_time||v.created_at),
           agent_name: emp ? `${emp.first_name} ${emp.last_name}` : `Agent #${v.agent_id}`,
           store_name: store?.name || 'Retail Outlet',
           visit_purpose: v.visit_purpose || 'Store Inspection',
-          duration_minutes: v.duration_minutes || 30,
-          shelf_share_percent: v.shelf_share_percent || 50,
+          duration_minutes: v.duration_minutes ?? null,
+          shelf_share_percent: v.shelf_share_percent ?? null,
           status: v.status,
           has_photo: Boolean(v.photo_evidence_url),
           photo_url: v.photo_evidence_url
@@ -1809,8 +1836,8 @@ export const fieldService = {
     }
 
     if (reportType === 'sales') {
-      const orders = await db.find('orders');
-      const customers = await db.find('customers');
+      const orders = (await db.find('orders',company)).filter(o=>allowed.has(Number(o.sales_agent_id))&&during(o.order_date||o.created_at));
+      const customers = await db.find('customers',company);
 
       return orders.map(o => {
         const agent = employees.find(e => Number(e.id) === Number(o.sales_agent_id));

@@ -212,7 +212,7 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
       });
 
       setShift(res.data || res);
-      setStatusMsg(res.clock_out_time || res.data?.clock_out_time ? `✓ Shift concluded. Total working duration logged.` : '✓ Shift started. 150m Geofence and GPS Telemetry active.');
+      setStatusMsg(res.clock_out_time || res.data?.clock_out_time ? `✓ Shift concluded. Total working duration logged.` : '✓ Shift started. Your assigned workplace boundary and GPS monitoring are active.');
       loadAllData();
     } catch (err) {
       setErrorMsg(err.message || 'Shift action failed');
