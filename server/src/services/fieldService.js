@@ -1736,7 +1736,7 @@ export const fieldService = {
       sales_generated: totalSales
     };
 
-    const existing = await db.findOne('daily_summaries', { company_id:Number(companyId), date: targetDate, supervisor_id: summaryData.supervisor_id });
+    const existing = (await db.find('daily_summaries', {company_id:Number(companyId),date:targetDate})).find(row=>summaryData.supervisor_id==null?row.supervisor_id==null:Number(row.supervisor_id)===summaryData.supervisor_id);
     if (existing) {
       return await db.update('daily_summaries', existing.id, summaryData);
     }

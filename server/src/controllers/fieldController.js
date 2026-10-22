@@ -376,9 +376,9 @@ export const fieldController = {
 
   async generateDailyTeamSummary(req, res) {
     try {
-      const scope=await supervisorScope(req.user,req.body.supervisor_id);
+      const scope=await supervisorScope(req.user,req.body?.supervisor_id);
       const supervisorId=scope.supervisorId;
-      const summary = await fieldService.generateDailyTeamSummary(supervisorId, req.body.date, scope.companyId);
+      const summary = await fieldService.generateDailyTeamSummary(supervisorId, req.body?.date, scope.companyId);
       res.json({ success: true, data: summary, message: 'Daily team summary compiled successfully.' });
     } catch (err) {
       res.status(err.status||500).json({ success: false, error: { message: err.message } });

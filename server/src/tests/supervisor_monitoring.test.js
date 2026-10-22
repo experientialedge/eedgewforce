@@ -3,7 +3,7 @@ import {db,resetTestData} from './helpers/database.js';
 import {fieldService} from '../services/fieldService.js';
 import {fieldController} from '../controllers/fieldController.js';
 import {supervisorScope,supervisorEmployee} from '../utils/supervisorAccess.js';
-const invoke=async(method,user,{query={},params={},body={}}={})=>{let result,status=200;const res={status(code){status=code;return res;},json(value){result=value;}};await fieldController[method]({user,query,params,body},res);return {status,...result};};
+const invoke=async(method,user,{query={},params={},body}={})=>{let result,status=200;const res={status(code){status=code;return res;},json(value){result=value;}};await fieldController[method]({user,query,params,body},res);return {status,...result};};
 
 test('Supervisor monitoring isolates companies and teams and preserves location evidence',async t=>{
  await resetTestData();t.mock.timers.enable({apis:['Date'],now:Date.parse('2026-10-21T23:30:00Z')});
@@ -64,5 +64,13 @@ test('Supervisor monitoring isolates companies and teams and preserves location 
   for(const input of [{},{clockOutTime:'invalid'},{clockOutTime:'2026-10-22T01:00:00Z'},{clockOutTime:'2026-10-21T22:00:00Z'},{clockOutTime:'2026-10-21T23:25:00Z',notes:''}])await assert.rejects(fieldService.overrideAttendance({attendanceId:9001,notes:'Verified fixture correction',...input}));
   assert.equal((await db.findById('attendance',9001)).clock_out_time,undefined);
   const corrected=await fieldService.overrideAttendance({attendanceId:9001,clockOutTime:'2026-10-21T23:25:00Z',notes:'Verified fixture correction'});assert.equal(corrected.clock_out,'2026-10-21T23:25:00.000Z');assert.equal(corrected.working_duration_text,'0h 10m');assert.equal(corrected.status,'late');
+ });
+ await t.test('A summary works without a request body and preserves separate company and supervisor snapshots',async()=>{
+  const selected=await fieldService.generateDailyTeamSummary(9001,null,1);
+  const first=await invoke('generateDailyTeamSummary',admin);
+  assert.equal(first.status,200);assert.equal(first.data.company_id,1);assert.equal(first.data.supervisor_id,null);assert.notEqual(first.data.id,selected.id);
+  const second=await invoke('generateDailyTeamSummary',admin);assert.equal(second.data.id,first.data.id);
+  assert.equal((await db.findById('daily_summaries',selected.id)).supervisor_id,9001);
+  const other=await invoke('generateDailyTeamSummary',otherAdmin);assert.equal(other.status,200);assert.equal(other.data.company_id,2);assert.notEqual(other.data.id,first.data.id);
  });
 });
