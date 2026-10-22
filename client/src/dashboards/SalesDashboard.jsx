@@ -226,7 +226,7 @@ export default function SalesDashboard({ user }) {
       });
 
       setShift(res.data || res);
-      setShiftStatusMsg(res.clock_out_time || res.data?.clock_out_time ? '✓ Shift concluded. Total working duration logged.' : '✓ Shift started. GPS 150m geofencing & tracking active.');
+      setShiftStatusMsg(res.clock_out_time || res.data?.clock_out_time ? '✓ Shift concluded. Total working duration logged.' : '✓ Shift started. Your assigned workplace boundary and GPS monitoring are active.');
       loadData();
     } catch (err) {
       setShiftErrorMsg(err.message || 'Shift action failed');

@@ -2,6 +2,7 @@
 // EDGEWFORCE - FIELD OPERATIONS & SUPERVISOR CONTROLLER
 // ==============================================================================
 
+import {supervisorScope,supervisorEmployee,supervisorRecord} from '../utils/supervisorAccess.js';
 import { fieldService } from '../services/fieldService.js';
 import { isManagementUser } from '../middleware/rbac.js';
 
@@ -284,51 +285,58 @@ export const fieldController = {
 
   async getSupervisorDashboardMetrics(req, res) {
     try {
-      const supervisorId = req.query.supervisor_id || (req.user.role_code === 'SUPERVISOR' ? req.user.employee?.id : null);
-      const metrics = await fieldService.getSupervisorDashboardMetrics(supervisorId, req.query.date);
+      const scope=await supervisorScope(req.user,req.query.supervisor_id);
+      const supervisorId=scope.supervisorId;
+      const metrics = await fieldService.getSupervisorDashboardMetrics(supervisorId, req.query.date, scope.companyId);
       res.json({ success: true, data: metrics });
     } catch (err) {
-      res.status(500).json({ success: false, error: { message: err.message } });
+      res.status(err.status||500).json({ success: false, error: { message: err.message } });
     }
   },
 
   async getSupervisorTeamTable(req, res) {
     try {
-      const supervisorId = req.query.supervisor_id || (req.user.role_code === 'SUPERVISOR' ? req.user.employee?.id : null);
-      const team = await fieldService.getSupervisorTeamTable({ ...req.query, supervisor_id: supervisorId });
+      const scope=await supervisorScope(req.user,req.query.supervisor_id);
+      const supervisorId=scope.supervisorId;
+      const team = await fieldService.getSupervisorTeamTable({ ...req.query, supervisor_id: supervisorId, company_id: scope.companyId });
       res.json({ success: true, data: team, team });
     } catch (err) {
-      res.status(500).json({ success: false, error: { message: err.message } });
+      res.status(err.status||500).json({ success: false, error: { message: err.message } });
     }
   },
 
   async getSupervisorEmployeeProfile(req, res) {
     try {
       const { employeeId } = req.params;
-      const profile = await fieldService.getSupervisorEmployeeProfile(employeeId, req.query.date);
+      const scope=await supervisorScope(req.user);
+      await supervisorEmployee(scope,employeeId);
+      const profile = await fieldService.getSupervisorEmployeeProfile(employeeId, req.query.date, scope.companyId);
       res.json({ success: true, data: profile });
     } catch (err) {
-      res.status(500).json({ success: false, error: { message: err.message } });
+      res.status(err.status||500).json({ success: false, error: { message: err.message } });
     }
   },
 
   async getEmployeeTimeline(req, res) {
     try {
       const { employeeId } = req.params;
-      const timeline = await fieldService.getEmployeeTimeline(employeeId, req.query.date);
+      const scope=await supervisorScope(req.user);
+      await supervisorEmployee(scope,employeeId);
+      const timeline = await fieldService.getEmployeeTimeline(employeeId, req.query.date, scope.companyId);
       res.json({ success: true, data: timeline });
     } catch (err) {
-      res.status(500).json({ success: false, error: { message: err.message } });
+      res.status(err.status||500).json({ success: false, error: { message: err.message } });
     }
   },
 
   async getSupervisorAlerts(req, res) {
     try {
-      const supervisorId = req.query.supervisor_id || (req.user.role_code === 'SUPERVISOR' ? req.user.employee?.id : null);
-      const alerts = await fieldService.getSupervisorAlerts({ ...req.query, supervisor_id: supervisorId });
+      const scope=await supervisorScope(req.user,req.query.supervisor_id);
+      const supervisorId=scope.supervisorId;
+      const alerts = await fieldService.getSupervisorAlerts({ ...req.query, supervisor_id: supervisorId, company_id: scope.companyId });
       res.json({ success: true, data: alerts, alerts });
     } catch (err) {
-      res.status(500).json({ success: false, error: { message: err.message } });
+      res.status(err.status||500).json({ success: false, error: { message: err.message } });
     }
   },
 
@@ -336,11 +344,13 @@ export const fieldController = {
     try {
       const actorId = req.user.employee?.id || req.user.id;
       const { alertId } = req.params;
+      const scope=await supervisorScope(req.user);
+      await supervisorRecord(scope,'location_alerts',alertId);
       const { resolution_notes } = req.body;
       const updated = await fieldService.resolveSupervisorAlert(alertId, resolution_notes, actorId, req);
       res.json({ success: true, data: updated, message: 'Alert resolved successfully.' });
     } catch (err) {
-      res.status(400).json({ success: false, error: { message: err.message } });
+      res.status(err.status||400).json({ success: false, error: { message: err.message } });
     }
   },
 
@@ -348,6 +358,8 @@ export const fieldController = {
     try {
       const reviewerId = req.user.employee?.id || req.user.id;
       const { attendance_id, action, clock_out_time, notes } = req.body;
+      const scope=await supervisorScope(req.user);
+      await supervisorRecord(scope,'attendance',attendance_id);
       const updated = await fieldService.overrideAttendance({
         attendanceId: attendance_id,
         action,
@@ -358,26 +370,37 @@ export const fieldController = {
       });
       res.json({ success: true, data: updated, message: 'Attendance record updated via supervisor approval.' });
     } catch (err) {
-      res.status(400).json({ success: false, error: { message: err.message } });
+      res.status(err.status||400).json({ success: false, error: { message: err.message } });
     }
   },
 
   async generateDailyTeamSummary(req, res) {
     try {
-      const supervisorId = req.body.supervisor_id || (req.user.role_code === 'SUPERVISOR' ? req.user.employee?.id : null);
-      const summary = await fieldService.generateDailyTeamSummary(supervisorId, req.body.date);
+      const scope=await supervisorScope(req.user,req.body?.supervisor_id);
+      const supervisorId=scope.supervisorId;
+      const summary = await fieldService.generateDailyTeamSummary(supervisorId, req.body?.date, scope.companyId);
       res.json({ success: true, data: summary, message: 'Daily team summary compiled successfully.' });
     } catch (err) {
-      res.status(500).json({ success: false, error: { message: err.message } });
+      res.status(err.status||500).json({ success: false, error: { message: err.message } });
     }
   },
 
   async getReports(req, res) {
     try {
-      const reports = await fieldService.getReports(req.query);
+      let scope,employeeId;
+      if(isManagementUser(req.user)){
+        scope=await supervisorScope(req.user,req.query.supervisorId||req.query.supervisor_id);
+        employeeId=req.query.employeeId||req.query.employee_id;
+        if(employeeId)await supervisorEmployee(scope,employeeId);
+      }else{
+        employeeId=req.user.employee?.id;
+        if(!employeeId)throw Object.assign(new Error('A linked staff profile is required.'),{status:403});
+        scope={companyId:Number(req.user.company_id),supervisorId:null};
+      }
+      const reports = await fieldService.getReports({...req.query,companyId:scope.companyId,supervisorId:scope.supervisorId,employeeId});
       res.json({ success: true, data: reports, reports });
     } catch (err) {
-      res.status(500).json({ success: false, error: { message: err.message } });
+      res.status(err.status||500).json({ success: false, error: { message: err.message } });
     }
   }
 };
