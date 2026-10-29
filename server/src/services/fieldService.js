@@ -35,11 +35,11 @@ export const fieldService = {
   /**
    * Retrieves today's assigned route stops / stores with geofence metrics.
    */
-  async getRouteManifest(agentId) {
-    const visits = await db.find('visits', { agent_id: Number(agentId) });
-    const customers = await db.find('customers');
-    const stores = await db.find('stores');
-    const workLocations = await db.find('work_locations');
+  async getRouteManifest(agentId,companyId=1) {
+    const visits = await db.find('visits', { agent_id: Number(agentId),company_id:Number(companyId) });
+    const customers = await db.find('customers',{company_id:Number(companyId)});
+    const stores = await db.find('stores',{company_id:Number(companyId)});
+    const workLocations = await db.find('work_locations',{company_id:Number(companyId)});
 
     return visits.map(v => {
       const customer = customers.find(c => Number(c.id) === Number(v.customer_id));
@@ -57,19 +57,20 @@ export const fieldService = {
   /**
    * Retrieves active shift state for an employee with assigned work location.
    */
-  async getCurrentShift(agentId) {
+  async getCurrentShift(agentId,companyId=1) {
     const todayStr = getLagosTime().dateStr;
-    const shift = await db.findOne('attendance', { employee_id: Number(agentId), date: todayStr });
+    const shift = await db.findOne('attendance', { employee_id: Number(agentId), company_id:Number(companyId),date: todayStr });
     if (!shift) return null;
 
     let store = null;
     if (shift.store_id || shift.location_id) {
       const locId = Number(shift.store_id || shift.location_id);
       store = await db.findById('work_locations', locId) || await db.findById('stores', locId) || await db.findById('customers', locId);
+      if(store&&Number(store.company_id)!==Number(companyId))store=null;
     }
 
     return {
-      ...shift,
+      ...attendanceTimes(shift),
       store
     };
   },
@@ -1867,13 +1868,17 @@ export const fieldService = {
     const workLocations = await db.find('work_locations', { company_id: Number(companyId) });
     const stores = await db.find('stores', { company_id: Number(companyId) });
 
-    let filtered = logs.map(log => {
+    const visibleLogs=Array.isArray(filters.employee_ids)?logs.filter(log=>filters.employee_ids.includes(Number(log.employee_id))):logs;
+    let filtered = visibleLogs.map(log => {
       const emp = employees.find(e => Number(e.id) === Number(log.employee_id));
       const locId = Number(log.location_id || log.store_id);
       const matchedLoc = workLocations.find(w => Number(w.id) === locId) || stores.find(s => Number(s.id) === locId);
 
       const lagos = getLagosTime(log.timestamp || log.server_timestamp || new Date());
-      const distanceVal = Number(log.distance_from_store || log.distance_meters || 0);
+      const rawDistance=log.distance_from_store??log.distance_meters;
+      const distanceVal=rawDistance==null||rawDistance===''||!Number.isFinite(Number(rawDistance))?null:Number(rawDistance);
+      const observedCoordinates=validateCoordinates(log.latitude,log.longitude).valid;
+      const accuracy=log.accuracy==null||log.accuracy===''||!Number.isFinite(Number(log.accuracy))?null:Number(log.accuracy);
 
       const designation = emp?.position || (log.role === 'SALES_AGENT' ? 'Sales Agent' : (log.role === 'FIELD_AGENT' ? 'Field Agent' : 'Staff Member'));
       const region = log.assigned_region || matchedLoc?.region || emp?.region || matchedLoc?.state || emp?.state || 'WEST';
@@ -1886,14 +1891,15 @@ export const fieldService = {
           geofenceStatus = 'Verified';
         } else if (log.status === 'blocked') {
           geofenceStatus = 'Blocked';
-        } else {
+        } else if(log.is_inside_geofence===false) {
           geofenceStatus = 'Outside Geofence';
-        }
+        } else geofenceStatus='Not recorded';
       }
 
-      const assignedLat = matchedLoc ? Number(matchedLoc.latitude) : null;
-      const assignedLng = matchedLoc ? Number(matchedLoc.longitude) : null;
-      const permittedRadius = matchedLoc ? Number(matchedLoc.geofence_radius || 150) : 150;
+      const assignedCoordinates=matchedLoc&&validateCoordinates(matchedLoc.latitude,matchedLoc.longitude).valid;
+      const assignedLat = assignedCoordinates ? Number(matchedLoc.latitude) : null;
+      const assignedLng = assignedCoordinates ? Number(matchedLoc.longitude) : null;
+      const permittedRadius = matchedLoc ? workplaceRadius(matchedLoc) : null;
 
       return {
         id: log.id,
@@ -1913,13 +1919,13 @@ export const fieldService = {
         region: String(region).toUpperCase(),
         state,
         market,
-        latitude: Number(log.latitude),
-        longitude: Number(log.longitude),
-        accuracy: Number(log.accuracy || 5),
-        accuracy_text: `±${Math.round(log.accuracy || 5)}m`,
-        distance_meters: Math.round(distanceVal * 10) / 10,
-        distance_formatted: formatDistance(distanceVal),
-        distance_from_assigned_location: formatDistance(distanceVal),
+        latitude: observedCoordinates?Number(log.latitude):null,
+        longitude: observedCoordinates?Number(log.longitude):null,
+        accuracy,
+        accuracy_text: accuracy==null?'Not recorded':`±${Math.round(accuracy)}m`,
+        distance_meters: distanceVal==null?null:Math.round(distanceVal * 10) / 10,
+        distance_formatted: distanceVal==null?'Not recorded':formatDistance(distanceVal),
+        distance_from_assigned_location: distanceVal==null?'Not recorded':formatDistance(distanceVal),
         permitted_radius: permittedRadius,
         geofence_status: geofenceStatus,
         status: log.status || 'success',

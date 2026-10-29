@@ -1,3 +1,4 @@
+import {responseList} from '../../lib/operationsData';
 import React, { useState, useEffect, useRef } from 'react';
 import {
   MapPin, Clock, Calendar, Filter, Search, Download, RefreshCw,
@@ -82,7 +83,7 @@ function LocationMapModal({ item, onClose }) {
       bounds.push([agentLat, agentLng]);
 
       const isVerified = item.geofence_status === 'Verified';
-      const markerColor = isVerified ? '#F57C00' : '#DC2626';
+      const markerColor = isVerified ? '#F57C00' : item.geofence_status === 'Outside Geofence' ? '#DC2626' : '#71717A';
 
       // Accuracy circle
       if (Number.isFinite(Number(item.accuracy))&&Number(item.accuracy)>0) {
@@ -113,7 +114,7 @@ function LocationMapModal({ item, onClose }) {
             <div style="font-size: 11px; color: #4B5563;">${esc(item.designation)} &bull; ${esc(item.activity)}</div>
             <div style="font-size: 11px; color: #9CA3AF; margin-top: 2px;">GPS: ${agentLat.toFixed(6)}, ${agentLng.toFixed(6)}</div>
             <div style="font-size: 11px; font-weight: 700; color: ${isVerified ? '#059669' : '#DC2626'}; margin-top: 4px;">
-              Distance: ${esc(item.distance_formatted)} (${isVerified ? 'Inside Geofence' : 'Outside Geofence'})
+              Distance: ${esc(item.distance_formatted)} (${esc(item.geofence_status || 'Not recorded')})
             </div>
             <div style="font-size: 10px; color: #6B7280; margin-top: 2px;">Lagos Time: ${esc(item.server_time)}</div>
           </div>
@@ -209,7 +210,7 @@ function LocationMapModal({ item, onClose }) {
           <div>
             <div className="text-zinc-400 uppercase font-semibold text-[10px]">GPS Coordinates</div>
             <div className="font-mono text-zinc-800 dark:text-zinc-200 mt-0.5">
-              {Number(item.latitude).toFixed(6)}, {Number(item.longitude).toFixed(6)}
+              {mapPoint(item.latitude,item.longitude) ? `${Number(item.latitude).toFixed(6)}, ${Number(item.longitude).toFixed(6)}` : 'Not recorded'}
             </div>
             <div className="text-zinc-500">Accuracy: {item.accuracy_text}</div>
           </div>
@@ -231,6 +232,8 @@ function LocationMapModal({ item, onClose }) {
 
 export default function GeoLocationReportView({ user, defaultRoleFilter = null }) {
   const [logs, setLogs] = useState([]);
+  const [loadError,setLoadError]=useState('');
+  const requestVersion=useRef(0);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState(defaultRoleFilter || 'ALL');
@@ -244,6 +247,7 @@ export default function GeoLocationReportView({ user, defaultRoleFilter = null }
   const [selectedMapItem, setSelectedMapItem] = useState(null);
 
   const loadReport = async () => {
+    const version=++requestVersion.current;
     setLoading(true);
     try {
       const params = new URLSearchParams({
@@ -256,17 +260,19 @@ export default function GeoLocationReportView({ user, defaultRoleFilter = null }
       if (attendanceTypeFilter !== 'ALL') params.append('attendance_type', attendanceTypeFilter);
       if (geofenceStatusFilter !== 'ALL') params.append('geofence_status', geofenceStatusFilter);
 
-      const res = await api.get(`/field/geolocation-report?${params.toString()}`);
-      setLogs(res?.data || res?.report || []);
+      const res = await api.get(`/field/geolocation-report?${params.toString()}`,{requireOnline:true,signal:AbortSignal.timeout(25000)});
+      if(version!==requestVersion.current)return;
+      setLogs(responseList(res,'report'));setLoadError('');
     } catch (err) {
-      console.error('Failed to load geo-location report:', err);
+      if(version===requestVersion.current)setLoadError(err.message);
     } finally {
-      setLoading(false);
+      if(version===requestVersion.current)setLoading(false);
     }
   };
 
   useEffect(() => {
     loadReport();
+    return ()=>{++requestVersion.current;};
   }, [dateRange, roleFilter, regionFilter, attendanceTypeFilter, geofenceStatusFilter]);
 
   const handleExportCSV = () => {
@@ -319,6 +325,7 @@ export default function GeoLocationReportView({ user, defaultRoleFilter = null }
 
   return (
     <div className="space-y-5">
+      {loadError&&<div role="alert" className="rounded-xl bg-amber-500/10 p-4 text-sm">Report refresh failed. Previously loaded records are kept. {loadError}<button onClick={loadReport} className="btn-secondary ml-3 text-xs">Retry location report</button></div>}
       {/* Header Banner */}
       <div className="surface-card p-5 sm:p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -370,15 +377,15 @@ export default function GeoLocationReportView({ user, defaultRoleFilter = null }
           <div className="text-xl font-black text-red-600 dark:text-red-400 mt-0.5">{outsideCount}</div>
         </div>
         <div className="surface-card p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">Morning Clock-In (7-10:30a)</div>
+          <div className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">Morning Clock-In (8–10 AM)</div>
           <div className="text-xl font-black text-amber-600 dark:text-amber-400 mt-0.5">{morningCount}</div>
         </div>
         <div className="surface-card p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Midday Clock-In (12-2p)</div>
+          <div className="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Midday Clock-In (12–1 PM)</div>
           <div className="text-xl font-black text-blue-600 dark:text-blue-400 mt-0.5">{middayCount}</div>
         </div>
         <div className="surface-card p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400">Evening Clock-Out (5-9p)</div>
+          <div className="text-[10px] font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400">Evening Clock-Out (5–6 PM)</div>
           <div className="text-xl font-black text-purple-600 dark:text-purple-400 mt-0.5">{eveningCount}</div>
         </div>
       </div>
@@ -443,9 +450,9 @@ export default function GeoLocationReportView({ user, defaultRoleFilter = null }
               className="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-zinc-100 outline-none"
             >
               <option value="ALL">All Attendance Types</option>
-              <option value="MORNING_ATTENDANCE">Morning Attendance (7:00–10:30 AM)</option>
-              <option value="MIDDAY_ATTENDANCE">Midday Attendance (12:00–2:00 PM)</option>
-              <option value="EVENING_CLOCK_OUT">Evening Clock-Out (5:00–9:00 PM)</option>
+              <option value="MORNING_ATTENDANCE">Morning Attendance (8:00–10:00 AM; late from 9:00)</option>
+              <option value="MIDDAY_ATTENDANCE">Midday Attendance (12:00–1:00 PM)</option>
+              <option value="EVENING_CLOCK_OUT">Evening Clock-Out (5:00–6:00 PM)</option>
               <option value="STAFF_CLOCK_IN">Staff Clock-In</option>
               <option value="TELEMETRY_PING">Route Telemetry Ping</option>
             </select>
@@ -530,10 +537,10 @@ export default function GeoLocationReportView({ user, defaultRoleFilter = null }
                         {row.designation}
                       </td>
                       <td className="p-3 font-mono text-zinc-600 dark:text-zinc-400 whitespace-nowrap">
-                        {Number(row.latitude).toFixed(5)}
+                        {row.latitude==null?'Not recorded':Number(row.latitude).toFixed(5)}
                       </td>
                       <td className="p-3 font-mono text-zinc-600 dark:text-zinc-400 whitespace-nowrap">
-                        {Number(row.longitude).toFixed(5)}
+                        {row.longitude==null?'Not recorded':Number(row.longitude).toFixed(5)}
                       </td>
                       <td className="p-3 font-mono text-[11px] text-zinc-600 dark:text-zinc-400 whitespace-nowrap">
                         {row.server_time}

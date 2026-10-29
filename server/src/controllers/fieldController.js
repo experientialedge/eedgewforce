@@ -5,12 +5,13 @@
 import {supervisorScope,supervisorEmployee,supervisorRecord} from '../utils/supervisorAccess.js';
 import { fieldService } from '../services/fieldService.js';
 import { isManagementUser } from '../middleware/rbac.js';
+import {db} from '../config/database.js';
 
 export const fieldController = {
   async getRouteManifest(req, res) {
     try {
-      const agentId = req.user.employee?.id || req.user.id;
-      const manifest = await fieldService.getRouteManifest(agentId);
+      const agentId = req.user.employee?.id;
+      const manifest = agentId?await fieldService.getRouteManifest(agentId,req.user.company_id):[];
       res.json({ success: true, data: manifest, manifest });
     } catch (err) {
       res.status(500).json({ success: false, error: { message: err.message } });
@@ -43,21 +44,42 @@ export const fieldController = {
   async getGeoLocationReport(req, res) {
     try {
       const companyId = req.user.company_id || 1;
-      const report = await fieldService.getGeoLocationReport(req.query, companyId);
+      const {employee_ids:ignored,...filters}=req.query;
+      if(isManagementUser(req.user)){
+        const scope=await supervisorScope(req.user);
+        if(filters.employee_id)await supervisorEmployee(scope,filters.employee_id);
+        if(scope.restricted){
+          const employees=await db.find('employees',{company_id:Number(companyId)});
+          filters.employee_ids=employees.filter(e=>Number(e.id)===scope.supervisorId||Number(e.supervisor_id)===scope.supervisorId).map(e=>Number(e.id));
+        }
+      }else{
+        if(!req.user.employee?.id)return res.status(403).json({success:false,error:{message:'A linked staff profile is required to view location history.'}});
+        filters.employee_id=req.user.employee.id;
+      }
+      const report = await fieldService.getGeoLocationReport(filters, companyId);
       res.json({ success: true, data: report, report, total: report.length });
     } catch (err) {
-      res.status(500).json({ success: false, error: { message: err.message } });
+      res.status(err.status||500).json({ success: false, error: { message: err.message } });
     }
   },
 
   async getCurrentShift(req, res) {
     try {
-      const agentId = req.user.employee?.id || req.user.id;
-      const shift = await fieldService.getCurrentShift(agentId);
+      const agentId = req.user.employee?.id;
+      const shift = agentId?await fieldService.getCurrentShift(agentId,req.user.company_id):null;
       res.json({ success: true, data: shift, shift });
     } catch (err) {
       res.status(500).json({ success: false, error: { message: err.message } });
     }
+  },
+
+  async getPersonalAlerts(req,res){
+    try{
+      const employeeId=req.user.employee?.id;
+      if(!employeeId)return res.status(403).json({success:false,error:{message:'A linked staff profile is required to view personal field alerts.'}});
+      const alerts=await db.find('location_alerts',{company_id:Number(req.user.company_id),employee_id:Number(employeeId)},{order:{column:'created_at',ascending:false}});
+      res.json({success:true,data:alerts});
+    }catch(error){res.status(500).json({success:false,error:{message:error.message}});}
   },
 
   async checkIn(req, res) {

@@ -1,5 +1,7 @@
+import {loadOperationsData,FIELD_SOURCES,responseShift,paymentAttempt} from '../lib/operationsData';
+import {useShiftTelemetry} from '../hooks/useShiftTelemetry';
 import AttendanceControl from '../components/employee/AttendanceControl';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   MapPin, Clock, Navigation, ShieldAlert, CheckCircle2, AlertTriangle,
   ClipboardCheck, Phone, MessageCircle, Play, Square, ChevronRight,
@@ -62,6 +64,8 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
     notes: ''
   });
   const [paymentSubmitting, setPaymentSubmitting] = useState(false);
+  const paymentAttemptRef=useRef(null);
+  const paymentInFlight=useRef(false);
 
   // Filters & Search
   const [searchQuery, setSearchQuery] = useState('');
@@ -83,41 +87,25 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
     }
   }, [initialTab]);
 
+  const [loadError,setLoadError]=useState('');
+  const loadVersion=useRef(0);
   const loadAllData = async () => {
+    const version=++loadVersion.current;
     setLoading(true);
     try {
-      const [manifestRes, curShiftRes, storesRes, windowRes, custRes, delRes, colRes, alertRes, taskRes, sosRes] = await Promise.all([
-        apiRequest('/field/route-manifest').catch(() => ({ data: [] })),
-        apiRequest('/field/shifts/current').catch(() => ({ data: null })),
-        apiRequest('/field/stores').catch(() => ({ data: [] })),
-        apiRequest('/field/shifts/window-status').catch(() => ({ data: null })),
-        api.get('/customers').catch(() => ({ data: [] })),
-        api.get('/delivery/orders').catch(() => ({ data: [] })),
-        api.get('/sales/collections').catch(() => ({ data: [] })),
-        apiRequest('/field/supervisor/alerts').catch(() => apiRequest('/field/alerts').catch(() => ({ data: [] }))),
-        api.get('/tasks/my').catch(() => api.get('/tasks').catch(() => ({ data: [] }))),
-        apiRequest('/field/sos').catch(() => ({ data: [] }))
-      ]);
-
-      setRoute(manifestRes?.data || manifestRes?.manifest || []);
-      setShift(curShiftRes?.data || curShiftRes?.shift || null);
-      setStores(storesRes?.data || storesRes?.stores || []);
-      setWindowStatus(windowRes?.data || windowRes || null);
-      setCustomers(custRes?.data || custRes || []);
-      setDeliveries(delRes?.data || delRes || []);
-      setCollections(colRes?.data || colRes || []);
-      setAlerts(alertRes?.data || alertRes || []);
-      setTasks(taskRes?.data || taskRes || []);
-      setSosHistory(sosRes?.data || sosRes || []);
-    } catch (err) {
-      console.error('Error loading field dashboard data:', err);
-    } finally {
-      setLoading(false);
-    }
+      const {values,failures}=await loadOperationsData(api.get,FIELD_SOURCES);
+      if(version!==loadVersion.current)return;
+      const setters={route:setRoute,shift:setShift,stores:setStores,windowStatus:setWindowStatus,customers:setCustomers,deliveries:setDeliveries,collections:setCollections,alerts:setAlerts,tasks:setTasks,sosHistory:setSosHistory};
+      for(const [key,value] of Object.entries(values))setters[key](value);
+      setLoadError(failures.length?'Some operational information could not refresh. Previously loaded records are kept. Please retry.':'');
+    }catch(error){if(version===loadVersion.current)setLoadError(error.message);}
+    finally{if(version===loadVersion.current)setLoading(false);}
   };
 
   useEffect(() => {
     loadAllData();
+    window.addEventListener('focus',loadAllData);
+    window.addEventListener('online',loadAllData);
 
     // Watch live GPS location
     let watchId = null;
@@ -136,31 +124,14 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
       );
     }
     return () => {
-      if (watchId) navigator.geolocation.clearWatch(watchId);
+      ++loadVersion.current;
+      window.removeEventListener('focus',loadAllData);
+      window.removeEventListener('online',loadAllData);
+      if (watchId!==null) navigator.geolocation.clearWatch(watchId);
     };
   }, []);
 
-  // Telemetry Ping during active shift
-  useEffect(() => {
-    if (!shift?.clock_in_time || shift?.clock_out_time || user?.workplace_session_id) return;
-
-    const sendPing = async () => {
-      if (!agentLocation) return;
-      try {
-        await apiRequest('/field/location-ping', 'POST', {
-          latitude: agentLocation.latitude,
-          longitude: agentLocation.longitude,
-          accuracy: agentLocation.accuracy,
-          current_activity: 'Store Route Patrol'
-        });
-      } catch (err) {
-        console.warn('Location telemetry ping:', err.message);
-      }
-    };
-
-    const interval = setInterval(sendPing, 45000);
-    return () => clearInterval(interval);
-  }, [shift, agentLocation, user?.workplace_session_id]);
+  useShiftTelemetry(shift,agentLocation,user,'Store Route Patrol');
 
   // Working Duration Timer
   useEffect(() => {
@@ -211,7 +182,7 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
         device: navigator.userAgent
       });
 
-      setShift(res.data || res);
+      setShift(responseShift(res));
       setStatusMsg(res.clock_out_time || res.data?.clock_out_time ? `✓ Shift concluded. Total working duration logged.` : '✓ Shift started. Your assigned workplace boundary and GPS monitoring are active.');
       loadAllData();
     } catch (err) {
@@ -228,10 +199,12 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
 
   const handleCreatePaymentCollection = async (e) => {
     e.preventDefault();
+    if(paymentInFlight.current)return;
     if (!paymentForm.customer_id || !paymentForm.amount) {
       setErrorMsg('Please select a customer and enter the collection amount');
       return;
     }
+    paymentInFlight.current=true;
     setPaymentSubmitting(true);
     setErrorMsg('');
     try {
@@ -239,10 +212,12 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
         customer_id: Number(paymentForm.customer_id),
         amount: Number(paymentForm.amount),
         payment_method: paymentForm.payment_method,
-        reference: paymentForm.reference || `COL-${Date.now().toString().slice(-6)}`,
+        reference_number: paymentForm.reference.trim()||undefined,
         notes: paymentForm.notes
       };
-      await api.post('/sales/collections', payload);
+      paymentAttemptRef.current=paymentAttempt(paymentAttemptRef.current,payload);
+      await api.post('/sales/payments', paymentAttemptRef.current.payload,{requireOnline:true});
+      paymentAttemptRef.current=null;
       setStatusMsg(`✓ Payment of ₦${Number(paymentForm.amount).toLocaleString()} successfully recorded and applied to customer balance.`);
       setNewPaymentModalOpen(false);
       setPaymentForm({ customer_id: '', amount: '', payment_method: 'Direct Bank Transfer', reference: '', notes: '' });
@@ -250,6 +225,7 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
     } catch (err) {
       setErrorMsg(err.message || 'Failed to record payment');
     } finally {
+      paymentInFlight.current=false;
       setPaymentSubmitting(false);
     }
   };
@@ -280,6 +256,7 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
 
   return (
     <div className="space-y-5">
+      {loadError&&<div role="alert" className="rounded-xl bg-amber-500/10 border border-amber-500/20 p-4 text-sm">{loadError}<button onClick={loadAllData} className="btn-secondary ml-3 text-xs">Retry operational data</button></div>}
       {/* 1. AGENT COCKPIT HEADER & STATUS BANNER */}
       <div className="surface-card rounded-2xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-sm relative overflow-hidden">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -850,10 +827,10 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
                   {collections.map((col) => (
                     <tr key={col.id} className="hover:bg-zinc-500/5 transition">
                       <td className="py-3 font-mono font-bold text-zinc-900 dark:text-zinc-100">
-                        {col.reference || `COL-00${col.id}`}
+                        {col.reference_number || col.reference || `COL-${col.id}`}
                       </td>
                       <td className="py-3 font-bold text-zinc-900 dark:text-zinc-100">
-                        {col.customer_name || 'Retail Outlet'}
+                        {col.customer?.name || col.customer_name || 'Retail Outlet'}
                       </td>
                       <td className="py-3 font-bold text-emerald-600">
                         ₦{(col.amount || 0).toLocaleString()}
@@ -862,13 +839,13 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
                         {col.payment_method || 'Bank Transfer'}
                       </td>
                       <td className="py-3 text-zinc-400 font-mono text-[11px]">
-                        {formatDate(col.created_at || new Date().toISOString())}
+                        {formatDate(col.payment_date || col.created_at)}
                       </td>
                       <td className="py-3 text-right">
                         <button
                           onClick={() => setReceiptModalOrder({
-                            order_number: col.reference || `COL-00${col.id}`,
-                            customer_name: col.customer_name || 'Merchant',
+                            order_number: col.reference_number || col.reference || `COL-${col.id}`,
+                            customer_name: col.customer?.name || col.customer_name || 'Merchant',
                             total_amount: col.amount,
                             payment_method: col.payment_method,
                             created_at: col.created_at || new Date().toISOString(),
@@ -931,7 +908,7 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
                     </span>
                   </div>
                   <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed">
-                    {al.message || al.description || 'Geofence boundary monitored. Maintain proximity within 150m of assigned stops.'}
+                    {al.message || al.description || 'Review your assigned workplace boundary and the details of this alert.'}
                   </p>
                 </div>
               </div>
@@ -939,7 +916,7 @@ export default function FieldDashboard({ user, initialTab = 'manifest', onSelect
 
             {alerts.length === 0 && (
               <div className="text-center py-10 text-zinc-400 text-xs">
-                ✓ No active red flags or geofence breaches. Field operations nominal.
+                No personal field alerts are recorded. Missing GPS does not establish that a workplace boundary was met.
               </div>
             )}
           </div>

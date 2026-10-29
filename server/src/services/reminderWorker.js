@@ -44,7 +44,7 @@ export const reminderWorker = {
   /**
    * Executes one cycle of due reminders processing with idempotency and race condition safety.
    */
-  async processDueReminders() {
+  async processDueReminders({throwOnError=false}={}) {
     if (isProcessing) return;
     isProcessing = true;
 
@@ -63,6 +63,7 @@ export const reminderWorker = {
       }
     } catch (err) {
       logger.error(`[REMINDER WORKER] Cycle error: ${err.message}`);
+      if(throwOnError)throw err;
     } finally {
       isProcessing = false;
     }

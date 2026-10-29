@@ -14,6 +14,7 @@ router.use(requireAuth);
 
 // 1. Shift & GPS Attendance
 router.get('/route-manifest', fieldController.getRouteManifest);
+router.get('/alerts',fieldController.getPersonalAlerts);
 router.post('/shifts/toggle', fieldController.toggleShift);
 router.get('/shifts/current', fieldController.getCurrentShift);
 router.get('/shifts/window-status', fieldController.getShiftWindowStatus);

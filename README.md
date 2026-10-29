@@ -1,4 +1,7 @@
 # EDGEWFORCE
+
+For WhoGoHost / GO54 or another Node.js-enabled cPanel account, use [the cPanel deployment guide](CPANEL_SETUP.md). The upload package serves the responsive website and API together and keeps the existing Supabase database.
+
 ## Enterprise Commercial Sales, Field Operations & Workforce Automation Platform
 **Powered by Experiential Edge / Integrated Marketing Solutions**
 

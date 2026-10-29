@@ -15,7 +15,8 @@
     "build": "npm --workspace client run build",
     "vercel-build": "npm --workspace client run build",
     "dev": "npx --yes concurrently \"npm --workspace server run dev\" \"npm --workspace client run dev\"",
-    "test": "npm --workspace server test"
+    "test": "npm --workspace server test",
+    "package:cpanel": "node deploy/cpanel/package.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.0",
@@ -31,10 +32,11 @@
     "nodemailer": "^10.1.0"
   },
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "concurrently": "^9.2.1",
+    "archiver": "^7.0.1"
   },
   "engines": {
-    "node": "24.x"
+    "node": "^22.16.0 || ^24.0.0"
   },
   "overrides": {
     "uuid": "^11.1.1"
