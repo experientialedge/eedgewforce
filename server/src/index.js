@@ -44,6 +44,7 @@ import { employeeService } from './services/employeeService.js';
 import { reminderWorker } from './services/reminderWorker.js';
 import { logger } from './utils/logger.js';
 import { db } from './config/database.js';
+import {proxyHops,clientCacheHeaders} from './utils/hostingConfiguration.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.LAMBDA_TASK_ROOT);
@@ -56,7 +57,7 @@ try {
 }
 
 const app = express();
-if (process.env.VERCEL) app.set('trust proxy', 1);
+app.set('trust proxy', proxyHops());
 const PORT = Number(process.env.PORT || 3000);
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 
@@ -188,10 +189,12 @@ app.post('/api/telemetry/idle', requireAuth, async (req, res) => {
 // 6. Serve Client Static Assets (Production Mode)
 const clientDistPath = path.resolve(__dirname, '../../client/dist');
 if (fs.existsSync(clientDistPath)) {
-  app.use(express.static(clientDistPath));
+  app.use(express.static(clientDistPath,{setHeaders:clientCacheHeaders}));
   app.use((req, res, next) => {
-    if (req.method === 'GET' && !req.originalUrl.startsWith('/api/') && !req.originalUrl.startsWith('/uploads/')) {
-      return res.sendFile(path.join(clientDistPath, 'index.html'));
+    const requestPath=req.path;
+    if (req.method === 'GET' && !/^\/(api|uploads)(\/|$)/.test(requestPath) && !path.extname(requestPath)) {
+      res.set('Cache-Control','no-cache');
+      return res.sendFile('index.html',{root:clientDistPath});
     }
     next();
   });
@@ -225,7 +228,7 @@ if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
   app.listen(PORT, () => {
     logger.info(`EdgeWForce Backend Server operational on port ${PORT}`);
     logger.info(`API Base URL: http://localhost:${PORT}/api`);
-    reminderWorker.start(15000);
+    if(process.env.REMINDER_WORKER_ENABLED!=='false')reminderWorker.start(15000);
   });
 }
 

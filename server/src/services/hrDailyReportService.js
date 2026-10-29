@@ -103,7 +103,7 @@ export const hrDailyReportService = {
     const user=await this.authorize(actor), settings=await db.findOne('hr_report_settings',{company_id:user.company_id});
     const deliveries=await db.find('hr_report_deliveries',{company_id:user.company_id},{order:{column:'updated_at',ascending:false},limit:30});
     const runs=await db.find('hr_report_runs',{company_id:user.company_id},{select:'id,report_date,created_at',order:{column:'created_at',ascending:false},limit:30});
-    return {settings:settings||{enabled:false,recipients:[]},can_configure:admins.includes(user.role_code),email:emailService.reportConfiguration(),schedule:'Daily after 18:00 Lagos time. Vercel Hobby runs within the scheduled hour (18:00–18:59).',deliveries:deliveries.map(d=>({...d,state:d.state==='sending'&&Date.now()-Date.parse(d.updated_at)>300000?'uncertain':d.state,report_date:runs.find(r=>r.id===d.run_id)?.report_date||'Earlier report'}))};
+    return {settings:settings||{enabled:false,recipients:[]},can_configure:admins.includes(user.role_code),email:emailService.reportConfiguration(),schedule:process.env.VERCEL?'Daily after 18:00 Lagos time. Vercel Hobby runs within the scheduled hour (18:00–18:59).':'Daily after 18:00 Lagos time, according to the hosting cron schedule.',deliveries:deliveries.map(d=>({...d,state:d.state==='sending'&&Date.now()-Date.parse(d.updated_at)>300000?'uncertain':d.state,report_date:runs.find(r=>r.id===d.run_id)?.report_date||'Earlier report'}))};
   },
   async save(actor,input) {
     const user=await this.authorize(actor,true);if(typeof input.enabled!=='boolean')fail('Specify whether daily delivery is enabled.');
@@ -133,7 +133,7 @@ export const hrDailyReportService = {
   async deliver(companyId,day,sender=emailService.sendDailyWorkbook.bind(emailService)) {
     const settings=await db.findOne('hr_report_settings',{company_id:companyId});
     if(!settings?.enabled)return {skipped:true,reason:'Daily email delivery is disabled.'};
-    if(!emailService.reportConfiguration().configured)fail('Email delivery is unavailable. Configure SMTP_USER, SMTP_PASS and EMAIL_FROM in Vercel. Excel downloads remain available.',503);
+    if(!emailService.reportConfiguration().configured)fail('Email delivery is unavailable. Configure SMTP_USER, SMTP_PASS and EMAIL_FROM in the hosting environment. Excel downloads remain available.',503);
     const recipients=reportRecipients(settings.recipients),run=await this.prepare(companyId,day),bytes=await reportWorkbook(run.snapshot),results=[];
     const sendOne=async(recipient)=>{
       const claim=await this.claim(companyId,run.id,recipient);

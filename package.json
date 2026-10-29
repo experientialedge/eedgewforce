@@ -15,7 +15,8 @@
     "build": "npm --workspace client run build",
     "vercel-build": "npm --workspace client run build",
     "dev": "npx --yes concurrently \"npm --workspace server run dev\" \"npm --workspace client run dev\"",
-    "test": "npm --workspace server test"
+    "test": "npm --workspace server test",
+    "package:cpanel": "node deploy/cpanel/package.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.0",
@@ -27,14 +28,15 @@
     "express-rate-limit": "^7.5.0",
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
-    "multer": "^2.4.0",
-    "nodemailer": "^10.1.0"
+    "multer": "^2.5.0",
+    "nodemailer": "^10.1.4"
   },
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "concurrently": "^9.2.1",
+    "archiver": "^7.0.1"
   },
   "engines": {
-    "node": "24.x"
+    "node": "^22.16.0 || ^24.0.0"
   },
   "overrides": {
     "uuid": "^11.1.1"

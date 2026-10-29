@@ -1,5 +1,7 @@
+import {loadOperationsData,SALES_SOURCES,responseShift,paymentAttempt} from '../lib/operationsData';
+import {useShiftTelemetry} from '../hooks/useShiftTelemetry';
 import AttendanceControl from '../components/employee/AttendanceControl';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   WalletCards,
   Target,
@@ -82,6 +84,8 @@ export default function SalesDashboard({ user }) {
   const [collectMethod, setCollectMethod] = useState('Cash');
   const [collectRef, setCollectRef] = useState('');
   const [collectMsg, setCollectMsg] = useState('');
+  const [collecting,setCollecting]=useState(false);
+  const collectionAttempt=useRef(null),collectionLock=useRef(false);
 
   // Modals & Drawers
   const [merchantModalOpen, setMerchantModalOpen] = useState(false);
@@ -107,35 +111,25 @@ export default function SalesDashboard({ user }) {
   const [customerSearch, setCustomerSearch] = useState('');
   const [productCategory, setProductCategory] = useState('all');
   const [orderStatusFilter, setOrderStatusFilter] = useState('all');
+  const [loadError,setLoadError]=useState('');
+  const loadVersion=useRef(0);
   const loadData = async () => {
+    const version=++loadVersion.current;
+
     try {
-      const [rData, cData, pData, oData, colData, iData, sData, curShift, windowRes] = await Promise.all([
-        api.get('/sales/my-report').catch(() => null),
-        api.get('/sales/customers').catch(() => []),
-        api.get('/sales/products').catch(() => []),
-        api.get('/sales/orders').catch(() => []),
-        api.get('/sales/payments').catch(() => []),
-        api.get('/sales/competitor-intel').catch(() => []),
-        api.get('/sales/settlements').catch(() => []),
-        apiRequest('/field/shifts/current').catch(() => ({ data: null })),
-        apiRequest('/field/shifts/window-status').catch(() => ({ data: null }))
-      ]);
-      if (rData) setReport(rData);
-      setCustomers(cData || []);
-      setProducts(pData || []);
-      setOrders(oData || []);
-      setCollections(colData || []);
-      setIntel(iData || []);
-      setSettlements(sData || []);
-      setShift(curShift?.data || curShift?.shift || null);
-      setWindowStatus(windowRes?.data || windowRes || null);
-    } catch {
-      // Offline fallback
-    }
+      const {values,failures}=await loadOperationsData(api.get,SALES_SOURCES);
+      if(version!==loadVersion.current)return;
+      const setters={report:setReport,customers:setCustomers,products:setProducts,orders:setOrders,collections:setCollections,intel:setIntel,settlements:setSettlements,shift:setShift,windowStatus:setWindowStatus};
+      for(const [key,value] of Object.entries(values))setters[key](value);
+      setLoadError(failures.length?'Some operational information could not refresh. Previously loaded records are kept. Please retry.':'');
+    }catch(error){if(version===loadVersion.current)setLoadError(error.message);}
+    finally{}
   };
 
   useEffect(() => {
     loadData();
+    window.addEventListener('focus',loadData);
+    window.addEventListener('online',loadData);
 
     // Watch live GPS location
     let watchId = null;
@@ -153,31 +147,14 @@ export default function SalesDashboard({ user }) {
       );
     }
     return () => {
-      if (watchId) navigator.geolocation.clearWatch(watchId);
+      ++loadVersion.current;
+      window.removeEventListener('focus',loadData);
+      window.removeEventListener('online',loadData);
+      if (watchId!==null) navigator.geolocation.clearWatch(watchId);
     };
   }, []);
 
-  // Periodic Telemetry Ping during active shift
-  useEffect(() => {
-    if (!shift?.clock_in_time || shift?.clock_out_time) return;
-
-    const sendPing = async () => {
-      if (!agentLocation) return;
-      try {
-        await apiRequest('/field/location-ping', 'POST', {
-          latitude: agentLocation.latitude,
-          longitude: agentLocation.longitude,
-          accuracy: agentLocation.accuracy,
-          current_activity: 'Store Sales Route'
-        });
-      } catch (err) {
-        console.warn('Sales location ping:', err.message);
-      }
-    };
-
-    const interval = setInterval(sendPing, 45000);
-    return () => clearInterval(interval);
-  }, [shift, agentLocation]);
+  useShiftTelemetry(shift,agentLocation,user,'Store Sales Route');
 
   // Working Duration Timer
   useEffect(() => {
@@ -225,7 +202,7 @@ export default function SalesDashboard({ user }) {
         device: navigator.userAgent
       });
 
-      setShift(res.data || res);
+      setShift(responseShift(res));
       setShiftStatusMsg(res.clock_out_time || res.data?.clock_out_time ? '✓ Shift concluded. Total working duration logged.' : '✓ Shift started. Your assigned workplace boundary and GPS monitoring are active.');
       loadData();
     } catch (err) {
@@ -304,20 +281,26 @@ export default function SalesDashboard({ user }) {
   const handlePostCollection = async (e) => {
     e.preventDefault();
     if (!collectCustomerId || !collectAmount) return;
-
+    if(collectionLock.current)return;
+    collectionLock.current=true;setCollecting(true);setCollectMsg('');
     try {
-      await api.post('/sales/payments', {
+      const payload={
         customer_id: collectCustomerId,
         amount: Number(collectAmount),
         payment_method: collectMethod,
         reference_number: collectRef
-      });
+      };
+      collectionAttempt.current=paymentAttempt(collectionAttempt.current,payload);
+      await api.post('/sales/payments', collectionAttempt.current.payload,{requireOnline:true});
+      collectionAttempt.current=null;
       setCollectMsg('Payment collected and customer balance updated!');
       setCollectAmount('');
       setCollectCustomerId('');
       loadData();
     } catch (err) {
       setCollectMsg(`Error: ${err.message}`);
+    } finally {
+      collectionLock.current=false;setCollecting(false);
     }
   };
 
@@ -361,6 +344,7 @@ export default function SalesDashboard({ user }) {
 
   return (
     <div className="space-y-6">
+      {loadError&&<div role="alert" className="rounded-xl bg-amber-500/10 border border-amber-500/20 p-4 text-sm">{loadError}<button onClick={loadData} className="btn-secondary ml-3 text-xs">Retry operational data</button></div>}
       {/* Cockpit Top Bar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -1236,11 +1220,11 @@ export default function SalesDashboard({ user }) {
               </div>
 
               {collectMsg && (
-                <div className="text-xs text-emerald-500 font-semibold">{collectMsg}</div>
+                <div role={collectMsg.startsWith('Error:')?'alert':'status'} className={`text-xs font-semibold ${collectMsg.startsWith('Error:')?'text-rose-600':'text-emerald-600'}`}>{collectMsg}</div>
               )}
 
-              <button type="submit" className="btn-primary w-full">
-                Post Payment Collection
+              <button type="submit" className="btn-primary w-full" disabled={collecting}>
+                {collecting?'Recording payment…':'Post Payment Collection'}
               </button>
             </form>
           </div>

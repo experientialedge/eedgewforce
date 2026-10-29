@@ -59,3 +59,4 @@ EdgeWForce/
 
 .vercel
 .env*
+!deploy/cpanel/.env.example
