@@ -6,7 +6,8 @@
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { supabase, supabaseAdmin } from '../config/database.js';
+import { db, supabase, supabaseAdmin } from '../config/database.js';
+import {randomUUID} from 'node:crypto';
 import { logger } from '../utils/logger.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -26,6 +27,12 @@ export const storageService = {
    */
   async uploadFile(file, folder = 'general') {
     if (!file) return null;
+    if (db.backend === 'mysql') {
+      const bytes=file.buffer || (file.path ? fs.readFileSync(file.path) : null);
+      const allowed={'image/jpeg':'.jpg','image/png':'.png','image/webp':'.webp','image/gif':'.gif','application/pdf':'.pdf'};
+      if (!bytes || !allowed[file.mimetype]) throw new Error('A supported attachment with file data is required.');
+      return db.storeFile(randomUUID()+allowed[file.mimetype],file.mimetype,bytes);
+    }
     const storageClient = supabaseAdmin || supabase;
     const requireCloud = Boolean(process.env.VERCEL) || (process.env.NODE_ENV === 'production' && process.env.DATA_BACKEND !== 'local');
 
@@ -96,6 +103,10 @@ export const storageService = {
    * Deletes a file from Supabase Storage by its public URL.
    */
   async deleteFile(fileUrl) {
+    if (db.backend === 'mysql') {
+      if (!/^\/uploads\/[a-zA-Z0-9._-]+$/.test(fileUrl || '')) return false;
+      return db.deleteFile(fileUrl.slice('/uploads/'.length));
+    }
     const storageClient = supabaseAdmin || supabase;
     if (!fileUrl || !storageClient || !fileUrl.includes(DEFAULT_BUCKET)) return false;
     try {
