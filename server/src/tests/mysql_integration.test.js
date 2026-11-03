@@ -10,6 +10,9 @@ import {authService} from '../services/authService.js';
 import {fieldService} from '../services/fieldService.js';
 import {collaborationService} from '../services/collaborationService.js';
 import {hrDailyReportService} from '../services/hrDailyReportService.js';
+import {hrService} from '../services/hrService.js';
+import {employeeService} from '../services/employeeService.js';
+import {reviewLeave} from '../services/leaveReviewService.js';
 
 test('Real MySQL: transactions, staff sign-in, workplace attendance, collaboration and Excel', {skip:process.env.MYSQL_TESTS!=='true'}, async t=>{
   const config=mysqlConfiguration();
@@ -23,6 +26,18 @@ test('Real MySQL: transactions, staff sign-in, workplace attendance, collaborati
     const actor=await db.insert('users',{company_id:1,full_name:'Test administrator',email:'admin@mysql.example',role_code:'SUPER_ADMIN',password_hash:await bcrypt.hash('IsolatedMysqlTest123!',10),requires_password_change:false});
     const staff=await db.insert('users',{company_id:1,full_name:'Test staff',email:'staff@mysql.example',role_code:'STAFF_MEMBER',password_hash:await bcrypt.hash('IsolatedMysqlTest123!',10),requires_password_change:false});
     const employee=await db.insert('employees',{company_id:1,user_id:staff.id,first_name:'Test',last_name:'Staff',employee_code:'MYSQL-TEST-1',status:'active'});
+    await t.test('Full HR registration initializes normalized balances and leave approval debits once',async()=>{
+      const registered=await hrService.registerStaff({first_name:'Registered',last_name:'Staff',email:'registered@mysql.example',phone:'+2348099998811'},actor);
+      assert.ok(registered.employee.id);
+      const balances=await employeeService.getLeaveBalances(registered.employee.id);
+      assert.equal(balances.annual,20);assert.equal(balances.sick,12);assert.equal(balances.casual,5);
+      const rows=await db.find('leave_balances',{employee_id:registered.employee.id});
+      assert.equal(rows.length,3);assert.ok(rows.every(r=>r.company_id===1&&r.annual===undefined));
+      const leave=await db.insert('leave_requests',{company_id:1,employee_id:registered.employee.id,leave_type:'annual',start_date:'2026-11-10',end_date:'2026-11-11',days:2,status:'pending'});
+      await reviewLeave(actor,leave.id,true,'Verified test');
+      assert.equal((await employeeService.getLeaveBalances(registered.employee.id)).annual,18);
+      await assert.rejects(reviewLeave(actor,leave.id,true));
+    });
     await t.test('Separate pools serialize and roll back multi-record transactions',async()=>{
       await assert.rejects(db.transaction(async()=>{await db.insert('users',{email:'rollback@mysql.example',company_id:1});throw Error('Rollback fixture');}));
       assert.equal(await db.findOne('users',{email:'rollback@mysql.example'}),null);
