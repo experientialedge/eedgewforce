@@ -1,7 +1,7 @@
 import {AsyncLocalStorage} from 'node:async_hooks';
 import {createHash} from 'node:crypto';
 import mysql from 'mysql2/promise';
-import {tableDefinition,columnDefinition,sqlIdentifier,encodeMysqlValue,decodeMysqlRow,mysqlRecord,mysqlSchema} from './mysqlSchema.js';
+import {tableDefinition,columnDefinition,sqlIdentifier,encodeMysqlValue,decodeMysqlRow,mysqlRecord,mysqlSchema,MYSQL_SCHEMA_VERSION} from './mysqlSchema.js';
 
 export function mysqlConfiguration(env=process.env){
   if(!env.MYSQL_DATABASE||!env.MYSQL_USER||!env.MYSQL_PASSWORD)throw new Error('MySQL requires MYSQL_DATABASE, MYSQL_USER and MYSQL_PASSWORD.');
@@ -25,8 +25,8 @@ export function createMysqlDatabase(config,{pool=mysql.createPool(config)}={}){
       const rows=await query('SELECT table_name FROM information_schema.tables WHERE table_schema = ?',[config.database]);
       const present=new Set(rows.map(r=>r.TABLE_NAME||r.table_name));
       if(Object.keys(mysqlSchema).some(name=>!present.has(name))||!present.has('edgewforce_files'))throw new Error('The MySQL schema and copy verification must be installed before activation.');
-      const manifest=await query('SELECT state FROM edgewforce_copy_manifest WHERE id = 1');
-      if(manifest[0]?.state!=='verified')throw new Error('MySQL data copy has not been verified.');
+      const manifest=await query('SELECT state,schema_version FROM edgewforce_copy_manifest WHERE id = 1');
+      if(manifest[0]?.state!=='verified'||manifest[0]?.schema_version!==MYSQL_SCHEMA_VERSION)throw new Error('MySQL data copy has not been verified for this release.');
       return true;
     },
     async find(table,filter={},options={}){

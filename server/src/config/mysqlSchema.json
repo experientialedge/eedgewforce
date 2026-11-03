@@ -10,7 +10,11 @@
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "title": {
         "format": "text",
@@ -41,7 +45,11 @@
       "conversation_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "ai_conversations",
+          "column": "id"
+        }
       },
       "role": {
         "format": "text",
@@ -72,7 +80,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "title": {
         "format": "text",
@@ -132,12 +144,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "date": {
         "format": "date",
@@ -544,7 +564,11 @@
         "format": "integer",
         "type": "integer",
         "default": 1,
-        "required": false
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "name": {
         "format": "text",
@@ -595,12 +619,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "project_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "collaboration_projects",
+          "column": "id"
+        }
       },
       "name": {
         "format": "text",
@@ -616,7 +648,11 @@
       "created_by": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "created_at": {
         "format": "timestamp with time zone",
@@ -637,17 +673,29 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "project_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "collaboration_projects",
+          "column": "id"
+        }
       },
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "body": {
         "format": "text",
@@ -673,17 +721,29 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "project_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "collaboration_projects",
+          "column": "id"
+        }
       },
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "role": {
         "format": "text",
@@ -710,27 +770,47 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "project_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "collaboration_projects",
+          "column": "id"
+        }
       },
       "channel_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "collaboration_channels",
+          "column": "id"
+        }
       },
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "parent_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "collaboration_messages",
+          "column": "id"
+        }
       },
       "body": {
         "format": "text",
@@ -761,22 +841,38 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "project_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "collaboration_projects",
+          "column": "id"
+        }
       },
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "task_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "collaboration_tasks",
+          "column": "id"
+        }
       },
       "source_key": {
         "format": "text",
@@ -822,12 +918,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "owner_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "name": {
         "format": "text",
@@ -871,12 +975,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "project_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "collaboration_projects",
+          "column": "id"
+        }
       },
       "title": {
         "format": "text",
@@ -935,12 +1047,20 @@
       "origin_task_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "collaboration_tasks",
+          "column": "id"
+        }
       },
       "created_by": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "version": {
         "format": "integer",
@@ -978,12 +1098,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "customer_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "customers",
+          "column": "id"
+        }
       },
       "agent_id": {
         "format": "integer",
@@ -1151,7 +1279,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "working_days": {
         "format": "text[]",
@@ -1283,12 +1415,20 @@
       "agent_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "customer_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "customers",
+          "column": "id"
+        }
       },
       "competitor_brand": {
         "format": "text",
@@ -1350,7 +1490,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "code": {
         "format": "text",
@@ -1607,17 +1751,29 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "order_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "orders",
+          "column": "id"
+        }
       },
       "customer_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "customers",
+          "column": "id"
+        }
       },
       "driver_name": {
         "format": "text",
@@ -1720,12 +1876,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "start_time": {
         "format": "timestamp with time zone",
@@ -1793,17 +1957,29 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "location_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "work_locations",
+          "column": "id"
+        }
       },
       "assignment_type": {
         "format": "text",
@@ -1868,12 +2044,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "employee_code": {
         "format": "text",
@@ -1898,7 +2082,11 @@
       "department_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "departments",
+          "column": "id"
+        }
       },
       "department": {
         "format": "text",
@@ -1918,7 +2106,11 @@
       "supervisor_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "rank_code": {
         "format": "text",
@@ -2171,7 +2363,11 @@
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "event_type": {
         "format": "text",
@@ -2231,7 +2427,11 @@
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "role": {
         "format": "text",
@@ -2333,7 +2533,11 @@
       "uploaded_by": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "created_at": {
         "format": "timestamp with time zone",
@@ -2390,12 +2594,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "run_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "hr_report_runs",
+          "column": "id"
+        }
       },
       "recipient": {
         "format": "text",
@@ -2442,7 +2654,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "report_date": {
         "format": "date",
@@ -2472,7 +2688,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "enabled": {
         "format": "boolean",
@@ -2487,7 +2707,11 @@
       "updated_by": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "updated_at": {
         "format": "timestamp with time zone",
@@ -2509,12 +2733,20 @@
         "format": "integer",
         "type": "integer",
         "default": 1,
-        "required": false
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "duration_seconds": {
         "format": "integer",
@@ -2593,22 +2825,38 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "product_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "products",
+          "column": "id"
+        }
       },
       "store_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "stores",
+          "column": "id"
+        }
       },
       "location_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "work_locations",
+          "column": "id"
+        }
       },
       "quantity": {
         "format": "integer",
@@ -2657,12 +2905,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "product_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "products",
+          "column": "id"
+        }
       },
       "alert_type": {
         "format": "text",
@@ -2706,12 +2962,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "product_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "products",
+          "column": "id"
+        }
       },
       "warehouse_id": {
         "format": "integer",
@@ -2772,7 +3036,11 @@
       "product_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "products",
+          "column": "id"
+        }
       },
       "change_quantity": {
         "format": "integer",
@@ -2807,7 +3075,11 @@
       "created_by": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "created_at": {
         "format": "timestamp with time zone",
@@ -2828,12 +3100,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "leave_type": {
         "format": "text",
@@ -2883,12 +3163,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "leave_type": {
         "format": "text",
@@ -3038,17 +3326,29 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "previous_location_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "work_locations",
+          "column": "id"
+        }
       },
       "previous_location_name": {
         "format": "text",
@@ -3058,7 +3358,11 @@
       "new_location_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "work_locations",
+          "column": "id"
+        }
       },
       "new_location_name": {
         "format": "text",
@@ -3263,7 +3567,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "last_attempt_at": {
         "format": "timestamp with time zone",
@@ -3283,12 +3591,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "period_days": {
         "format": "integer",
@@ -3332,7 +3648,11 @@
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "type": {
         "format": "text",
@@ -3381,7 +3701,11 @@
       "okr_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "okrs",
+          "column": "id"
+        }
       },
       "title": {
         "format": "text",
@@ -3431,12 +3755,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "objective": {
         "format": "text",
@@ -3502,7 +3834,11 @@
       "order_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "orders",
+          "column": "id"
+        }
       },
       "action": {
         "format": "text",
@@ -3553,17 +3889,29 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "order_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "orders",
+          "column": "id"
+        }
       },
       "product_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "products",
+          "column": "id"
+        }
       },
       "quantity": {
         "format": "integer",
@@ -3599,7 +3947,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "order_number": {
         "format": "text",
@@ -3609,12 +3961,20 @@
       "customer_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "customers",
+          "column": "id"
+        }
       },
       "sales_agent_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "subtotal": {
         "format": "numeric",
@@ -3714,7 +4074,11 @@
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "pay_month": {
         "format": "date",
@@ -3787,7 +4151,11 @@
       "generated_by": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "created_at": {
         "format": "timestamp with time zone",
@@ -3854,7 +4222,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "sku": {
         "format": "text",
@@ -4055,7 +4427,11 @@
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "endpoint": {
         "format": "text",
@@ -4128,7 +4504,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "code": {
         "format": "text",
@@ -4164,22 +4544,38 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "reminder_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "task_reminders",
+          "column": "id"
+        }
       },
       "task_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "tasks",
+          "column": "id"
+        }
       },
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "channel": {
         "format": "character varying",
@@ -4232,7 +4628,11 @@
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "store_id": {
         "format": "integer",
@@ -4315,17 +4715,29 @@
         "format": "integer",
         "type": "integer",
         "default": 1,
-        "required": false
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "supervisor_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "supervisor_name": {
         "format": "text",
@@ -4428,7 +4840,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "agent_id": {
         "format": "integer",
@@ -4499,12 +4915,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "agent_name": {
         "format": "text",
@@ -4588,17 +5012,29 @@
         "format": "integer",
         "type": "integer",
         "default": 1,
-        "required": false
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "agent_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "message": {
         "format": "text",
@@ -4682,7 +5118,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "store_name": {
         "format": "text",
@@ -4800,7 +5240,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "code": {
         "format": "text",
@@ -4899,12 +5343,20 @@
       "task_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "tasks",
+          "column": "id"
+        }
       },
       "author_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "comment": {
         "format": "text",
@@ -4930,22 +5382,38 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "task_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "tasks",
+          "column": "id"
+        }
       },
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "reminder_at": {
         "format": "timestamp with time zone",
@@ -5008,7 +5476,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "title": {
         "format": "text",
@@ -5023,7 +5495,11 @@
       "assigned_to": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "assigned_by": {
         "format": "integer",
@@ -5159,7 +5635,11 @@
         "format": "integer",
         "type": "integer",
         "default": 1,
-        "required": false
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "name": {
         "format": "text",
@@ -5205,12 +5685,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "region_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "regions",
+          "column": "id"
+        }
       },
       "code": {
         "format": "text",
@@ -5241,7 +5729,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "full_name": {
         "format": "text",
@@ -5352,12 +5844,20 @@
       "visit_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "visits",
+          "column": "id"
+        }
       },
       "product_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "products",
+          "column": "id"
+        }
       },
       "stock_status": {
         "format": "text",
@@ -5395,12 +5895,20 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "visit_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "visits",
+          "column": "id"
+        }
       },
       "person_met": {
         "format": "text",
@@ -5478,7 +5986,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "agent_id": {
         "format": "integer",
@@ -5613,7 +6125,11 @@
         "format": "integer",
         "type": "integer",
         "default": 1,
-        "required": false
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "name": {
         "format": "text",
@@ -5669,7 +6185,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "name": {
         "format": "text",
@@ -5768,17 +6288,29 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "token_id": {
         "format": "uuid",
@@ -5793,7 +6325,11 @@
       "location_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "work_locations",
+          "column": "id"
+        }
       },
       "created_at": {
         "format": "timestamp with time zone",
@@ -5844,17 +6380,29 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "last_activity_at": {
         "format": "timestamp with time zone",
@@ -5904,7 +6452,11 @@
       "reviewed_by": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "created_at": {
         "format": "timestamp with time zone",
@@ -5925,17 +6477,29 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "event_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "workforce_activity_events",
+          "column": "id"
+        }
       },
       "title": {
         "format": "text",
@@ -5971,17 +6535,29 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "client_id": {
         "format": "uuid",
@@ -6021,7 +6597,11 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "report_date": {
         "format": "date",
@@ -6087,22 +6667,38 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "employee_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
       },
       "session_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "workforce_access_sessions",
+          "column": "id"
+        }
       },
       "kind": {
         "format": "text",
@@ -6112,7 +6708,11 @@
       "location_id": {
         "format": "integer",
         "type": "integer",
-        "required": false
+        "required": false,
+        "references": {
+          "table": "work_locations",
+          "column": "id"
+        }
       },
       "observed_at": {
         "format": "timestamp with time zone",
@@ -6137,17 +6737,29 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "event_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "workforce_movement_events",
+          "column": "id"
+        }
       },
       "title": {
         "format": "text",
@@ -6183,17 +6795,29 @@
       "company_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
       },
       "user_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
       },
       "report_id": {
         "format": "integer",
         "type": "integer",
-        "required": true
+        "required": true,
+        "references": {
+          "table": "workforce_executive_reports",
+          "column": "id"
+        }
       },
       "title": {
         "format": "text",

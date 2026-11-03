@@ -40,7 +40,7 @@ export async function prepareCopy(snapshot,{output,sourceUrl,serviceKey,fetcher=
   for(const table of Object.keys(tables))tables[table]=rewrite(tables[table]);
   const expected={tables:{},files:files.length};
   const sqlValue=value=>value==null?'NULL':typeof value==='number'?String(value):"CONVERT(0x"+Buffer.from(String(value),'utf8').toString('hex')+' USING utf8mb4)';
-  const lines=['-- PRIVATE EdgeWForce copy. Import only into the new, empty Hostinger database.','SET NAMES utf8mb4;',...mysqlSchemaStatements,'START TRANSACTION;'];
+  const lines=['-- PRIVATE EdgeWForce copy. Import only into the new, empty Hostinger database.','SET NAMES utf8mb4;',...mysqlSchemaStatements,'SET FOREIGN_KEY_CHECKS=0;','START TRANSACTION;'];
   for(const table of Object.keys(mysqlSchema)){
     const columns=Object.entries(mysqlSchema[table].columns);
     for(const row of tables[table]){
@@ -50,7 +50,7 @@ export async function prepareCopy(snapshot,{output,sourceUrl,serviceKey,fetcher=
     expected.tables[table]={count:tables[table].length,sha256:copyDigest(table,tables[table])};
   }
   for(const file of files)lines.push('INSERT INTO edgewforce_files (name,content_type,payload,sha256) VALUES ('+[sqlValue(file.name),sqlValue(file.type),'0x'+file.bytes.toString('hex'),sqlValue(file.sha256)].join(',')+');');
-  lines.push('INSERT INTO edgewforce_copy_manifest (id,schema_version,state,expected,captured_at) VALUES (1,'+[MYSQL_SCHEMA_VERSION,'imported',JSON.stringify(expected),snapshot.captured_at].map(sqlValue).join(',')+');','COMMIT;');
+  lines.push('INSERT INTO edgewforce_copy_manifest (id,schema_version,state,expected,captured_at) VALUES (1,'+[MYSQL_SCHEMA_VERSION,'imported',JSON.stringify(expected),snapshot.captured_at].map(sqlValue).join(',')+');','COMMIT;','SET FOREIGN_KEY_CHECKS=1;');
   fs.writeFileSync(output,lines.join('\n')+'\n',{mode:0o600});
   return {tables:Object.keys(mysqlSchema).length,records:Object.values(tables).reduce((sum,rows)=>sum+rows.length,0),files:files.length,accounts:tables.users.length,synchronizedPasswords,capturedAt:snapshot.captured_at,sha256:createHash('sha256').update(fs.readFileSync(output)).digest('hex')};
 }

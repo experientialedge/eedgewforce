@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import {randomUUID} from 'node:crypto';
 
 export const mysqlSchema=JSON.parse(fs.readFileSync(new URL('./mysqlSchema.json',import.meta.url),'utf8'));
+export const MYSQL_SCHEMA_VERSION='edgewforce-mysql-2026-11-03';
 export const sqlIdentifier=name=>{
   if(typeof name!=='string'||!/^[a-z][a-z0-9_]*$/.test(name))throw new Error('Invalid database identifier.');
   return '`'+name+'`';
@@ -77,6 +78,9 @@ export function mysqlRecord(table,record,{defaults=false}={}){
 
 // Application invariants that need uniqueness even across separate Node/cron processes.
 export const mysqlUniqueKeys={users:[['email']],employees:[['user_id'],['employee_code']],attendance:[['employee_id','date']],employee_location_assignments:[],collaboration_members:[['project_id','user_id']],collaboration_messages:[['project_id','user_id','client_nonce']],collaboration_notices:[['user_id','source_key']],workforce_activity_presence:[['user_id','client_id']],workforce_activity_notices:[['user_id','event_id']],workforce_movement_notices:[['user_id','event_id']],workforce_report_notices:[['user_id','report_id']],workforce_executive_reports:[['company_id','report_date']],hr_report_settings:[['company_id']],hr_report_runs:[['company_id','report_date']],hr_report_deliveries:[['run_id','recipient']]};
+export function mysqlForeignKeys(table){
+  return Object.entries(tableDefinition(table).columns).filter(([,column])=>column.type==='integer'&&column.references&&mysqlSchema[column.references.table]?.primaryKey===column.references.column);
+}
 
 export function mysqlCreateTable(table){
   const definition=tableDefinition(table),uniqueKeys=mysqlUniqueKeys[table]||[];
@@ -88,5 +92,6 @@ export function mysqlCreateTable(table){
   fields.push('PRIMARY KEY ('+sqlIdentifier(definition.primaryKey)+')');
   for(const [i,columns] of uniqueKeys.entries())if(columns.every(name=>definition.columns[name]))fields.push('UNIQUE KEY '+sqlIdentifier('uq_'+table.slice(0,35)+'_'+i)+' ('+columns.map(sqlIdentifier).join(',')+')');
   for(const [name,column] of Object.entries(definition.columns))if(column.type==='integer'&&name!==definition.primaryKey)fields.push('KEY '+sqlIdentifier('ix_'+name)+' ('+sqlIdentifier(name)+')');
+  for(const [name,column] of mysqlForeignKeys(table))fields.push('CONSTRAINT '+sqlIdentifier('fk_'+table.slice(0,25)+'_'+name.slice(0,25))+' FOREIGN KEY ('+sqlIdentifier(name)+') REFERENCES '+sqlIdentifier(column.references.table)+' ('+sqlIdentifier(column.references.column)+')');
   return 'CREATE TABLE IF NOT EXISTS '+sqlIdentifier(table)+' (\n  '+fields.join(',\n  ')+'\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;';
 }
