@@ -25,6 +25,7 @@ describe('Strict Least-Privilege Agent Access Control & IDOR Protection', async 
     // 1. Create Field Agent
     const fieldEmp = await db.insert('employees', {
       company_id: 1,
+      status: 'active',
       first_name: 'Amaka',
       last_name: 'FieldAgent',
       role_code: 'FIELD_AGENT',
@@ -41,6 +42,7 @@ describe('Strict Least-Privilege Agent Access Control & IDOR Protection', async 
     // 2. Create Sales Agent
     const salesEmp = await db.insert('employees', {
       company_id: 1,
+      status: 'active',
       first_name: 'Tunde',
       last_name: 'SalesAgent',
       role_code: 'SALES_AGENT',

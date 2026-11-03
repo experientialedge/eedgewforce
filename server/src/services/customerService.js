@@ -1,3 +1,4 @@
+import { schemaPatch } from '../utils/schemaPatch.js';
 // ==============================================================================
 // EDGEWFORCE - CUSTOMER 360 & RELATIONSHIP MANAGEMENT SERVICE
 // ==============================================================================
@@ -139,6 +140,7 @@ export const customerService = {
     const existing = await db.findById('customers', id);
     if (!existing) throw new Error('Customer not found');
 
+    updates = schemaPatch('customers', updates);
     const updated = await db.update('customers', id, updates);
 
     await db.insert('audit_logs', {

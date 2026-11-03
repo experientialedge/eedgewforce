@@ -1,3 +1,4 @@
+import { sosService } from '../services/sosService.js';
 // ==============================================================================
 // EDGEWFORCE - HR COMMAND CENTER CONTROLLER
 // ==============================================================================
@@ -160,12 +161,7 @@ export const hrController = {
 
   async getSOS(req, res) {
     try {
-      const list = await db.findAll('sos', {company_id:req.user.company_id}, { order: { column: 'id', ascending: false } });
-      const employees = await db.findAll('employees',{company_id:req.user.company_id});
-      const data = list.map(s => ({
-        ...s,
-        agent: employees.find(e => Number(e.id) === Number(s.agent_id))
-      }));
+      const data = await sosService.list(req.user.company_id);
       res.json({ success: true, data, sos: data });
     } catch (err) {
       res.status(500).json({ success: false, error: { message: err.message } });

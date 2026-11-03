@@ -40,9 +40,9 @@ router.put('/leave/:id/approve', hasRole('HR', 'HR_MANAGER', 'CEO', 'CTO', 'IT_A
 router.put('/leave/:id/reject', hasRole('HR', 'HR_MANAGER', 'CEO', 'CTO', 'IT_ADMIN', 'SUPER_ADMIN', 'ADMIN', 'MANAGER'), hrController.rejectLeave);
 router.get('/tasks', hasRole('HR', 'HR_MANAGER', 'CEO', 'CTO', 'IT_ADMIN', 'SUPER_ADMIN', 'ADMIN', 'MANAGER'), hrController.getTasks);
 router.post('/tasks', hasRole('HR', 'HR_MANAGER', 'CEO', 'CTO', 'IT_ADMIN', 'SUPER_ADMIN', 'ADMIN', 'MANAGER'), hrController.assignTask);
-router.get('/sos', hasRole('HR', 'HR_MANAGER', 'CEO', 'CTO', 'IT_ADMIN', 'SUPER_ADMIN', 'ADMIN', 'MANAGER'), hrController.getSOS);
-router.put('/sos/:id/acknowledge', hasRole('HR', 'HR_MANAGER', 'CEO', 'CTO', 'IT_ADMIN', 'SUPER_ADMIN', 'ADMIN', 'MANAGER'), hrController.acknowledgeSOS);
-router.put('/sos/:id/resolve', hasRole('HR', 'HR_MANAGER', 'CEO', 'CTO', 'IT_ADMIN', 'SUPER_ADMIN', 'ADMIN', 'MANAGER'), hrController.resolveSOS);
+router.get('/sos', hasRole('SUPERVISOR', 'HR', 'HR_MANAGER', 'CEO', 'CTO', 'IT_ADMIN', 'SUPER_ADMIN', 'ADMIN', 'MANAGER'), hrController.getSOS);
+router.put('/sos/:id/acknowledge', hasRole('SUPERVISOR', 'HR', 'HR_MANAGER', 'CEO', 'CTO', 'IT_ADMIN', 'SUPER_ADMIN', 'ADMIN', 'MANAGER'), hrController.acknowledgeSOS);
+router.put('/sos/:id/resolve', hasRole('SUPERVISOR', 'HR', 'HR_MANAGER', 'CEO', 'CTO', 'IT_ADMIN', 'SUPER_ADMIN', 'ADMIN', 'MANAGER'), hrController.resolveSOS);
 router.post('/ranks', hasRole('HR', 'HR_MANAGER', 'CEO', 'CTO', 'IT_ADMIN', 'SUPER_ADMIN', 'ADMIN'), hrController.createRank);
 router.put('/ranks/:id', hasRole('HR', 'HR_MANAGER', 'CEO', 'CTO', 'IT_ADMIN', 'SUPER_ADMIN', 'ADMIN'), hrController.updateRank);
 router.put('/organization/node/:id', hasRole('HR', 'HR_MANAGER', 'CEO', 'CTO', 'IT_ADMIN', 'SUPER_ADMIN', 'ADMIN'), hrController.reassignOrganizationNode);

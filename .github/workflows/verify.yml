@@ -18,6 +18,7 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: npm
       - run: npm ci --include=dev --include=optional
+      - run: npm run audit:schema
       - run: npm test
       - run: npm run build
       - run: node --test server/src/tests/cpanel_hosting.test.js

@@ -1,3 +1,4 @@
+import { schemaPatch } from '../utils/schemaPatch.js';
 // ==============================================================================
 // EDGEWFORCE - ADMIN & MULTI-TENANT ONBOARDING SERVICE
 // ==============================================================================
@@ -142,6 +143,7 @@ export const adminService = {
   },
 
   async updateCompanySettings(companyId, settingsUpdates, user) {
+    settingsUpdates = schemaPatch('company_settings', settingsUpdates);
     const existing = await db.findOne('company_settings', { company_id: Number(companyId) });
     let updated;
     if (existing) {

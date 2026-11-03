@@ -1,3 +1,4 @@
+import { createNotification } from './notificationRepository.js';
 // ==============================================================================
 // EDGEWFORCE - AUTOMATED BACKGROUND REMINDER WORKER
 // Executes proactive multi-channel reminders, enforces 3-stage reminder level,
@@ -124,7 +125,7 @@ export const reminderWorker = {
           ? `Task "${task.title}" is due right now. Please complete and submit client delivery.`
           : (rem.reminder_level === 'overdue' ? `Attention: "${task.title}" is OVERDUE. Please mark complete immediately.` : `Reminder: "${task.title}" is due at ${task.due_at ? new Date(task.due_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Soon'}.`);
 
-        await db.insert('notifications', {
+        await createNotification({
           employee_id: employee.id,
           company_id: rem.company_id,
           type: 'Tasks',
@@ -244,7 +245,7 @@ export const reminderWorker = {
       const supervisorUser = supervisor?.user_id ? await db.findById('users', supervisor.user_id) : null;
 
       if (supervisor?.id) {
-        await db.insert('notifications', {
+        await createNotification({
           employee_id: supervisor.id,
           company_id: task.company_id,
           type: 'Tasks',
@@ -263,7 +264,7 @@ export const reminderWorker = {
       for (const hr of hrUsers) {
         const hrEmp = await db.findOne('employees', { user_id: hr.id });
         if (hrEmp?.id) {
-          await db.insert('notifications', {
+          await createNotification({
             employee_id: hrEmp.id,
             company_id: task.company_id,
             type: 'HR',

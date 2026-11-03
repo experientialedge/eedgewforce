@@ -7,6 +7,14 @@ import { db } from '../config/database.js';
 import { calculatePayslipBreakdown } from '../utils/calculations.js';
 import { recordAudit } from '../middleware/auditLogger.js';
 
+function storedPayslipBreakdown(basic, housing, transport, other) {
+  const result = calculatePayslipBreakdown(basic, housing, transport, other);
+  return { basic_salary: result.basicSalary, housing_allowance: result.housingAllowance,
+    transport_allowance: result.transportAllowance, other_allowance: result.otherAllowance,
+    gross_pay: result.grossPay, tax_paye: result.taxPAYE, pension: result.pension,
+    other_deductions: result.otherDeductions, total_deductions: result.totalDeductions, net_pay: result.netPay };
+}
+
 export const accountingService = {
   /**
    * Retrieves high-level commercial financial position.
@@ -21,7 +29,7 @@ export const accountingService = {
     const totalRevenue = orders.reduce((sum, o) => sum + Number(o.total_amount || 0), 0);
     const totalCollected = collections.reduce((sum, c) => sum + Number(c.amount || 0), 0);
     const totalOutstanding = customers.reduce((sum, c) => sum + Math.max(0, Number(c.balance || 0)), 0);
-    const pendingSettlements = settlements.filter(s => s.status === 'submitted' || s.status === 'under_review');
+    const pendingSettlements = settlements.filter(s => ['pending_audit', 'submitted', 'under_review'].includes(String(s.reconciliation_status || s.status).toLowerCase()));
 
     return {
       totalRevenue,
@@ -62,17 +70,17 @@ export const accountingService = {
    */
   async reviewSettlement(settlementId, status, notes = '', actor = null, req = null) {
     const settlement = await db.findById('settlements', settlementId);
-    if (!settlement) throw new Error('Settlement not found');
+    if (!settlement || (actor && Number(settlement.company_id) !== Number(actor.company_id))) throw new Error('Settlement not found');
+    if (!['approved', 'rejected', 'under_review'].includes(String(status).toLowerCase())) throw new Error('Invalid reconciliation status.');
 
     const updated = await db.update('settlements', settlement.id, {
-      status,
-      notes: notes || settlement.notes,
-      reviewed_by: Number(actor?.id || 1),
-      reviewed_at: new Date().toISOString()
+      reconciliation_status: status,
+      audited_by: Number(actor?.id || 1),
+      audited_at: new Date().toISOString()
     });
 
     await recordAudit(actor, `SETTLEMENT_${status.toUpperCase()}`, 'settlements', settlement.id, { notes }, req);
-    return updated;
+    return { ...updated, status: updated.reconciliation_status, notes };
   },
 
   /**
@@ -88,7 +96,7 @@ export const accountingService = {
     const transport = customEarnings.transport_allowance !== undefined ? Number(customEarnings.transport_allowance) : emp.transport_allowance;
     const other = customEarnings.other_allowance !== undefined ? Number(customEarnings.other_allowance) : emp.other_allowance;
 
-    const breakdown = calculatePayslipBreakdown(basic, housing, transport, other);
+    const breakdown = storedPayslipBreakdown(basic, housing, transport, other);
 
     const existing = await db.findOne('payslips', { employee_id: emp.id, pay_month: targetMonth });
     let record;
@@ -122,7 +130,7 @@ export const accountingService = {
     if (!emp) throw new Error('Employee not found');
 
     const targetMonth = payMonth || (new Date().toISOString().slice(0, 7) + '-01');
-    const breakdown = calculatePayslipBreakdown(emp.base_salary, emp.housing_allowance, emp.transport_allowance, emp.other_allowance);
+    const breakdown = storedPayslipBreakdown(emp.base_salary, emp.housing_allowance, emp.transport_allowance, emp.other_allowance);
 
     const existing = await db.findOne('payslips', { employee_id: emp.id, pay_month: targetMonth });
     let record;
@@ -160,7 +168,7 @@ export const accountingService = {
 
     for (const emp of employees) {
       const existing = await db.findOne('payslips', { employee_id: emp.id, pay_month: targetMonth });
-      const breakdown = calculatePayslipBreakdown(
+      const breakdown = storedPayslipBreakdown(
         emp.base_salary,
         emp.housing_allowance,
         emp.transport_allowance,

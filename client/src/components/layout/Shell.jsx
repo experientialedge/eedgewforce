@@ -56,7 +56,7 @@ export default function Shell({
       setNotifications(list || []);
 
       // Check if there are active SOS emergency alerts
-      if (['CEO', 'CTO', 'HR', 'MANAGER', 'IT_ADMIN', 'SUPERVISOR', 'SUPER_ADMIN'].includes(user?.role_code) || ['CEO', 'CTO', 'HR'].includes(user?.rank?.code)) {
+      if (['CEO', 'CTO', 'HR', 'HR_MANAGER', 'ADMIN', 'MANAGER', 'IT_ADMIN', 'SUPERVISOR', 'SUPER_ADMIN'].includes(user?.role_code) || ['CEO', 'CTO', 'HR'].includes(user?.rank?.code)) {
         const sos = await api.get('/hr/sos').catch(() => []);
         const activeSOS = (Array.isArray(sos) ? sos : (sos?.sos || sos?.data || [])).find(s => s.status === 'active');
         if (activeSOS) {

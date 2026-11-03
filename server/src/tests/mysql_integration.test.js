@@ -1,3 +1,9 @@
+import { sosService } from '../services/sosService.js';
+import { idleService } from '../services/idleService.js';
+import { scheduleService } from '../services/scheduleService.js';
+import { notificationService } from '../services/notificationService.js';
+import { emailService } from '../services/emailService.js';
+import { upgradeMysqlSchedules } from '../config/mysqlUpgrades.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import mysql from 'mysql2/promise';
@@ -62,6 +68,30 @@ test('Real MySQL: transactions, staff sign-in, workplace attendance, collaborati
       assert.equal((await collaborationService.overview(staff)).projects[0].id,project.id);
       const task=await collaborationService.write(actor,project.id,'task',{title:'SQL task',assignee_ids:[staff.id],priority:'normal'});
       assert.deepEqual(task.assignee_ids,[staff.id]);assert.equal(task.status,'todo');
+    });
+    await t.test('Existing MySQL schedule schemas upgrade without losing records and support both reviews',async()=>{
+      const old=await db.insert('schedules',{company_id:1,employee_id:employee.id,date:'2026-11-03',tasks:[{activity:'Preserved task'}],status:'SUBMITTED'});
+      for(const name of ['employee_name','employee_code','department','position','title','submitted_at','supervisor_status','hr_status'])await connection.query('ALTER TABLE schedules DROP COLUMN `'+name+'`');
+      const upgradePool=mysql.createPool(config);
+      try {await upgradeMysqlSchedules(upgradePool,config.database);await upgradeMysqlSchedules(upgradePool,config.database);} finally {await upgradePool.end();}
+      assert.equal((await db.findById('schedules',old.id)).tasks[0].activity,'Preserved task');
+      const schedule=await scheduleService.createOrUpdateSchedule(employee.id,{status:'DRAFT',title:'SQL reviewed shift'});
+      await scheduleService.reviewSupervisorSchedule(schedule.id,employee.id,{status:'APPROVED'});
+      await scheduleService.reviewHRSchedule(schedule.id,actor.id,{status:'ACKNOWLEDGED'});
+      assert.equal((await db.findById('schedules',schedule.id)).hr_status,'ACKNOWLEDGED');
+    });
+    await t.test('Emergency dispatch, notification read-state and inactivity use actual SQL columns',async()=>{
+      t.mock.method(emailService,'sendIdleAlertEmail',async()=>({skipped:true}));
+      const event=await sosService.dispatch(employee.id,6.6,3.4,7,'Isolated SQL fixture');
+      assert.equal((await db.findById('sos_events',event.id)).accuracy,7);
+      await sosService.review(event.id,actor);await sosService.review(event.id,actor,'Isolated fixture resolved');
+      const notice=await notificationService.notify(employee.id,'Tasks','Fixture task','Fixture body');
+      await notificationService.markRead(notice.id,employee.id);
+      assert.equal((await db.findById('notifications',notice.id)).is_read,true);
+      const identity={...staff,employee};
+      const idle=await idleService.startIdleSession({duration_seconds:600},identity);
+      await idleService.explainIdleSession(idle.id,{reason:'Break',reason_details:'SQL explanation'},identity);
+      assert.equal((await idleService.getIdleSessions({},identity)).find(r=>r.id===idle.id).reason_details,'SQL explanation');
     });
     await t.test('Excel and binary attachments are generated from the internal database',async()=>{
       const workbook=await hrDailyReportService.download(actor,'2026-11-03');assert.equal(Buffer.from(workbook).subarray(0,2).toString(),'PK');

@@ -1,3 +1,4 @@
+import { schemaPatch } from '../utils/schemaPatch.js';
 // ==============================================================================
 // EDGEWFORCE - INVENTORY & WAREHOUSE SERVICE
 // ==============================================================================
@@ -108,6 +109,7 @@ export const inventoryService = {
     const existing = await db.findById('products', id);
     if (!existing) throw new Error('Product not found');
 
+    updates = schemaPatch('products', updates);
     const updated = await db.update('products', id, {
       ...updates,
       location_of_item: updates.location_of_item || updates.warehouse_name || existing.location_of_item || existing.warehouse_name,

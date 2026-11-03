@@ -1,0 +1,6594 @@
+{
+  "observedAt": "2026-11-03T23:50:55.078Z",
+  "source": "Supabase public OpenAPI (read-only inspection)",
+  "definitions": {
+    "workforce_activity_notices": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "event_id": {
+          "description": "Note:\nThis is a Foreign Key to `workforce_activity_events.id`.<fk table='workforce_activity_events' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "title": {
+          "format": "text",
+          "type": "string"
+        },
+        "body": {
+          "format": "text",
+          "type": "string"
+        },
+        "read_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "user_id",
+        "event_id",
+        "title",
+        "body",
+        "created_at"
+      ]
+    },
+    "face_events": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "event_type": {
+          "format": "text",
+          "type": "string"
+        },
+        "image_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "confidence": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "match_threshold": {
+          "default": 0.8,
+          "format": "numeric",
+          "type": "number"
+        },
+        "verified": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "provider": {
+          "default": "INTERNAL_FACE_ENGINE",
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "employee_id",
+        "event_type",
+        "verified",
+        "provider",
+        "created_at"
+      ]
+    },
+    "push_subscriptions": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "endpoint": {
+          "format": "text",
+          "type": "string"
+        },
+        "subscription_json": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "employee_id",
+        "endpoint",
+        "subscription_json",
+        "created_at"
+      ]
+    },
+    "collaboration_tasks": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "project_id": {
+          "description": "Note:\nThis is a Foreign Key to `collaboration_projects.id`.<fk table='collaboration_projects' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "title": {
+          "format": "text",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "format": "text",
+          "type": "string"
+        },
+        "assignee_ids": {
+          "format": "jsonb"
+        },
+        "status": {
+          "default": "todo",
+          "format": "text",
+          "type": "string"
+        },
+        "priority": {
+          "default": "normal",
+          "format": "text",
+          "type": "string"
+        },
+        "scheduled_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "due_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "remind_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "recurrence": {
+          "default": "none",
+          "format": "text",
+          "type": "string"
+        },
+        "series_id": {
+          "default": "gen_random_uuid()",
+          "format": "uuid",
+          "type": "string"
+        },
+        "origin_task_id": {
+          "description": "Note:\nThis is a Foreign Key to `collaboration_tasks.id`.<fk table='collaboration_tasks' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_by": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "version": {
+          "default": 1,
+          "format": "integer",
+          "type": "integer"
+        },
+        "completed_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "project_id",
+        "title",
+        "description",
+        "assignee_ids",
+        "status",
+        "priority",
+        "recurrence",
+        "series_id",
+        "created_by",
+        "version",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "public_employee_directory": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_code": {
+          "format": "text",
+          "type": "string"
+        },
+        "staff_id": {
+          "format": "text",
+          "type": "string"
+        },
+        "first_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "last_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "full_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "job_title": {
+          "format": "text",
+          "type": "string"
+        },
+        "department": {
+          "format": "text",
+          "type": "string"
+        },
+        "work_email": {
+          "format": "text",
+          "type": "string"
+        },
+        "work_phone": {
+          "format": "text",
+          "type": "string"
+        },
+        "supervisor_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "work_location": {
+          "format": "text",
+          "type": "string"
+        },
+        "status": {
+          "format": "text",
+          "type": "string"
+        }
+      }
+    },
+    "ranks": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "code": {
+          "format": "text",
+          "type": "string"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "level": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "active": {
+          "default": true,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "description": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "code",
+        "name",
+        "level",
+        "created_at"
+      ]
+    },
+    "collections": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "customer_id": {
+          "description": "Note:\nThis is a Foreign Key to `customers.id`.<fk table='customers' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "agent_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "order_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "amount": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "payment_method": {
+          "default": "Bank Transfer",
+          "format": "text",
+          "type": "string"
+        },
+        "reference_number": {
+          "format": "text",
+          "type": "string"
+        },
+        "status": {
+          "default": "PAID",
+          "format": "text",
+          "type": "string"
+        },
+        "payment_date": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "idempotency_key": {
+          "format": "text",
+          "type": "string"
+        },
+        "paystack_reference": {
+          "format": "text",
+          "type": "string"
+        },
+        "notes": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "customer_id",
+        "amount",
+        "created_at"
+      ]
+    },
+    "task_comments": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "task_id": {
+          "description": "Note:\nThis is a Foreign Key to `tasks.id`.<fk table='tasks' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "author_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "comment": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "task_id",
+        "author_id",
+        "comment",
+        "created_at"
+      ]
+    },
+    "location_assignment_history": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "previous_location_id": {
+          "description": "Note:\nThis is a Foreign Key to `work_locations.id`.<fk table='work_locations' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "previous_location_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "new_location_id": {
+          "description": "Note:\nThis is a Foreign Key to `work_locations.id`.<fk table='work_locations' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "new_location_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "assignment_type": {
+          "default": "primary",
+          "format": "text",
+          "type": "string"
+        },
+        "action": {
+          "default": "ASSIGNED",
+          "format": "text",
+          "type": "string"
+        },
+        "changed_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "changed_by_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "reason": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "employee_id",
+        "assignment_type",
+        "action",
+        "created_at"
+      ]
+    },
+    "workforce_activity_events": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "last_activity_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "last_seen_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "detected_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "kind": {
+          "format": "text",
+          "type": "string"
+        },
+        "ended_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "reason": {
+          "format": "character varying",
+          "maxLength": 100,
+          "type": "string"
+        },
+        "reason_details": {
+          "format": "text",
+          "type": "string"
+        },
+        "explained_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "reviewed_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "reviewed_by": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "user_id",
+        "employee_id",
+        "last_activity_at",
+        "last_seen_at",
+        "detected_at",
+        "kind",
+        "created_at"
+      ]
+    },
+    "collaboration_channels": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "project_id": {
+          "description": "Note:\nThis is a Foreign Key to `collaboration_projects.id`.<fk table='collaboration_projects' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "format": "text",
+          "type": "string"
+        },
+        "created_by": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "project_id",
+        "name",
+        "description",
+        "created_by",
+        "created_at"
+      ]
+    },
+    "ai_messages": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "conversation_id": {
+          "description": "Note:\nThis is a Foreign Key to `ai_conversations.id`.<fk table='ai_conversations' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "role": {
+          "format": "text",
+          "type": "string"
+        },
+        "content": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "conversation_id",
+        "role",
+        "content",
+        "created_at"
+      ]
+    },
+    "order_approvals": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "default": 1,
+          "format": "integer",
+          "type": "integer"
+        },
+        "order_id": {
+          "description": "Note:\nThis is a Foreign Key to `orders.id`.<fk table='orders' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "action": {
+          "format": "text",
+          "type": "string"
+        },
+        "reviewed_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "approved_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "approver_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "comments": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "collaboration_members": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "project_id": {
+          "description": "Note:\nThis is a Foreign Key to `collaboration_projects.id`.<fk table='collaboration_projects' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "role": {
+          "default": "member",
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "project_id",
+        "user_id",
+        "role",
+        "created_at"
+      ]
+    },
+    "orders": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "order_number": {
+          "format": "text",
+          "type": "string"
+        },
+        "customer_id": {
+          "description": "Note:\nThis is a Foreign Key to `customers.id`.<fk table='customers' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "sales_agent_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "subtotal": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "discount_amount": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "vat_amount": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "total_amount": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "status": {
+          "default": "PENDING_APPROVAL",
+          "format": "text",
+          "type": "string"
+        },
+        "payment_status": {
+          "default": "UNPAID",
+          "format": "text",
+          "type": "string"
+        },
+        "payment_method": {
+          "default": "Bank Transfer",
+          "format": "text",
+          "type": "string"
+        },
+        "delivery_status": {
+          "default": "PENDING",
+          "format": "text",
+          "type": "string"
+        },
+        "order_date": {
+          "default": "CURRENT_DATE",
+          "format": "date",
+          "type": "string"
+        },
+        "approved_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "approved_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "idempotency_key": {
+          "format": "text",
+          "type": "string"
+        },
+        "rejection_reason": {
+          "format": "text",
+          "type": "string"
+        },
+        "notes": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "order_number",
+        "customer_id",
+        "subtotal",
+        "total_amount",
+        "status",
+        "payment_status",
+        "delivery_status",
+        "created_at"
+      ]
+    },
+    "collaboration_notices": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "project_id": {
+          "description": "Note:\nThis is a Foreign Key to `collaboration_projects.id`.<fk table='collaboration_projects' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "task_id": {
+          "description": "Note:\nThis is a Foreign Key to `collaboration_tasks.id`.<fk table='collaboration_tasks' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "source_key": {
+          "format": "text",
+          "type": "string"
+        },
+        "kind": {
+          "format": "text",
+          "type": "string"
+        },
+        "title": {
+          "format": "text",
+          "type": "string"
+        },
+        "body": {
+          "format": "text",
+          "type": "string"
+        },
+        "read_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "project_id",
+        "user_id",
+        "source_key",
+        "kind",
+        "title",
+        "body",
+        "created_at"
+      ]
+    },
+    "okr_key_results": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "okr_id": {
+          "description": "Note:\nThis is a Foreign Key to `okrs.id`.<fk table='okrs' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "title": {
+          "format": "text",
+          "type": "string"
+        },
+        "target_value": {
+          "default": 100,
+          "format": "numeric",
+          "type": "number"
+        },
+        "current_value": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "unit": {
+          "default": "%",
+          "format": "text",
+          "type": "string"
+        },
+        "progress": {
+          "default": 0,
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "okr_id",
+        "title",
+        "target_value",
+        "current_value",
+        "unit",
+        "progress",
+        "created_at"
+      ]
+    },
+    "daily_summaries": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "default": 1,
+          "format": "integer",
+          "type": "integer"
+        },
+        "supervisor_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "date": {
+          "format": "date",
+          "type": "string"
+        },
+        "total_members": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "field_agents": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "sales_agents": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "present": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "absent": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "late": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "geofence_violations": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "missing_checkouts": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "store_visits": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "tasks_completed": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "photos_uploaded": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "sales_generated": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "territories": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "region_id": {
+          "description": "Note:\nThis is a Foreign Key to `regions.id`.<fk table='regions' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "code": {
+          "format": "text",
+          "type": "string"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "code",
+        "name",
+        "created_at"
+      ]
+    },
+    "workforce_access_sessions": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "token_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "state": {
+          "format": "text",
+          "type": "string"
+        },
+        "location_id": {
+          "description": "Note:\nThis is a Foreign Key to `work_locations.id`.<fk table='work_locations' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "expires_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "last_verified_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "last_seen_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "outside_since": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "revoked_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "revoke_reason": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "user_id",
+        "employee_id",
+        "token_id",
+        "state",
+        "created_at",
+        "expires_at"
+      ]
+    },
+    "visit_audits": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "visit_id": {
+          "description": "Note:\nThis is a Foreign Key to `visits.id`.<fk table='visits' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "product_id": {
+          "description": "Note:\nThis is a Foreign Key to `products.id`.<fk table='products' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "stock_status": {
+          "format": "text",
+          "type": "string"
+        },
+        "shelf_facing_count": {
+          "default": 0,
+          "format": "integer",
+          "type": "integer"
+        },
+        "promo_active": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "visit_id",
+        "product_id",
+        "stock_status",
+        "created_at"
+      ]
+    },
+    "location_alerts": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "supervisor_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "default": 1,
+          "format": "integer",
+          "type": "integer"
+        },
+        "alert_type": {
+          "format": "text",
+          "type": "string"
+        },
+        "severity": {
+          "default": "warning",
+          "format": "text",
+          "type": "string"
+        },
+        "message": {
+          "format": "text",
+          "type": "string"
+        },
+        "details": {
+          "format": "jsonb"
+        },
+        "status": {
+          "default": "active",
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "resolved_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "resolved_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "resolution_notes": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "employee_id",
+        "alert_type",
+        "message",
+        "created_at"
+      ]
+    },
+    "work_locations": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "location_type": {
+          "default": "Office",
+          "format": "text",
+          "type": "string"
+        },
+        "address": {
+          "format": "text",
+          "type": "string"
+        },
+        "state": {
+          "default": "Lagos",
+          "format": "text",
+          "type": "string"
+        },
+        "lga": {
+          "format": "text",
+          "type": "string"
+        },
+        "city": {
+          "default": "Lagos",
+          "format": "text",
+          "type": "string"
+        },
+        "region": {
+          "default": "South-West",
+          "format": "text",
+          "type": "string"
+        },
+        "latitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "longitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "geofence_radius": {
+          "default": 150,
+          "format": "integer",
+          "type": "integer"
+        },
+        "geofence_radius_meters": {
+          "default": 150,
+          "format": "integer",
+          "type": "integer"
+        },
+        "status": {
+          "default": "active",
+          "format": "text",
+          "type": "string"
+        },
+        "created_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "name",
+        "latitude",
+        "longitude",
+        "status",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "customers": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "code": {
+          "format": "text",
+          "type": "string"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "business_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "customer_type": {
+          "default": "Retail",
+          "format": "text",
+          "type": "string"
+        },
+        "tier": {
+          "default": "Tier 1",
+          "format": "text",
+          "type": "string"
+        },
+        "territory": {
+          "default": "Lagos Mainland",
+          "format": "text",
+          "type": "string"
+        },
+        "address": {
+          "format": "text",
+          "type": "string"
+        },
+        "latitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "longitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "geofence_radius": {
+          "default": 150,
+          "format": "integer",
+          "type": "integer"
+        },
+        "contact_person": {
+          "format": "text",
+          "type": "string"
+        },
+        "phone": {
+          "format": "text",
+          "type": "string"
+        },
+        "email": {
+          "format": "text",
+          "type": "string"
+        },
+        "credit_limit": {
+          "default": 1000000,
+          "format": "numeric",
+          "type": "number"
+        },
+        "balance": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "assigned_agent_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "assigned_supervisor_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "status": {
+          "default": "active",
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "region_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "territory_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "total_sales_ngn": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "gps_accuracy": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "last_gps_updated_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "google_maps_directions_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "registered_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "birthday": {
+          "format": "date",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "code",
+        "name",
+        "status",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "nexus_generation_leases": {
+      "properties": {
+        "company_id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "last_attempt_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "company_id",
+        "last_attempt_at"
+      ]
+    },
+    "sos_events": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "default": 1,
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "agent_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "message": {
+          "default": "Emergency Assistance Required",
+          "format": "text",
+          "type": "string"
+        },
+        "latitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "longitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "accuracy": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "address": {
+          "format": "text",
+          "type": "string"
+        },
+        "battery_level": {
+          "default": 100,
+          "format": "integer",
+          "type": "integer"
+        },
+        "status": {
+          "default": "active",
+          "format": "text",
+          "type": "string"
+        },
+        "acknowledged_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "acknowledged_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "resolved_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "resolved_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "resolution_notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "message",
+        "status",
+        "created_at"
+      ]
+    },
+    "employee_idle_sessions": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "start_time": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "end_time": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "idle_duration_minutes": {
+          "default": 0,
+          "format": "integer",
+          "type": "integer"
+        },
+        "latitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "longitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "location_address": {
+          "format": "text",
+          "type": "string"
+        },
+        "reason": {
+          "format": "text",
+          "type": "string"
+        },
+        "status": {
+          "default": "FLAGGED",
+          "format": "text",
+          "type": "string"
+        },
+        "reviewed_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "employee_id",
+        "start_time",
+        "created_at"
+      ]
+    },
+    "task_reminders": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "task_id": {
+          "description": "Note:\nThis is a Foreign Key to `tasks.id`.<fk table='tasks' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "reminder_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "reminder_level": {
+          "default": "pre_deadline",
+          "format": "character varying",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "channels": {
+          "format": "jsonb"
+        },
+        "status": {
+          "default": "scheduled",
+          "format": "character varying",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "attempts": {
+          "default": 0,
+          "format": "integer",
+          "type": "integer"
+        },
+        "idempotency_key": {
+          "format": "character varying",
+          "maxLength": 100,
+          "type": "string"
+        },
+        "error_message": {
+          "format": "text",
+          "type": "string"
+        },
+        "sent_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "timezone('utc'::text, now())",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "task_id",
+        "reminder_at",
+        "reminder_level",
+        "channels",
+        "status",
+        "attempts"
+      ]
+    },
+    "tasks": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "title": {
+          "format": "text",
+          "type": "string"
+        },
+        "description": {
+          "format": "text",
+          "type": "string"
+        },
+        "assigned_to": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "assigned_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "client_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "project_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "requires_client_dispatch": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "sent_to_client": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "status": {
+          "default": "pending",
+          "format": "text",
+          "type": "string"
+        },
+        "priority": {
+          "default": "medium",
+          "format": "text",
+          "type": "string"
+        },
+        "due_date": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "acknowledged_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "progress": {
+          "default": 0,
+          "format": "integer",
+          "type": "integer"
+        },
+        "department": {
+          "format": "text",
+          "type": "string"
+        },
+        "supervisor_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "department_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "task_type": {
+          "format": "text",
+          "type": "string"
+        },
+        "delivery_stages": {
+          "format": "jsonb"
+        },
+        "due_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "acknowledged_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "completed_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "completion_notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "evidence_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "evidence_name": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "title",
+        "created_at"
+      ]
+    },
+    "companies": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "uuid": {
+          "default": "gen_random_uuid()",
+          "format": "uuid",
+          "type": "string"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "business_type": {
+          "default": "Distribution",
+          "format": "text",
+          "type": "string"
+        },
+        "industry": {
+          "default": "FMCG",
+          "format": "text",
+          "type": "string"
+        },
+        "registration_number": {
+          "format": "text",
+          "type": "string"
+        },
+        "email": {
+          "format": "text",
+          "type": "string"
+        },
+        "phone": {
+          "format": "text",
+          "type": "string"
+        },
+        "address": {
+          "format": "text",
+          "type": "string"
+        },
+        "country": {
+          "default": "Nigeria",
+          "format": "text",
+          "type": "string"
+        },
+        "state": {
+          "default": "Lagos",
+          "format": "text",
+          "type": "string"
+        },
+        "city": {
+          "default": "Lagos",
+          "format": "text",
+          "type": "string"
+        },
+        "logo_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "status": {
+          "default": "active",
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "email",
+        "status",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "workforce_executive_reports": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "report_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "facts": {
+          "format": "jsonb"
+        },
+        "narrative": {
+          "format": "text",
+          "type": "string"
+        },
+        "source": {
+          "default": "verified_facts",
+          "format": "text",
+          "type": "string"
+        },
+        "model": {
+          "format": "text",
+          "type": "string"
+        },
+        "generated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "ai_generated_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "ai_facts_hash": {
+          "format": "text",
+          "type": "string"
+        },
+        "ai_claimed_until": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "ai_last_attempt_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "report_date",
+        "facts",
+        "source",
+        "generated_at"
+      ]
+    },
+    "okrs": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "objective": {
+          "format": "text",
+          "type": "string"
+        },
+        "key_result": {
+          "format": "text",
+          "type": "string"
+        },
+        "target_value": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "current_value": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "progress": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "quarter": {
+          "default": "Q3 2026",
+          "format": "text",
+          "type": "string"
+        },
+        "status": {
+          "default": "In Progress",
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "employee_id",
+        "objective",
+        "key_result",
+        "target_value",
+        "created_at"
+      ]
+    },
+    "ai_conversations": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "title": {
+          "default": "Sales Copilot Session",
+          "format": "text",
+          "type": "string"
+        },
+        "context_data": {
+          "format": "jsonb"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "user_id",
+        "title",
+        "created_at"
+      ]
+    },
+    "sos": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "agent_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "agent_phone": {
+          "format": "text",
+          "type": "string"
+        },
+        "latitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "longitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "location_address": {
+          "format": "text",
+          "type": "string"
+        },
+        "emergency_type": {
+          "default": "GENERAL_DISTRESS",
+          "format": "text",
+          "type": "string"
+        },
+        "status": {
+          "default": "ACTIVE",
+          "format": "text",
+          "type": "string"
+        },
+        "acknowledged_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "acknowledged_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "resolved_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "resolved_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "resolution_notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "employee_id",
+        "latitude",
+        "longitude",
+        "created_at"
+      ]
+    },
+    "employees": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_code": {
+          "format": "text",
+          "type": "string"
+        },
+        "first_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "last_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "phone": {
+          "format": "text",
+          "type": "string"
+        },
+        "department_id": {
+          "description": "Note:\nThis is a Foreign Key to `departments.id`.<fk table='departments' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "department": {
+          "format": "text",
+          "type": "string"
+        },
+        "position": {
+          "format": "text",
+          "type": "string"
+        },
+        "territory": {
+          "format": "text",
+          "type": "string"
+        },
+        "supervisor_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "rank_code": {
+          "format": "text",
+          "type": "string"
+        },
+        "base_salary": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "housing_allowance": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "transport_allowance": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "other_allowance": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "performance_score": {
+          "default": 90,
+          "format": "numeric",
+          "type": "number"
+        },
+        "hire_date": {
+          "default": "CURRENT_DATE",
+          "format": "date",
+          "type": "string"
+        },
+        "status": {
+          "default": "active",
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "full_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "staff_id": {
+          "format": "text",
+          "type": "string"
+        },
+        "personal_email": {
+          "format": "text",
+          "type": "string"
+        },
+        "work_email": {
+          "format": "text",
+          "type": "string"
+        },
+        "date_of_birth": {
+          "format": "text",
+          "type": "string"
+        },
+        "marital_status": {
+          "format": "text",
+          "type": "string"
+        },
+        "nationality": {
+          "default": "Nigerian",
+          "format": "text",
+          "type": "string"
+        },
+        "address": {
+          "format": "text",
+          "type": "string"
+        },
+        "home_address": {
+          "format": "text",
+          "type": "string"
+        },
+        "city_lga": {
+          "format": "text",
+          "type": "string"
+        },
+        "state_of_origin": {
+          "format": "text",
+          "type": "string"
+        },
+        "state_of_residence": {
+          "format": "text",
+          "type": "string"
+        },
+        "landmark": {
+          "format": "text",
+          "type": "string"
+        },
+        "department_raw": {
+          "format": "text",
+          "type": "string"
+        },
+        "date_of_joining": {
+          "format": "text",
+          "type": "string"
+        },
+        "work_location": {
+          "format": "text",
+          "type": "string"
+        },
+        "supervisor_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "emergency_contact_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "emergency_contact_relationship": {
+          "format": "text",
+          "type": "string"
+        },
+        "emergency_contact_phone": {
+          "format": "text",
+          "type": "string"
+        },
+        "blood_group": {
+          "format": "text",
+          "type": "string"
+        },
+        "bank_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "account_number": {
+          "format": "text",
+          "type": "string"
+        },
+        "hobbies_interests": {
+          "format": "text",
+          "type": "string"
+        },
+        "flagged_for_review": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "review_reason": {
+          "format": "text",
+          "type": "string"
+        },
+        "onboarding_status": {
+          "default": "Account Created",
+          "format": "text",
+          "type": "string"
+        },
+        "auth_user_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "email": {
+          "format": "text",
+          "type": "string"
+        },
+        "state": {
+          "format": "text",
+          "type": "string"
+        },
+        "lga": {
+          "format": "text",
+          "type": "string"
+        },
+        "city": {
+          "format": "text",
+          "type": "string"
+        },
+        "face_enrolled": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "invitation_sent_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "reporting_manager_id": {
+          "format": "integer",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "employee_code",
+        "first_name",
+        "last_name",
+        "status",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "workforce_activity_presence": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "client_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "sequence": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "last_activity_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "last_seen_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "stopped_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "user_id",
+        "employee_id",
+        "client_id",
+        "sequence",
+        "last_activity_at",
+        "last_seen_at"
+      ]
+    },
+    "schedules": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "default": 1,
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "supervisor_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "supervisor_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "date": {
+          "default": "CURRENT_DATE",
+          "format": "date",
+          "type": "string"
+        },
+        "shift_start": {
+          "default": "08:00",
+          "format": "text",
+          "type": "string"
+        },
+        "shift_end": {
+          "default": "17:00",
+          "format": "text",
+          "type": "string"
+        },
+        "total_planned_hours": {
+          "default": 8,
+          "format": "numeric",
+          "type": "number"
+        },
+        "work_location": {
+          "default": "Assigned Territory",
+          "format": "text",
+          "type": "string"
+        },
+        "notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "tasks": {
+          "format": "jsonb"
+        },
+        "status": {
+          "default": "Planned",
+          "format": "text",
+          "type": "string"
+        },
+        "supervisor_approval_status": {
+          "default": "Pending",
+          "format": "text",
+          "type": "string"
+        },
+        "supervisor_reviewed_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "supervisor_notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "hr_reviewed_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "hr_notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "employee_id",
+        "date",
+        "status",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "file_uploads": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "bucket": {
+          "default": "edgewforce-assets",
+          "format": "text",
+          "type": "string"
+        },
+        "path": {
+          "format": "text",
+          "type": "string"
+        },
+        "original_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "mime_type": {
+          "format": "text",
+          "type": "string"
+        },
+        "size_bytes": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "uploaded_by": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "bucket",
+        "path",
+        "mime_type",
+        "size_bytes",
+        "created_at"
+      ]
+    },
+    "inventory_movements": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "product_id": {
+          "description": "Note:\nThis is a Foreign Key to `products.id`.<fk table='products' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "warehouse_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "movement_type": {
+          "format": "text",
+          "type": "string"
+        },
+        "quantity": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "previous_quantity": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "new_quantity": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "reference_number": {
+          "format": "text",
+          "type": "string"
+        },
+        "notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "recorded_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "product_id",
+        "movement_type",
+        "quantity",
+        "previous_quantity",
+        "new_quantity",
+        "created_at"
+      ]
+    },
+    "visits": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "agent_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "customer_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "store_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "status": {
+          "default": "PLANNED",
+          "format": "text",
+          "type": "string"
+        },
+        "planned_date": {
+          "default": "CURRENT_DATE",
+          "format": "date",
+          "type": "string"
+        },
+        "planned_time": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "actual_arrival": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "actual_departure": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "duration_minutes": {
+          "default": 0,
+          "format": "integer",
+          "type": "integer"
+        },
+        "check_in_lat": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "check_in_lng": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "is_geofence_verified": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "visit_purpose": {
+          "format": "text",
+          "type": "string"
+        },
+        "shelf_share_percent": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "check_in_time": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "check_in_distance_meters": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "check_out_time": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "photo_evidence_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "signature_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "out_of_stock_skus": {
+          "format": "jsonb"
+        },
+        "competitor_notes": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "agent_id",
+        "created_at"
+      ]
+    },
+    "location_logs": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "role": {
+          "format": "text",
+          "type": "string"
+        },
+        "company_id": {
+          "default": 1,
+          "format": "integer",
+          "type": "integer"
+        },
+        "supervisor_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "store_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "location_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "assigned_market": {
+          "format": "text",
+          "type": "string"
+        },
+        "assigned_region": {
+          "format": "text",
+          "type": "string"
+        },
+        "assigned_state": {
+          "format": "text",
+          "type": "string"
+        },
+        "timestamp": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "server_timestamp": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "local_time_lagos": {
+          "format": "text",
+          "type": "string"
+        },
+        "latitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "longitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "accuracy": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "address": {
+          "format": "text",
+          "type": "string"
+        },
+        "current_activity": {
+          "format": "text",
+          "type": "string"
+        },
+        "activity": {
+          "format": "text",
+          "type": "string"
+        },
+        "attendance_type": {
+          "format": "text",
+          "type": "string"
+        },
+        "attendance_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "is_inside_geofence": {
+          "default": true,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "distance_from_store": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "geofence_status": {
+          "format": "text",
+          "type": "string"
+        },
+        "status": {
+          "default": "success",
+          "format": "text",
+          "type": "string"
+        },
+        "battery_level": {
+          "default": 100,
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "notes": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "employee_id",
+        "created_at"
+      ]
+    },
+    "deliveries": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "order_id": {
+          "description": "Note:\nThis is a Foreign Key to `orders.id`.<fk table='orders' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "customer_id": {
+          "description": "Note:\nThis is a Foreign Key to `customers.id`.<fk table='customers' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "driver_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "driver_phone": {
+          "format": "text",
+          "type": "string"
+        },
+        "vehicle_number": {
+          "format": "text",
+          "type": "string"
+        },
+        "dispatch_time": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "actual_delivery_time": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "delivery_status": {
+          "default": "PENDING",
+          "format": "text",
+          "type": "string"
+        },
+        "recipient_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "recipient_signature": {
+          "format": "text",
+          "type": "string"
+        },
+        "proof_of_delivery_photo": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "failure_reason": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "order_id",
+        "customer_id",
+        "created_at"
+      ]
+    },
+    "employee_location_assignments": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "location_id": {
+          "description": "Note:\nThis is a Foreign Key to `work_locations.id`.<fk table='work_locations' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "assignment_type": {
+          "default": "primary",
+          "format": "text",
+          "type": "string"
+        },
+        "is_primary": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "is_active": {
+          "default": true,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "start_date": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "end_date": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "reason": {
+          "format": "text",
+          "type": "string"
+        },
+        "assigned_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "employee_id",
+        "location_id",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "reminder_delivery_logs": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "reminder_id": {
+          "description": "Note:\nThis is a Foreign Key to `task_reminders.id`.<fk table='task_reminders' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "task_id": {
+          "description": "Note:\nThis is a Foreign Key to `tasks.id`.<fk table='tasks' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "channel": {
+          "format": "character varying",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "status": {
+          "format": "character varying",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "provider_message_id": {
+          "format": "character varying",
+          "maxLength": 150,
+          "type": "string"
+        },
+        "error_message": {
+          "format": "text",
+          "type": "string"
+        },
+        "sent_at": {
+          "default": "timezone('utc'::text, now())",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "timezone('utc'::text, now())",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "task_id",
+        "channel",
+        "status"
+      ]
+    },
+    "branches": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "default": 1,
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "address": {
+          "format": "text",
+          "type": "string"
+        },
+        "state": {
+          "format": "text",
+          "type": "string"
+        },
+        "city": {
+          "format": "text",
+          "type": "string"
+        },
+        "latitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "longitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "products": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "sku": {
+          "format": "text",
+          "type": "string"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "category": {
+          "format": "text",
+          "type": "string"
+        },
+        "brand": {
+          "format": "text",
+          "type": "string"
+        },
+        "unit": {
+          "default": "carton",
+          "format": "text",
+          "type": "string"
+        },
+        "cost_price": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "price": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "selling_price": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "stock_quantity": {
+          "default": 100,
+          "format": "integer",
+          "type": "integer"
+        },
+        "reorder_level": {
+          "default": 20,
+          "format": "integer",
+          "type": "integer"
+        },
+        "min_stock_alert": {
+          "default": 20,
+          "format": "integer",
+          "type": "integer"
+        },
+        "warehouse_name": {
+          "default": "Ikeja Central Depot",
+          "format": "text",
+          "type": "string"
+        },
+        "shelve_location": {
+          "format": "text",
+          "type": "string"
+        },
+        "status": {
+          "default": "active",
+          "format": "text",
+          "type": "string"
+        },
+        "image_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "quantity_display": {
+          "format": "text",
+          "type": "string"
+        },
+        "location_of_item": {
+          "format": "text",
+          "type": "string"
+        },
+        "condition": {
+          "format": "text",
+          "type": "string"
+        },
+        "shelf_number": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "sku",
+        "name",
+        "status",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "leave_requests": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "leave_type": {
+          "format": "text",
+          "type": "string"
+        },
+        "start_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "end_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "days": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "reason": {
+          "format": "text",
+          "type": "string"
+        },
+        "status": {
+          "default": "pending",
+          "format": "text",
+          "type": "string"
+        },
+        "approved_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "approved_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "reviewed_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "reviewed_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "review_notes": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "employee_id",
+        "leave_type",
+        "start_date",
+        "end_date",
+        "days",
+        "created_at"
+      ]
+    },
+    "collaboration_messages": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "project_id": {
+          "description": "Note:\nThis is a Foreign Key to `collaboration_projects.id`.<fk table='collaboration_projects' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "channel_id": {
+          "description": "Note:\nThis is a Foreign Key to `collaboration_channels.id`.<fk table='collaboration_channels' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "parent_id": {
+          "description": "Note:\nThis is a Foreign Key to `collaboration_messages.id`.<fk table='collaboration_messages' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "body": {
+          "format": "text",
+          "type": "string"
+        },
+        "client_nonce": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "project_id",
+        "channel_id",
+        "user_id",
+        "body",
+        "client_nonce",
+        "created_at"
+      ]
+    },
+    "permissions": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "code": {
+          "format": "text",
+          "type": "string"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "category": {
+          "format": "text",
+          "type": "string"
+        },
+        "description": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "code",
+        "name",
+        "category"
+      ]
+    },
+    "collaboration_events": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "project_id": {
+          "description": "Note:\nThis is a Foreign Key to `collaboration_projects.id`.<fk table='collaboration_projects' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "body": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "project_id",
+        "user_id",
+        "body",
+        "created_at"
+      ]
+    },
+    "idle_alerts": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "default": 1,
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "duration_seconds": {
+          "default": 600,
+          "format": "integer",
+          "type": "integer"
+        },
+        "reason": {
+          "default": "Break",
+          "format": "text",
+          "type": "string"
+        },
+        "explanation": {
+          "format": "text",
+          "type": "string"
+        },
+        "custom_reason": {
+          "format": "text",
+          "type": "string"
+        },
+        "status": {
+          "default": "pending",
+          "format": "text",
+          "type": "string"
+        },
+        "reviewed_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "reviewed_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "review_notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "alert_type": {
+          "format": "text",
+          "type": "string"
+        },
+        "severity": {
+          "format": "text",
+          "type": "string"
+        },
+        "description": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "employee_id",
+        "duration_seconds",
+        "created_at"
+      ]
+    },
+    "leave_balances": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "leave_type": {
+          "format": "text",
+          "type": "string"
+        },
+        "allocated_days": {
+          "default": 20,
+          "format": "integer",
+          "type": "integer"
+        },
+        "used_days": {
+          "default": 0,
+          "format": "integer",
+          "type": "integer"
+        },
+        "remaining_days": {
+          "default": 20,
+          "format": "integer",
+          "type": "integer"
+        },
+        "year": {
+          "default": 2026,
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "employee_id",
+        "leave_type",
+        "created_at"
+      ]
+    },
+    "teams": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "default": 1,
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "supervisor_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "description": {
+          "format": "text",
+          "type": "string"
+        },
+        "region_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "territory_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "hr_report_deliveries": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "run_id": {
+          "description": "Note:\nThis is a Foreign Key to `hr_report_runs.id`.<fk table='hr_report_runs' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "recipient": {
+          "format": "text",
+          "type": "string"
+        },
+        "state": {
+          "format": "text",
+          "type": "string"
+        },
+        "attempts": {
+          "default": 1,
+          "format": "integer",
+          "type": "integer"
+        },
+        "message_id": {
+          "format": "text",
+          "type": "string"
+        },
+        "error": {
+          "format": "text",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "run_id",
+        "recipient",
+        "state",
+        "attempts",
+        "updated_at"
+      ]
+    },
+    "inventory_transactions": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "product_id": {
+          "description": "Note:\nThis is a Foreign Key to `products.id`.<fk table='products' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "change_quantity": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "previous_quantity": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "new_quantity": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "type": {
+          "format": "text",
+          "type": "string"
+        },
+        "reference_id": {
+          "format": "text",
+          "type": "string"
+        },
+        "notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_by": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "product_id",
+        "change_quantity",
+        "previous_quantity",
+        "new_quantity",
+        "type",
+        "created_at"
+      ]
+    },
+    "warehouses": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "default": 1,
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "location": {
+          "format": "text",
+          "type": "string"
+        },
+        "address": {
+          "format": "text",
+          "type": "string"
+        },
+        "state": {
+          "format": "text",
+          "type": "string"
+        },
+        "city": {
+          "format": "text",
+          "type": "string"
+        },
+        "latitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "longitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "inventory_alerts": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "product_id": {
+          "description": "Note:\nThis is a Foreign Key to `products.id`.<fk table='products' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "alert_type": {
+          "default": "LOW_STOCK",
+          "format": "text",
+          "type": "string"
+        },
+        "severity": {
+          "default": "MEDIUM",
+          "format": "text",
+          "type": "string"
+        },
+        "description": {
+          "format": "text",
+          "type": "string"
+        },
+        "status": {
+          "default": "OPEN",
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "alert_type",
+        "severity",
+        "description",
+        "status",
+        "created_at"
+      ]
+    },
+    "announcements": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "title": {
+          "format": "text",
+          "type": "string"
+        },
+        "message": {
+          "format": "text",
+          "type": "string"
+        },
+        "category": {
+          "default": "General",
+          "format": "text",
+          "type": "string"
+        },
+        "priority": {
+          "default": "NORMAL",
+          "format": "text",
+          "type": "string"
+        },
+        "target_audience": {
+          "default": "ALL",
+          "format": "text",
+          "type": "string"
+        },
+        "author_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "pinned": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "title",
+        "message",
+        "created_at"
+      ]
+    },
+    "holidays": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "date": {
+          "format": "date",
+          "type": "string"
+        },
+        "description": {
+          "format": "text",
+          "type": "string"
+        },
+        "year": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "date",
+        "year",
+        "created_at"
+      ]
+    },
+    "departments": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "code": {
+          "format": "text",
+          "type": "string"
+        },
+        "description": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "code",
+        "created_at"
+      ]
+    },
+    "order_items": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "order_id": {
+          "description": "Note:\nThis is a Foreign Key to `orders.id`.<fk table='orders' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "product_id": {
+          "description": "Note:\nThis is a Foreign Key to `products.id`.<fk table='products' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "quantity": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "unit_price": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "total_price": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "order_id",
+        "product_id",
+        "quantity",
+        "unit_price",
+        "total_price",
+        "created_at"
+      ]
+    },
+    "hr_report_settings": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "enabled": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "recipients": {
+          "format": "jsonb"
+        },
+        "updated_by": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "enabled",
+        "recipients",
+        "updated_at"
+      ]
+    },
+    "payslips": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "pay_month": {
+          "format": "date",
+          "type": "string"
+        },
+        "basic_salary": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "housing_allowance": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "transport_allowance": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "other_allowance": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "gross_pay": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "tax_paye": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "pension": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "other_deductions": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "total_deductions": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "net_pay": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "status": {
+          "default": "published",
+          "format": "text",
+          "type": "string"
+        },
+        "generated_by": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "pdf_url": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "employee_id",
+        "pay_month",
+        "basic_salary",
+        "housing_allowance",
+        "transport_allowance",
+        "other_allowance",
+        "gross_pay",
+        "tax_paye",
+        "pension",
+        "other_deductions",
+        "total_deductions",
+        "net_pay",
+        "status",
+        "created_at"
+      ]
+    },
+    "competitor_intel": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "agent_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "customer_id": {
+          "description": "Note:\nThis is a Foreign Key to `customers.id`.<fk table='customers' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "competitor_brand": {
+          "format": "text",
+          "type": "string"
+        },
+        "product_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "observed_price": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "our_price": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "price_difference": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "shelf_share_percent": {
+          "default": 50,
+          "format": "integer",
+          "type": "integer"
+        },
+        "promo_details": {
+          "format": "text",
+          "type": "string"
+        },
+        "picture_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "agent_id",
+        "competitor_brand",
+        "product_name",
+        "observed_price",
+        "our_price",
+        "price_difference",
+        "created_at"
+      ]
+    },
+    "workforce_movement_events": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "session_id": {
+          "description": "Note:\nThis is a Foreign Key to `workforce_access_sessions.id`.<fk table='workforce_access_sessions' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "kind": {
+          "format": "text",
+          "type": "string"
+        },
+        "location_id": {
+          "description": "Note:\nThis is a Foreign Key to `work_locations.id`.<fk table='work_locations' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "observed_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "details": {
+          "format": "jsonb"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "user_id",
+        "employee_id",
+        "session_id",
+        "kind",
+        "observed_at",
+        "details"
+      ]
+    },
+    "workforce_movement_notices": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "event_id": {
+          "description": "Note:\nThis is a Foreign Key to `workforce_movement_events.id`.<fk table='workforce_movement_events' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "title": {
+          "format": "text",
+          "type": "string"
+        },
+        "body": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "read_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "user_id",
+        "event_id",
+        "title",
+        "body",
+        "created_at"
+      ]
+    },
+    "field_activities": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "default": 1,
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "role": {
+          "format": "text",
+          "type": "string"
+        },
+        "store_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "visit_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "activity_type": {
+          "format": "text",
+          "type": "string"
+        },
+        "title": {
+          "format": "text",
+          "type": "string"
+        },
+        "description": {
+          "format": "text",
+          "type": "string"
+        },
+        "photo_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "latitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "longitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "timestamp": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "metadata": {
+          "format": "jsonb"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "settlements": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "agent_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "settlement_date": {
+          "default": "CURRENT_DATE",
+          "format": "date",
+          "type": "string"
+        },
+        "total_collected": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "cash_in_hand": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "bank_transfer_amount": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "deposit_slip_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "reconciliation_status": {
+          "default": "PENDING_AUDIT",
+          "format": "text",
+          "type": "string"
+        },
+        "audited_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "audited_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "agent_id",
+        "created_at"
+      ]
+    },
+    "regions": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "code": {
+          "format": "text",
+          "type": "string"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "description": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "code",
+        "name",
+        "created_at"
+      ]
+    },
+    "store_requests": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "store_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "address": {
+          "format": "text",
+          "type": "string"
+        },
+        "store_type": {
+          "default": "Supermarket",
+          "format": "text",
+          "type": "string"
+        },
+        "contact_person": {
+          "format": "text",
+          "type": "string"
+        },
+        "phone": {
+          "format": "text",
+          "type": "string"
+        },
+        "latitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "longitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "accuracy": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "requested_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "supervisor_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "status": {
+          "default": "pending",
+          "format": "text",
+          "type": "string"
+        },
+        "territory": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "store_photo_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "storefront_photo_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "geofence_radius": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "reviewed_by": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "reviewed_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "rejection_reason": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "store_name",
+        "address",
+        "created_at"
+      ]
+    },
+    "hr_report_runs": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "report_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "snapshot": {
+          "format": "jsonb"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "report_date",
+        "snapshot",
+        "created_at"
+      ]
+    },
+    "collaboration_projects": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "owner_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "format": "text",
+          "type": "string"
+        },
+        "color": {
+          "default": "#f97316",
+          "format": "text",
+          "type": "string"
+        },
+        "status": {
+          "default": "active",
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "owner_id",
+        "name",
+        "description",
+        "color",
+        "status",
+        "created_at"
+      ]
+    },
+    "inventory": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "product_id": {
+          "description": "Note:\nThis is a Foreign Key to `products.id`.<fk table='products' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "store_id": {
+          "description": "Note:\nThis is a Foreign Key to `stores.id`.<fk table='stores' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "location_id": {
+          "description": "Note:\nThis is a Foreign Key to `work_locations.id`.<fk table='work_locations' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "quantity": {
+          "default": 0,
+          "format": "integer",
+          "type": "integer"
+        },
+        "reserved_quantity": {
+          "default": 0,
+          "format": "integer",
+          "type": "integer"
+        },
+        "available_quantity": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "last_restocked_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "product_id",
+        "quantity",
+        "reserved_quantity",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "company_settings": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "working_days": {
+          "format": "text[]",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "working_hours_start": {
+          "default": "08:00",
+          "format": "text",
+          "type": "string"
+        },
+        "working_hours_end": {
+          "default": "17:00",
+          "format": "text",
+          "type": "string"
+        },
+        "work_start_time": {
+          "default": "08:00:00",
+          "format": "time without time zone",
+          "type": "string"
+        },
+        "work_end_time": {
+          "default": "17:00:00",
+          "format": "time without time zone",
+          "type": "string"
+        },
+        "timezone": {
+          "default": "Africa/Lagos",
+          "format": "text",
+          "type": "string"
+        },
+        "geofence_radius": {
+          "default": 150,
+          "format": "integer",
+          "type": "integer"
+        },
+        "geofence_radius_meters": {
+          "default": 150,
+          "format": "integer",
+          "type": "integer"
+        },
+        "currency": {
+          "default": "NGN",
+          "format": "text",
+          "type": "string"
+        },
+        "receipt_company_name": {
+          "default": "EXPERIENTIAL EDGE",
+          "format": "text",
+          "type": "string"
+        },
+        "receipt_tagline": {
+          "default": "Integrated Marketing & Commercial Distribution Solutions",
+          "format": "text",
+          "type": "string"
+        },
+        "receipt_title": {
+          "default": "EEDGED2U SALES RECEIPT",
+          "format": "text",
+          "type": "string"
+        },
+        "receipt_address": {
+          "default": "No 15, Atiba Osborne Mende, Maryland, Lagos, Nigeria",
+          "format": "text",
+          "type": "string"
+        },
+        "receipt_phone": {
+          "default": "+2348006393435",
+          "format": "text",
+          "type": "string"
+        },
+        "receipt_footer_note": {
+          "default": "Goods received in good condition are not returnable after 48 hours. Thank you for your business!",
+          "format": "text",
+          "type": "string"
+        },
+        "attendance_rules": {
+          "format": "jsonb"
+        },
+        "visit_rules": {
+          "format": "jsonb"
+        },
+        "sales_targets": {
+          "format": "jsonb"
+        },
+        "active_modules": {
+          "format": "jsonb"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "attendance": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "date": {
+          "default": "CURRENT_DATE",
+          "format": "date",
+          "type": "string"
+        },
+        "clock_in": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "clock_in_time": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "clock_out": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "clock_out_time": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "morning_clock_in": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "midday_clock_in": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "evening_clock_out": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "clock_in_latitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "clock_in_longitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "clock_out_latitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "clock_out_longitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "clock_in_address": {
+          "format": "text",
+          "type": "string"
+        },
+        "clock_out_address": {
+          "format": "text",
+          "type": "string"
+        },
+        "clock_in_accuracy": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "distance_meters": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "geofence_radius": {
+          "default": 150,
+          "format": "integer",
+          "type": "integer"
+        },
+        "is_geofence_verified": {
+          "default": true,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "is_override": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "override_reason": {
+          "format": "text",
+          "type": "string"
+        },
+        "override_by": {
+          "format": "text",
+          "type": "string"
+        },
+        "working_hours": {
+          "default": 0,
+          "format": "numeric",
+          "type": "number"
+        },
+        "working_duration_text": {
+          "default": "0h 00m",
+          "format": "text",
+          "type": "string"
+        },
+        "status": {
+          "default": "Present",
+          "format": "text",
+          "type": "string"
+        },
+        "attendance_type": {
+          "default": "STAFF_CLOCK_IN",
+          "format": "text",
+          "type": "string"
+        },
+        "activity": {
+          "default": "Staff Clock-In",
+          "format": "text",
+          "type": "string"
+        },
+        "is_late": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "supervisor_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "store_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "location_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "location_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "market": {
+          "format": "text",
+          "type": "string"
+        },
+        "assigned_market": {
+          "format": "text",
+          "type": "string"
+        },
+        "assigned_region": {
+          "format": "text",
+          "type": "string"
+        },
+        "assigned_state": {
+          "format": "text",
+          "type": "string"
+        },
+        "clock_in_device": {
+          "format": "text",
+          "type": "string"
+        },
+        "clock_out_device": {
+          "format": "text",
+          "type": "string"
+        },
+        "clock_out_accuracy": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "clock_in_distance_from_store": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "verification_mode": {
+          "format": "text",
+          "type": "string"
+        },
+        "formatted_distance": {
+          "format": "text",
+          "type": "string"
+        },
+        "geofence_status": {
+          "format": "text",
+          "type": "string"
+        },
+        "server_timestamp": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "local_time_lagos": {
+          "format": "text",
+          "type": "string"
+        },
+        "morning_lat": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "morning_lng": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "morning_distance": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "morning_geofence_status": {
+          "format": "text",
+          "type": "string"
+        },
+        "midday_lat": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "midday_lng": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "midday_distance": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "midday_geofence_status": {
+          "format": "text",
+          "type": "string"
+        },
+        "evening_lat": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "evening_lng": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "evening_distance": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "evening_geofence_status": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "employee_id",
+        "date",
+        "status",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "users": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "full_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "email": {
+          "format": "text",
+          "type": "string"
+        },
+        "phone": {
+          "format": "text",
+          "type": "string"
+        },
+        "password_hash": {
+          "format": "text",
+          "type": "string"
+        },
+        "role_code": {
+          "default": "STAFF_MEMBER",
+          "format": "text",
+          "type": "string"
+        },
+        "status": {
+          "default": "active",
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "requires_password_change": {
+          "default": true,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "password_changed_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "first_login_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "onboarding_status": {
+          "default": "Account Created",
+          "format": "text",
+          "type": "string"
+        },
+        "raw_phone": {
+          "format": "text",
+          "type": "string"
+        },
+        "auth_user_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "uuid": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "reset_token": {
+          "format": "text",
+          "type": "string"
+        },
+        "reset_token_expires_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "session_invalid_before": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "full_name",
+        "password_hash",
+        "role_code",
+        "status",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "workforce_report_notices": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "report_id": {
+          "description": "Note:\nThis is a Foreign Key to `workforce_executive_reports.id`.<fk table='workforce_executive_reports' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "title": {
+          "format": "text",
+          "type": "string"
+        },
+        "body": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "read_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "user_id",
+        "report_id",
+        "title",
+        "body",
+        "created_at"
+      ]
+    },
+    "stores": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "code": {
+          "format": "text",
+          "type": "string"
+        },
+        "name": {
+          "format": "text",
+          "type": "string"
+        },
+        "store_type": {
+          "default": "Supermarket",
+          "format": "text",
+          "type": "string"
+        },
+        "contact_person": {
+          "format": "text",
+          "type": "string"
+        },
+        "phone": {
+          "format": "text",
+          "type": "string"
+        },
+        "email": {
+          "format": "text",
+          "type": "string"
+        },
+        "address": {
+          "format": "text",
+          "type": "string"
+        },
+        "territory": {
+          "format": "text",
+          "type": "string"
+        },
+        "latitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "longitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "geofence_radius": {
+          "default": 150,
+          "format": "integer",
+          "type": "integer"
+        },
+        "supervisor_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "assigned_field_agents": {
+          "format": "integer[]",
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "assigned_sales_agents": {
+          "format": "integer[]",
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "status": {
+          "default": "active",
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "code",
+        "name",
+        "status",
+        "created_at"
+      ]
+    },
+    "sales_activities": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "default": 1,
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "store_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "customer_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "visit_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "order_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "activity_type": {
+          "format": "text",
+          "type": "string"
+        },
+        "units_sold": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "amount": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "notes": {
+          "format": "text",
+          "type": "string"
+        },
+        "photo_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "latitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "longitude": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "timestamp": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "visit_reports": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "visit_id": {
+          "description": "Note:\nThis is a Foreign Key to `visits.id`.<fk table='visits' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "person_met": {
+          "format": "text",
+          "type": "string"
+        },
+        "visit_outcome": {
+          "format": "text",
+          "type": "string"
+        },
+        "sales_status": {
+          "format": "text",
+          "type": "string"
+        },
+        "customer_feedback": {
+          "format": "text",
+          "type": "string"
+        },
+        "competitor_activity": {
+          "format": "text",
+          "type": "string"
+        },
+        "stock_availability": {
+          "format": "text",
+          "type": "string"
+        },
+        "issues_identified": {
+          "format": "text",
+          "type": "string"
+        },
+        "order_created": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "order_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "follow_up_required": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "follow_up_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "visit_id",
+        "created_at"
+      ]
+    },
+    "notifications": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "employee_id": {
+          "description": "Note:\nThis is a Foreign Key to `employees.id`.<fk table='employees' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "type": {
+          "default": "General",
+          "format": "text",
+          "type": "string"
+        },
+        "title": {
+          "format": "text",
+          "type": "string"
+        },
+        "body": {
+          "format": "text",
+          "type": "string"
+        },
+        "is_read": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "company_id": {
+          "default": 1,
+          "format": "integer",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "body",
+        "created_at"
+      ]
+    },
+    "audit_logs": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "default": 1,
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_email": {
+          "format": "text",
+          "type": "string"
+        },
+        "action": {
+          "format": "text",
+          "type": "string"
+        },
+        "entity": {
+          "format": "text",
+          "type": "string"
+        },
+        "entity_id": {
+          "format": "text",
+          "type": "string"
+        },
+        "previous_value": {
+          "format": "jsonb"
+        },
+        "new_value": {
+          "format": "jsonb"
+        },
+        "ip_address": {
+          "format": "text",
+          "type": "string"
+        },
+        "device": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "actor_id": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "actor_email": {
+          "format": "text",
+          "type": "string"
+        },
+        "metadata": {
+          "format": "jsonb"
+        },
+        "user_agent": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "action",
+        "created_at"
+      ]
+    },
+    "nexus_intelligence_runs": {
+      "properties": {
+        "id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "company_id": {
+          "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "user_id": {
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>",
+          "format": "integer",
+          "type": "integer"
+        },
+        "period_days": {
+          "format": "integer",
+          "type": "integer"
+        },
+        "question_hash": {
+          "format": "text",
+          "type": "string"
+        },
+        "evidence_hash": {
+          "format": "text",
+          "type": "string"
+        },
+        "result": {
+          "format": "jsonb"
+        },
+        "evidence": {
+          "format": "jsonb"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company_id",
+        "user_id",
+        "period_days",
+        "question_hash",
+        "evidence_hash",
+        "result",
+        "evidence",
+        "created_at"
+      ]
+    }
+  },
+  "paths": {
+    "/rpc/rls_auto_enable": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/collaboration_process_due": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_now": {
+                  "format": "timestamp with time zone",
+                  "type": "string"
+                },
+                "p_user_id": {
+                  "format": "integer",
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/workforce_daily_reports": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/save_employee_attendance": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_employee_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_record": {
+                  "format": "jsonb"
+                }
+              },
+              "required": [
+                "p_employee_id",
+                "p_company_id",
+                "p_record"
+              ],
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/hr_report_claim": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_recipient": {
+                  "format": "text",
+                  "type": "string"
+                },
+                "p_run_id": {
+                  "format": "integer",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "p_company_id",
+                "p_run_id",
+                "p_recipient"
+              ],
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/workforce_activity_deliver": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/nexus_operational_snapshot": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_period": {
+                  "format": "integer",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "p_company_id"
+              ],
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/workforce_access_commit": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_action": {
+                  "format": "text",
+                  "type": "string"
+                },
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_data": {
+                  "format": "jsonb"
+                },
+                "p_session_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_user_id": {
+                  "format": "integer",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "p_session_id",
+                "p_user_id",
+                "p_company_id",
+                "p_action",
+                "p_data"
+              ],
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/workforce_executive_rollup": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_day": {
+                  "format": "date",
+                  "type": "string"
+                },
+                "p_notify": {
+                  "format": "boolean",
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "p_company_id"
+              ],
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/application_release_readiness": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/workforce_activity_process_due": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/nexus_claim_generation": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "p_company_id"
+              ],
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/workforce_activity_process_user": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_now": {
+                  "format": "timestamp with time zone",
+                  "type": "string"
+                },
+                "p_user_id": {
+                  "format": "integer",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "p_user_id"
+              ],
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/hr_review_leave": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_actor_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_approve": {
+                  "format": "boolean",
+                  "type": "boolean"
+                },
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_reason": {
+                  "format": "text",
+                  "type": "string"
+                },
+                "p_request_id": {
+                  "format": "integer",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "p_company_id",
+                "p_actor_id",
+                "p_request_id",
+                "p_approve",
+                "p_reason"
+              ],
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/hr_report_prepare": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_day": {
+                  "format": "date",
+                  "type": "string"
+                },
+                "p_snapshot": {
+                  "format": "jsonb"
+                }
+              },
+              "required": [
+                "p_company_id",
+                "p_day",
+                "p_snapshot"
+              ],
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/collaboration_commit": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_action": {
+                  "format": "text",
+                  "type": "string"
+                },
+                "p_actor_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_data": {
+                  "format": "jsonb"
+                },
+                "p_project_id": {
+                  "format": "integer",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "p_actor_id",
+                "p_company_id",
+                "p_project_id",
+                "p_action",
+                "p_data"
+              ],
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/workforce_report_claim_ai": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_report_id": {
+                  "format": "integer",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "p_report_id",
+                "p_company_id"
+              ],
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/collaboration_create_project": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_actor_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_data": {
+                  "format": "jsonb"
+                }
+              },
+              "required": [
+                "p_actor_id",
+                "p_company_id",
+                "p_data"
+              ],
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/hr_reporting_readiness": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/assign_employee_workplace": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_actor_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_actor_name": {
+                  "format": "text",
+                  "type": "string"
+                },
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_employee_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_end": {
+                  "format": "timestamp with time zone",
+                  "type": "string"
+                },
+                "p_location_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_reason": {
+                  "format": "text",
+                  "type": "string"
+                },
+                "p_start": {
+                  "format": "timestamp with time zone",
+                  "type": "string"
+                },
+                "p_type": {
+                  "format": "text",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "p_company_id",
+                "p_employee_id",
+                "p_location_id",
+                "p_type",
+                "p_start",
+                "p_end",
+                "p_actor_id",
+                "p_actor_name",
+                "p_reason"
+              ],
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/workforce_activity_heartbeat": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_client_id": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_sequence": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_stop": {
+                  "format": "boolean",
+                  "type": "boolean"
+                },
+                "p_user_id": {
+                  "format": "integer",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "p_user_id",
+                "p_company_id",
+                "p_client_id",
+                "p_sequence"
+              ],
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "/rpc/remove_employee_workplace": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_actor_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_actor_name": {
+                  "format": "text",
+                  "type": "string"
+                },
+                "p_assignment_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_company_id": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "p_reason": {
+                  "format": "text",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "p_company_id",
+                "p_assignment_id",
+                "p_actor_id",
+                "p_actor_name",
+                "p_reason"
+              ],
+              "type": "object"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

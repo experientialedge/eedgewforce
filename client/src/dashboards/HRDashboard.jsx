@@ -505,10 +505,10 @@ export default function HRDashboard({ user, initialTab = 'overview', onSelectTab
                     </span>
                   </div>
                   <h4 className="text-sm font-black mt-1">
-                    {sos.agent?.first_name || 'Godfrey'} {sos.agent?.last_name || 'Okorie'}: {sos.message}
+                    {sos.agent?.first_name || 'Staff member'} {sos.agent?.last_name || ''}: {sos.message}
                   </h4>
                   <p className="text-xs opacity-90 mt-0.5">
-                    GPS Coordinates: {sos.latitude?.toFixed(5)}, {sos.longitude?.toFixed(5)} (±{Math.round(sos.accuracy || 0)}m)
+                    GPS Coordinates: {sos.latitude?.toFixed(5)}, {sos.longitude?.toFixed(5)} (±{sos.accuracy == null ? 'unknown' : `${Math.round(sos.accuracy)}m`})
                   </p>
                 </div>
               </div>
@@ -1232,7 +1232,7 @@ export default function HRDashboard({ user, initialTab = 'overview', onSelectTab
                       </span>
                     </div>
                     <h3 className="text-base font-black mt-1">
-                      {sos.agent?.first_name || 'Godfrey'} {sos.agent?.last_name || 'Okorie'} ({sos.agent?.employee_code || 'EMP-1002'})
+                      {sos.agent?.first_name || 'Staff member'} {sos.agent?.last_name || ''} ({sos.agent?.employee_code || 'EMP-1002'})
                     </h3>
                     <p className="text-xs font-semibold opacity-95 mt-0.5">
                       "{sos.message}"

@@ -1,3 +1,4 @@
+import { createNotification, presentNotification } from './notificationRepository.js';
 // ==============================================================================
 // EDGEWFORCE - NOTIFICATION ENGINE SERVICE
 // In-App Notifications, Push Subscriptions & Emergency Chimes
@@ -13,14 +14,7 @@ export const notificationService = {
    * Dispatches a notification to an employee.
    */
   async notify(employeeId, type, title, body, link = null) {
-    return await db.insert('notifications', {
-      employee_id: Number(employeeId),
-      type: type || 'System',
-      title,
-      body,
-      link: link || null,
-      read: false
-    });
+    return createNotification({ employee_id: employeeId, type: type || 'System', title, body });
   },
 
   /**
@@ -28,6 +22,7 @@ export const notificationService = {
    */
   async getNotifications(employeeId, user = null) {
     let list = employeeId ? await db.find('notifications', { employee_id: Number(employeeId) }, { order: { column: 'created_at', ascending: false } }) : [];
+    list = list.map(presentNotification);
     if (user) {
       list = [...await workforceNoticeService.list(user),...list];
       list = list.filter(n => !n.company_id || Number(n.company_id) === Number(user.company_id));
@@ -58,9 +53,9 @@ export const notificationService = {
       return collaborationService.markRead(user, String(notificationId).slice(8));
     }
     if (notificationId === 'all') {
-      const all = employeeId ? await db.find('notifications', { employee_id: Number(employeeId), read: false }) : [];
+      const all = employeeId ? await db.find('notifications', { employee_id: Number(employeeId), is_read: false }) : [];
       for (const n of all) {
-        await db.update('notifications', n.id, { read: true });
+        await db.update('notifications', n.id, { is_read: true });
       }
       if (user) {
         for (const notice of await workforceNoticeService.list(user)) if(!notice.read)await workforceNoticeService.markRead(user,notice.id);
@@ -73,7 +68,7 @@ export const notificationService = {
 
     const notification = await db.findById('notifications', notificationId);
     if (!notification || Number(notification.employee_id) !== Number(employeeId)) throw new Error('Notification not found.');
-    return await db.update('notifications', notificationId, { read: true });
+    return await db.update('notifications', notificationId, { is_read: true });
   },
 
   /**
