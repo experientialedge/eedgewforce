@@ -12,8 +12,13 @@ check('Production mode',process.env.NODE_ENV==='production');
 check('Website build exists',fs.existsSync(path.join(root,'client/dist/index.html')));
 check('HTTPS website origin',process.env.CLIENT_URL?.split(',').every(v=>origin(v.trim())));
 check('Private JWT signing secret',process.env.JWT_SECRET?.length>=32&&!/^(your_|replace|example|changeme)/i.test(process.env.JWT_SECRET));
-check('Supabase URL',origin(process.env.SUPABASE_URL));
-check('Supabase server key',process.env.SUPABASE_SERVICE_ROLE_KEY?.length>20);
+if(process.env.DATA_BACKEND==='mysql'){
+  check('MySQL private settings',process.env.MYSQL_DATABASE&&process.env.MYSQL_USER&&process.env.MYSQL_PASSWORD);
+  check('Browser uses internal authentication',process.env.VITE_DATA_BACKEND==='mysql');
+}else{
+  check('Supabase URL',origin(process.env.SUPABASE_URL));
+  check('Supabase server key',process.env.SUPABASE_SERVICE_ROLE_KEY?.length>20);
+}
 check('Proxy configuration',/^[0-5]$/.test(process.env.TRUST_PROXY_HOPS||'0'));
 check('Cron owns background reminders',process.env.REMINDER_WORKER_ENABLED==='false');
 if(process.env.HR_DAILY_REPORTS_ENABLED==='true'){

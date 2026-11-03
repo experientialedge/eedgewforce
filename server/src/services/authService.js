@@ -115,7 +115,7 @@ export const authService = {
       if (!result?.data?.session) throw new Error('Invalid login credentials or authentication service unavailable.');
       token = result.data.session.access_token; refresh_token = result.data.session.refresh_token; authUser = result.data.user;
     }
-    if (!token && !isTestMode && user.email && !user.auth_user_id) {
+    if (!token && supabase && !isTestMode && user.email && !user.auth_user_id) {
       try {
         const sbRes = await supabaseAuthService.signIn({
           email: user.email,

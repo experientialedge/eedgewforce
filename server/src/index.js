@@ -93,6 +93,15 @@ app.use(cors({
 // 2. Request Body Parsers & Uploads
 app.use(express.json({ limit: '15mb' }));
 app.use(express.urlencoded({ extended: true, limit: '15mb' }));
+app.get('/uploads/:name', async (req,res,next) => {
+  if (db.backend !== 'mysql') return next();
+  try {
+    if (!/^[a-zA-Z0-9._-]+$/.test(req.params.name)) return res.sendStatus(404);
+    const file=await db.getFile(req.params.name);
+    if (!file) return res.sendStatus(404);
+    res.set({'Content-Type':file.content_type,'Cache-Control':'private, max-age=3600','X-Content-Type-Options':'nosniff'}).send(file.payload);
+  } catch (error) { next(error); }
+});
 app.use('/uploads', express.static(uploadDir));
 
 // 3. Rate Limiting
@@ -134,7 +143,7 @@ app.get('/api/health/ready', async (req, res) => {
       if (process.env.WORKFORCE_REPORTS_ENABLED === 'true' && !result.executive_reports) throw new Error('Executive report migration is required.');
       if (process.env.NEXUS_ENABLED === 'true' && !result.nexus) throw new Error('NEXUS migration is required.');
       if (process.env.HR_DAILY_REPORTS_ENABLED === 'true' && !await db.rpc('hr_reporting_readiness', {})) throw new Error('Daily HR reporting migration is required.');
-    } else await db.find('users', {}, { limit: 1 });
+    } else { await db.ready(); await db.find('users', {}, { limit: 1 }); }
     res.json({ ready: true, release: '2026-10-15' });
   } catch (err) {
     logger.error('Database readiness check failed: ' + err.message);

@@ -23,3 +23,32 @@ jobs:
       - run: node --test server/src/tests/cpanel_hosting.test.js
       - run: npm run package:cpanel
       - run: npm audit --omit=dev --audit-level=high
+  mysql:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: integration-test-only
+          MYSQL_DATABASE: edgewforce_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -pintegration-test-only"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      NODE_ENV: test
+      MYSQL_TESTS: 'true'
+      MYSQL_DATABASE: edgewforce_test
+      MYSQL_USER: root
+      MYSQL_PASSWORD: integration-test-only
+      MYSQL_HOST: 127.0.0.1
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --include=dev --include=optional
+      - run: node --test server/src/tests/mysql_backend.test.js server/src/tests/mysql_integration.test.js

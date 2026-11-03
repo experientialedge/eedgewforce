@@ -1,0 +1,6845 @@
+{
+  "ai_conversations": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "title": {
+        "format": "text",
+        "type": "string",
+        "default": "Sales Copilot Session",
+        "required": true
+      },
+      "context_data": {
+        "format": "jsonb",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "ai_messages": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "conversation_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "ai_conversations",
+          "column": "id"
+        }
+      },
+      "role": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "content": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "announcements": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "title": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "message": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "category": {
+        "format": "text",
+        "type": "string",
+        "default": "General",
+        "required": false
+      },
+      "priority": {
+        "format": "text",
+        "type": "string",
+        "default": "NORMAL",
+        "required": false
+      },
+      "target_audience": {
+        "format": "text",
+        "type": "string",
+        "default": "ALL",
+        "required": false
+      },
+      "author_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "pinned": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": false,
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "attendance": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "date": {
+        "format": "date",
+        "type": "string",
+        "default": "CURRENT_DATE",
+        "required": true
+      },
+      "clock_in": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "clock_in_time": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "clock_out": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "clock_out_time": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "morning_clock_in": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "midday_clock_in": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "evening_clock_out": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "clock_in_latitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "clock_in_longitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "clock_out_latitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "clock_out_longitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "clock_in_address": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "clock_out_address": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "clock_in_accuracy": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "distance_meters": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "geofence_radius": {
+        "format": "integer",
+        "type": "integer",
+        "default": 150,
+        "required": false
+      },
+      "is_geofence_verified": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": true,
+        "required": false
+      },
+      "is_override": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": false,
+        "required": false
+      },
+      "override_reason": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "override_by": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "working_hours": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "working_duration_text": {
+        "format": "text",
+        "type": "string",
+        "default": "0h 00m",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "Present",
+        "required": true
+      },
+      "attendance_type": {
+        "format": "text",
+        "type": "string",
+        "default": "STAFF_CLOCK_IN",
+        "required": false
+      },
+      "activity": {
+        "format": "text",
+        "type": "string",
+        "default": "Staff Clock-In",
+        "required": false
+      },
+      "is_late": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": false,
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "supervisor_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "store_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "location_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "location_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "market": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "assigned_market": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "assigned_region": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "assigned_state": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "clock_in_device": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "clock_out_device": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "clock_out_accuracy": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "clock_in_distance_from_store": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "verification_mode": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "formatted_distance": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "geofence_status": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "server_timestamp": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "local_time_lagos": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "morning_lat": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "morning_lng": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "morning_distance": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "morning_geofence_status": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "midday_lat": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "midday_lng": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "midday_distance": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "midday_geofence_status": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "evening_lat": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "evening_lng": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "evening_distance": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "evening_geofence_status": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "audit_logs": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": false
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "user_email": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "action": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "entity": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "entity_id": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "previous_value": {
+        "format": "jsonb",
+        "required": false
+      },
+      "new_value": {
+        "format": "jsonb",
+        "required": false
+      },
+      "ip_address": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "device": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "actor_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "actor_email": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "metadata": {
+        "format": "jsonb",
+        "required": false
+      },
+      "user_agent": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "branches": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "address": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "state": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "city": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "latitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "longitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": false
+      }
+    }
+  },
+  "collaboration_channels": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "project_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "collaboration_projects",
+          "column": "id"
+        }
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "description": {
+        "format": "text",
+        "type": "string",
+        "default": "",
+        "required": true
+      },
+      "created_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "collaboration_events": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "project_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "collaboration_projects",
+          "column": "id"
+        }
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "body": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "collaboration_members": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "project_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "collaboration_projects",
+          "column": "id"
+        }
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "role": {
+        "format": "text",
+        "type": "string",
+        "default": "member",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "collaboration_messages": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "project_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "collaboration_projects",
+          "column": "id"
+        }
+      },
+      "channel_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "collaboration_channels",
+          "column": "id"
+        }
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "parent_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "collaboration_messages",
+          "column": "id"
+        }
+      },
+      "body": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "client_nonce": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "collaboration_notices": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "project_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "collaboration_projects",
+          "column": "id"
+        }
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "task_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "collaboration_tasks",
+          "column": "id"
+        }
+      },
+      "source_key": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "kind": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "title": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "body": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "read_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "collaboration_projects": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "owner_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "description": {
+        "format": "text",
+        "type": "string",
+        "default": "",
+        "required": true
+      },
+      "color": {
+        "format": "text",
+        "type": "string",
+        "default": "#f97316",
+        "required": true
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "active",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "collaboration_tasks": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "project_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "collaboration_projects",
+          "column": "id"
+        }
+      },
+      "title": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "description": {
+        "format": "text",
+        "type": "string",
+        "default": "",
+        "required": true
+      },
+      "assignee_ids": {
+        "format": "jsonb",
+        "required": true
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "todo",
+        "required": true
+      },
+      "priority": {
+        "format": "text",
+        "type": "string",
+        "default": "normal",
+        "required": true
+      },
+      "scheduled_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "due_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "remind_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "recurrence": {
+        "format": "text",
+        "type": "string",
+        "default": "none",
+        "required": true
+      },
+      "series_id": {
+        "format": "uuid",
+        "type": "string",
+        "default": "gen_random_uuid()",
+        "required": true
+      },
+      "origin_task_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "collaboration_tasks",
+          "column": "id"
+        }
+      },
+      "created_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "version": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": true
+      },
+      "completed_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "collections": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "customer_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "customers",
+          "column": "id"
+        }
+      },
+      "agent_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "order_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "amount": {
+        "format": "numeric",
+        "type": "number",
+        "required": true
+      },
+      "payment_method": {
+        "format": "text",
+        "type": "string",
+        "default": "Bank Transfer",
+        "required": false
+      },
+      "reference_number": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "PAID",
+        "required": false
+      },
+      "payment_date": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "idempotency_key": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "paystack_reference": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "companies": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "uuid": {
+        "format": "uuid",
+        "type": "string",
+        "default": "gen_random_uuid()",
+        "required": true
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "business_type": {
+        "format": "text",
+        "type": "string",
+        "default": "Distribution",
+        "required": false
+      },
+      "industry": {
+        "format": "text",
+        "type": "string",
+        "default": "FMCG",
+        "required": false
+      },
+      "registration_number": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "email": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "phone": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "address": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "country": {
+        "format": "text",
+        "type": "string",
+        "default": "Nigeria",
+        "required": false
+      },
+      "state": {
+        "format": "text",
+        "type": "string",
+        "default": "Lagos",
+        "required": false
+      },
+      "city": {
+        "format": "text",
+        "type": "string",
+        "default": "Lagos",
+        "required": false
+      },
+      "logo_url": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "active",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "company_settings": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "working_days": {
+        "format": "text[]",
+        "type": "array",
+        "required": false
+      },
+      "working_hours_start": {
+        "format": "text",
+        "type": "string",
+        "default": "08:00",
+        "required": false
+      },
+      "working_hours_end": {
+        "format": "text",
+        "type": "string",
+        "default": "17:00",
+        "required": false
+      },
+      "work_start_time": {
+        "format": "time without time zone",
+        "type": "string",
+        "default": "08:00:00",
+        "required": false
+      },
+      "work_end_time": {
+        "format": "time without time zone",
+        "type": "string",
+        "default": "17:00:00",
+        "required": false
+      },
+      "timezone": {
+        "format": "text",
+        "type": "string",
+        "default": "Africa/Lagos",
+        "required": false
+      },
+      "geofence_radius": {
+        "format": "integer",
+        "type": "integer",
+        "default": 150,
+        "required": false
+      },
+      "geofence_radius_meters": {
+        "format": "integer",
+        "type": "integer",
+        "default": 150,
+        "required": false
+      },
+      "currency": {
+        "format": "text",
+        "type": "string",
+        "default": "NGN",
+        "required": false
+      },
+      "receipt_company_name": {
+        "format": "text",
+        "type": "string",
+        "default": "EXPERIENTIAL EDGE",
+        "required": false
+      },
+      "receipt_tagline": {
+        "format": "text",
+        "type": "string",
+        "default": "Integrated Marketing & Commercial Distribution Solutions",
+        "required": false
+      },
+      "receipt_title": {
+        "format": "text",
+        "type": "string",
+        "default": "EEDGED2U SALES RECEIPT",
+        "required": false
+      },
+      "receipt_address": {
+        "format": "text",
+        "type": "string",
+        "default": "No 15, Atiba Osborne Mende, Maryland, Lagos, Nigeria",
+        "required": false
+      },
+      "receipt_phone": {
+        "format": "text",
+        "type": "string",
+        "default": "+2348006393435",
+        "required": false
+      },
+      "receipt_footer_note": {
+        "format": "text",
+        "type": "string",
+        "default": "Goods received in good condition are not returnable after 48 hours. Thank you for your business!",
+        "required": false
+      },
+      "attendance_rules": {
+        "format": "jsonb",
+        "required": false
+      },
+      "visit_rules": {
+        "format": "jsonb",
+        "required": false
+      },
+      "sales_targets": {
+        "format": "jsonb",
+        "required": false
+      },
+      "active_modules": {
+        "format": "jsonb",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "competitor_intel": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "agent_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "customer_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "customers",
+          "column": "id"
+        }
+      },
+      "competitor_brand": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "product_name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "observed_price": {
+        "format": "numeric",
+        "type": "number",
+        "required": true
+      },
+      "our_price": {
+        "format": "numeric",
+        "type": "number",
+        "required": true
+      },
+      "price_difference": {
+        "format": "numeric",
+        "type": "number",
+        "required": true
+      },
+      "shelf_share_percent": {
+        "format": "integer",
+        "type": "integer",
+        "default": 50,
+        "required": false
+      },
+      "promo_details": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "picture_url": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "customers": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "code": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "business_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "customer_type": {
+        "format": "text",
+        "type": "string",
+        "default": "Retail",
+        "required": false
+      },
+      "tier": {
+        "format": "text",
+        "type": "string",
+        "default": "Tier 1",
+        "required": false
+      },
+      "territory": {
+        "format": "text",
+        "type": "string",
+        "default": "Lagos Mainland",
+        "required": false
+      },
+      "address": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "latitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "longitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "geofence_radius": {
+        "format": "integer",
+        "type": "integer",
+        "default": 150,
+        "required": false
+      },
+      "contact_person": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "phone": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "email": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "credit_limit": {
+        "format": "numeric",
+        "type": "number",
+        "default": 1000000,
+        "required": false
+      },
+      "balance": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "assigned_agent_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "assigned_supervisor_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "active",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "region_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "territory_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "total_sales_ngn": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "gps_accuracy": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "last_gps_updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "google_maps_directions_url": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "registered_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "birthday": {
+        "format": "date",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "daily_summaries": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": false
+      },
+      "supervisor_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "date": {
+        "format": "date",
+        "type": "string",
+        "required": false
+      },
+      "total_members": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "field_agents": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "sales_agents": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "present": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "absent": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "late": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "geofence_violations": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "missing_checkouts": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "store_visits": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "tasks_completed": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "photos_uploaded": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "sales_generated": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": false
+      }
+    }
+  },
+  "deliveries": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "order_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "orders",
+          "column": "id"
+        }
+      },
+      "customer_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "customers",
+          "column": "id"
+        }
+      },
+      "driver_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "driver_phone": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "vehicle_number": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "dispatch_time": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "actual_delivery_time": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "delivery_status": {
+        "format": "text",
+        "type": "string",
+        "default": "PENDING",
+        "required": false
+      },
+      "recipient_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "recipient_signature": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "proof_of_delivery_photo": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "failure_reason": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "departments": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "code": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "description": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "employee_idle_sessions": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "start_time": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": true
+      },
+      "end_time": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "idle_duration_minutes": {
+        "format": "integer",
+        "type": "integer",
+        "default": 0,
+        "required": false
+      },
+      "latitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "longitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "location_address": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "reason": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "FLAGGED",
+        "required": false
+      },
+      "reviewed_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "employee_location_assignments": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "location_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "work_locations",
+          "column": "id"
+        }
+      },
+      "assignment_type": {
+        "format": "text",
+        "type": "string",
+        "default": "primary",
+        "required": false
+      },
+      "is_primary": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": false,
+        "required": false
+      },
+      "is_active": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": true,
+        "required": false
+      },
+      "start_date": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "end_date": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "reason": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "assigned_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "employees": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "employee_code": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "first_name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "last_name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "phone": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "department_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "departments",
+          "column": "id"
+        }
+      },
+      "department": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "position": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "territory": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "supervisor_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "rank_code": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "base_salary": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "housing_allowance": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "transport_allowance": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "other_allowance": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "performance_score": {
+        "format": "numeric",
+        "type": "number",
+        "default": 90,
+        "required": false
+      },
+      "hire_date": {
+        "format": "date",
+        "type": "string",
+        "default": "CURRENT_DATE",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "active",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "full_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "staff_id": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "personal_email": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "work_email": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "date_of_birth": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "marital_status": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "nationality": {
+        "format": "text",
+        "type": "string",
+        "default": "Nigerian",
+        "required": false
+      },
+      "address": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "home_address": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "city_lga": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "state_of_origin": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "state_of_residence": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "landmark": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "department_raw": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "date_of_joining": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "work_location": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "supervisor_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "emergency_contact_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "emergency_contact_relationship": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "emergency_contact_phone": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "blood_group": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "bank_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "account_number": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "hobbies_interests": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "flagged_for_review": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": false,
+        "required": false
+      },
+      "review_reason": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "onboarding_status": {
+        "format": "text",
+        "type": "string",
+        "default": "Account Created",
+        "required": false
+      },
+      "auth_user_id": {
+        "format": "uuid",
+        "type": "string",
+        "required": false
+      },
+      "email": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "state": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "lga": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "city": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "face_enrolled": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": false,
+        "required": false
+      },
+      "invitation_sent_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "reporting_manager_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      }
+    }
+  },
+  "face_events": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "event_type": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "image_url": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "confidence": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "match_threshold": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0.8,
+        "required": false
+      },
+      "verified": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": false,
+        "required": true
+      },
+      "provider": {
+        "format": "text",
+        "type": "string",
+        "default": "INTERNAL_FACE_ENGINE",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "field_activities": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": false
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "role": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "store_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "visit_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "activity_type": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "title": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "description": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "photo_url": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "latitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "longitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "timestamp": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": false
+      },
+      "metadata": {
+        "format": "jsonb",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": false
+      }
+    }
+  },
+  "file_uploads": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "bucket": {
+        "format": "text",
+        "type": "string",
+        "default": "edgewforce-assets",
+        "required": true
+      },
+      "path": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "original_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "mime_type": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "size_bytes": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "uploaded_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "holidays": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "date": {
+        "format": "date",
+        "type": "string",
+        "required": true
+      },
+      "description": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "year": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "hr_report_deliveries": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "run_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "hr_report_runs",
+          "column": "id"
+        }
+      },
+      "recipient": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "state": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "attempts": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": true
+      },
+      "message_id": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "error": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "hr_report_runs": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "report_date": {
+        "format": "date",
+        "type": "string",
+        "required": true
+      },
+      "snapshot": {
+        "format": "jsonb",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "hr_report_settings": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "enabled": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": false,
+        "required": true
+      },
+      "recipients": {
+        "format": "jsonb",
+        "required": true
+      },
+      "updated_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "idle_alerts": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "duration_seconds": {
+        "format": "integer",
+        "type": "integer",
+        "default": 600,
+        "required": true
+      },
+      "reason": {
+        "format": "text",
+        "type": "string",
+        "default": "Break",
+        "required": false
+      },
+      "explanation": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "custom_reason": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "pending",
+        "required": false
+      },
+      "reviewed_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "reviewed_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "review_notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "alert_type": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "severity": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "description": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "inventory": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "product_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "products",
+          "column": "id"
+        }
+      },
+      "store_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "stores",
+          "column": "id"
+        }
+      },
+      "location_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "work_locations",
+          "column": "id"
+        }
+      },
+      "quantity": {
+        "format": "integer",
+        "type": "integer",
+        "default": 0,
+        "required": true
+      },
+      "reserved_quantity": {
+        "format": "integer",
+        "type": "integer",
+        "default": 0,
+        "required": true
+      },
+      "available_quantity": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "last_restocked_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "inventory_alerts": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "product_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "products",
+          "column": "id"
+        }
+      },
+      "alert_type": {
+        "format": "text",
+        "type": "string",
+        "default": "LOW_STOCK",
+        "required": true
+      },
+      "severity": {
+        "format": "text",
+        "type": "string",
+        "default": "MEDIUM",
+        "required": true
+      },
+      "description": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "OPEN",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "inventory_movements": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "product_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "products",
+          "column": "id"
+        }
+      },
+      "warehouse_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "movement_type": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "quantity": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "previous_quantity": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "new_quantity": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "reference_number": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "recorded_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "inventory_transactions": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "product_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "products",
+          "column": "id"
+        }
+      },
+      "change_quantity": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "previous_quantity": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "new_quantity": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "type": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "reference_id": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "leave_balances": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "leave_type": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "allocated_days": {
+        "format": "integer",
+        "type": "integer",
+        "default": 20,
+        "required": false
+      },
+      "used_days": {
+        "format": "integer",
+        "type": "integer",
+        "default": 0,
+        "required": false
+      },
+      "remaining_days": {
+        "format": "integer",
+        "type": "integer",
+        "default": 20,
+        "required": false
+      },
+      "year": {
+        "format": "integer",
+        "type": "integer",
+        "default": 2026,
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "leave_requests": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "leave_type": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "start_date": {
+        "format": "date",
+        "type": "string",
+        "required": true
+      },
+      "end_date": {
+        "format": "date",
+        "type": "string",
+        "required": true
+      },
+      "days": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "reason": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "pending",
+        "required": false
+      },
+      "approved_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "approved_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "reviewed_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "reviewed_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "review_notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "location_alerts": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "supervisor_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": false
+      },
+      "alert_type": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "severity": {
+        "format": "text",
+        "type": "string",
+        "default": "warning",
+        "required": false
+      },
+      "message": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "details": {
+        "format": "jsonb",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "active",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "resolved_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "resolved_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "resolution_notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "location_assignment_history": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "previous_location_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "work_locations",
+          "column": "id"
+        }
+      },
+      "previous_location_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "new_location_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "work_locations",
+          "column": "id"
+        }
+      },
+      "new_location_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "assignment_type": {
+        "format": "text",
+        "type": "string",
+        "default": "primary",
+        "required": true
+      },
+      "action": {
+        "format": "text",
+        "type": "string",
+        "default": "ASSIGNED",
+        "required": true
+      },
+      "changed_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "changed_by_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "reason": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "location_logs": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "employee_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "role": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": false
+      },
+      "supervisor_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "store_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "location_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "assigned_market": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "assigned_region": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "assigned_state": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "timestamp": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": false
+      },
+      "server_timestamp": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": false
+      },
+      "local_time_lagos": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "latitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "longitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "accuracy": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "address": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "current_activity": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "activity": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "attendance_type": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "attendance_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "is_inside_geofence": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": true,
+        "required": false
+      },
+      "distance_from_store": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "geofence_status": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "success",
+        "required": false
+      },
+      "battery_level": {
+        "format": "integer",
+        "type": "integer",
+        "default": 100,
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "nexus_generation_leases": {
+    "primaryKey": "company_id",
+    "columns": {
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "last_attempt_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": true
+      }
+    }
+  },
+  "nexus_intelligence_runs": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "period_days": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "question_hash": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "evidence_hash": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "result": {
+        "format": "jsonb",
+        "required": true
+      },
+      "evidence": {
+        "format": "jsonb",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "notifications": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "type": {
+        "format": "text",
+        "type": "string",
+        "default": "General",
+        "required": false
+      },
+      "title": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "body": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "is_read": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": false,
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": false
+      }
+    }
+  },
+  "okr_key_results": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "okr_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "okrs",
+          "column": "id"
+        }
+      },
+      "title": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "target_value": {
+        "format": "numeric",
+        "type": "number",
+        "default": 100,
+        "required": true
+      },
+      "current_value": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": true
+      },
+      "unit": {
+        "format": "text",
+        "type": "string",
+        "default": "%",
+        "required": true
+      },
+      "progress": {
+        "format": "integer",
+        "type": "integer",
+        "default": 0,
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "okrs": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "objective": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "key_result": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "target_value": {
+        "format": "numeric",
+        "type": "number",
+        "required": true
+      },
+      "current_value": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "progress": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "quarter": {
+        "format": "text",
+        "type": "string",
+        "default": "Q3 2026",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "In Progress",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "order_approvals": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": false
+      },
+      "order_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "orders",
+          "column": "id"
+        }
+      },
+      "action": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "reviewed_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "approved_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": false
+      },
+      "approver_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "comments": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "order_items": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "order_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "orders",
+          "column": "id"
+        }
+      },
+      "product_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "products",
+          "column": "id"
+        }
+      },
+      "quantity": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "unit_price": {
+        "format": "numeric",
+        "type": "number",
+        "required": true
+      },
+      "total_price": {
+        "format": "numeric",
+        "type": "number",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "orders": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "order_number": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "customer_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "customers",
+          "column": "id"
+        }
+      },
+      "sales_agent_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "subtotal": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": true
+      },
+      "discount_amount": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "vat_amount": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "total_amount": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": true
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "PENDING_APPROVAL",
+        "required": true
+      },
+      "payment_status": {
+        "format": "text",
+        "type": "string",
+        "default": "UNPAID",
+        "required": true
+      },
+      "payment_method": {
+        "format": "text",
+        "type": "string",
+        "default": "Bank Transfer",
+        "required": false
+      },
+      "delivery_status": {
+        "format": "text",
+        "type": "string",
+        "default": "PENDING",
+        "required": true
+      },
+      "order_date": {
+        "format": "date",
+        "type": "string",
+        "default": "CURRENT_DATE",
+        "required": false
+      },
+      "approved_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "approved_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "idempotency_key": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "rejection_reason": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "payslips": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "pay_month": {
+        "format": "date",
+        "type": "string",
+        "required": true
+      },
+      "basic_salary": {
+        "format": "numeric",
+        "type": "number",
+        "required": true
+      },
+      "housing_allowance": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": true
+      },
+      "transport_allowance": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": true
+      },
+      "other_allowance": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": true
+      },
+      "gross_pay": {
+        "format": "numeric",
+        "type": "number",
+        "required": true
+      },
+      "tax_paye": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": true
+      },
+      "pension": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": true
+      },
+      "other_deductions": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": true
+      },
+      "total_deductions": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": true
+      },
+      "net_pay": {
+        "format": "numeric",
+        "type": "number",
+        "required": true
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "published",
+        "required": true
+      },
+      "generated_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": false
+      },
+      "pdf_url": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "permissions": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "code": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "category": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "description": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "products": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "sku": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "category": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "brand": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "unit": {
+        "format": "text",
+        "type": "string",
+        "default": "carton",
+        "required": false
+      },
+      "cost_price": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "price": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "selling_price": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "stock_quantity": {
+        "format": "integer",
+        "type": "integer",
+        "default": 100,
+        "required": false
+      },
+      "reorder_level": {
+        "format": "integer",
+        "type": "integer",
+        "default": 20,
+        "required": false
+      },
+      "min_stock_alert": {
+        "format": "integer",
+        "type": "integer",
+        "default": 20,
+        "required": false
+      },
+      "warehouse_name": {
+        "format": "text",
+        "type": "string",
+        "default": "Ikeja Central Depot",
+        "required": false
+      },
+      "shelve_location": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "active",
+        "required": true
+      },
+      "image_url": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "quantity_display": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "location_of_item": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "condition": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "shelf_number": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "public_employee_directory": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "employee_code": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "staff_id": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "first_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "last_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "full_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "job_title": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "department": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "work_email": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "work_phone": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "supervisor_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "work_location": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "push_subscriptions": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "endpoint": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "subscription_json": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "ranks": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "code": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "level": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "active": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": true,
+        "required": false
+      },
+      "description": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "regions": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "code": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "description": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "reminder_delivery_logs": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "reminder_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "task_reminders",
+          "column": "id"
+        }
+      },
+      "task_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "tasks",
+          "column": "id"
+        }
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "channel": {
+        "format": "character varying",
+        "type": "string",
+        "required": true
+      },
+      "status": {
+        "format": "character varying",
+        "type": "string",
+        "required": true
+      },
+      "provider_message_id": {
+        "format": "character varying",
+        "type": "string",
+        "required": false
+      },
+      "error_message": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "sent_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "timezone('utc'::text, now())",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "timezone('utc'::text, now())",
+        "required": false
+      }
+    }
+  },
+  "sales_activities": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": false
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "store_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "customer_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "visit_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "order_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "activity_type": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "units_sold": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "amount": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "photo_url": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "latitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "longitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "timestamp": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": false
+      }
+    }
+  },
+  "schedules": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "supervisor_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "supervisor_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "date": {
+        "format": "date",
+        "type": "string",
+        "default": "CURRENT_DATE",
+        "required": true
+      },
+      "shift_start": {
+        "format": "text",
+        "type": "string",
+        "default": "08:00",
+        "required": false
+      },
+      "shift_end": {
+        "format": "text",
+        "type": "string",
+        "default": "17:00",
+        "required": false
+      },
+      "total_planned_hours": {
+        "format": "numeric",
+        "type": "number",
+        "default": 8,
+        "required": false
+      },
+      "work_location": {
+        "format": "text",
+        "type": "string",
+        "default": "Assigned Territory",
+        "required": false
+      },
+      "notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "tasks": {
+        "format": "jsonb",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "Planned",
+        "required": true
+      },
+      "supervisor_approval_status": {
+        "format": "text",
+        "type": "string",
+        "default": "Pending",
+        "required": false
+      },
+      "supervisor_reviewed_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "supervisor_notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "hr_reviewed_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "hr_notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "settlements": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "agent_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "settlement_date": {
+        "format": "date",
+        "type": "string",
+        "default": "CURRENT_DATE",
+        "required": false
+      },
+      "total_collected": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "cash_in_hand": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "bank_transfer_amount": {
+        "format": "numeric",
+        "type": "number",
+        "default": 0,
+        "required": false
+      },
+      "deposit_slip_url": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "reconciliation_status": {
+        "format": "text",
+        "type": "string",
+        "default": "PENDING_AUDIT",
+        "required": false
+      },
+      "audited_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "audited_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "sos": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "agent_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "agent_phone": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "latitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": true
+      },
+      "longitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": true
+      },
+      "location_address": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "emergency_type": {
+        "format": "text",
+        "type": "string",
+        "default": "GENERAL_DISTRESS",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "ACTIVE",
+        "required": false
+      },
+      "acknowledged_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "acknowledged_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "resolved_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "resolved_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "resolution_notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "sos_events": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "agent_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "message": {
+        "format": "text",
+        "type": "string",
+        "default": "Emergency Assistance Required",
+        "required": true
+      },
+      "latitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "longitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "accuracy": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "address": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "battery_level": {
+        "format": "integer",
+        "type": "integer",
+        "default": 100,
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "active",
+        "required": true
+      },
+      "acknowledged_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "acknowledged_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "resolved_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "resolved_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "resolution_notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "store_requests": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "store_name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "address": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "store_type": {
+        "format": "text",
+        "type": "string",
+        "default": "Supermarket",
+        "required": false
+      },
+      "contact_person": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "phone": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "latitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "longitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "accuracy": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "requested_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "supervisor_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "pending",
+        "required": false
+      },
+      "territory": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "store_photo_url": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "storefront_photo_url": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "geofence_radius": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "reviewed_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "reviewed_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "rejection_reason": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "stores": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "code": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "store_type": {
+        "format": "text",
+        "type": "string",
+        "default": "Supermarket",
+        "required": false
+      },
+      "contact_person": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "phone": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "email": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "address": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "territory": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "latitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "longitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "geofence_radius": {
+        "format": "integer",
+        "type": "integer",
+        "default": 150,
+        "required": false
+      },
+      "supervisor_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "assigned_field_agents": {
+        "format": "integer[]",
+        "type": "array",
+        "required": false
+      },
+      "assigned_sales_agents": {
+        "format": "integer[]",
+        "type": "array",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "active",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "task_comments": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "task_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "tasks",
+          "column": "id"
+        }
+      },
+      "author_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "comment": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "task_reminders": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "task_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "tasks",
+          "column": "id"
+        }
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "reminder_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": true
+      },
+      "reminder_level": {
+        "format": "character varying",
+        "type": "string",
+        "default": "pre_deadline",
+        "required": true
+      },
+      "channels": {
+        "format": "jsonb",
+        "required": true
+      },
+      "status": {
+        "format": "character varying",
+        "type": "string",
+        "default": "scheduled",
+        "required": true
+      },
+      "attempts": {
+        "format": "integer",
+        "type": "integer",
+        "default": 0,
+        "required": true
+      },
+      "idempotency_key": {
+        "format": "character varying",
+        "type": "string",
+        "required": false
+      },
+      "error_message": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "sent_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "timezone('utc'::text, now())",
+        "required": false
+      }
+    }
+  },
+  "tasks": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "title": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "description": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "assigned_to": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "assigned_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "client_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "project_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "requires_client_dispatch": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": false,
+        "required": false
+      },
+      "sent_to_client": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": false,
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "pending",
+        "required": false
+      },
+      "priority": {
+        "format": "text",
+        "type": "string",
+        "default": "medium",
+        "required": false
+      },
+      "due_date": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "acknowledged_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "completed_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "progress": {
+        "format": "integer",
+        "type": "integer",
+        "default": 0,
+        "required": false
+      },
+      "department": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "supervisor_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "department_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "task_type": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "delivery_stages": {
+        "format": "jsonb",
+        "required": false
+      },
+      "due_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "acknowledged_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "completed_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "completion_notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "evidence_url": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "evidence_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "teams": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "supervisor_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "description": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "region_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "territory_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": false
+      }
+    }
+  },
+  "territories": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "region_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "regions",
+          "column": "id"
+        }
+      },
+      "code": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "users": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "full_name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "email": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "phone": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "password_hash": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "role_code": {
+        "format": "text",
+        "type": "string",
+        "default": "STAFF_MEMBER",
+        "required": true
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "active",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "requires_password_change": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": true,
+        "required": false
+      },
+      "password_changed_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "first_login_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "onboarding_status": {
+        "format": "text",
+        "type": "string",
+        "default": "Account Created",
+        "required": false
+      },
+      "raw_phone": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "auth_user_id": {
+        "format": "uuid",
+        "type": "string",
+        "required": false
+      },
+      "uuid": {
+        "format": "uuid",
+        "type": "string",
+        "required": false
+      },
+      "reset_token": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "reset_token_expires_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "session_invalid_before": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "visit_audits": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "visit_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "visits",
+          "column": "id"
+        }
+      },
+      "product_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "products",
+          "column": "id"
+        }
+      },
+      "stock_status": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "shelf_facing_count": {
+        "format": "integer",
+        "type": "integer",
+        "default": 0,
+        "required": false
+      },
+      "promo_active": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": false,
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "visit_reports": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "visit_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "visits",
+          "column": "id"
+        }
+      },
+      "person_met": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "visit_outcome": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "sales_status": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "customer_feedback": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "competitor_activity": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "stock_availability": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "issues_identified": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "order_created": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": false,
+        "required": false
+      },
+      "order_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "follow_up_required": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": false,
+        "required": false
+      },
+      "follow_up_date": {
+        "format": "date",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "visits": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "agent_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "customer_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "store_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "PLANNED",
+        "required": false
+      },
+      "planned_date": {
+        "format": "date",
+        "type": "string",
+        "default": "CURRENT_DATE",
+        "required": false
+      },
+      "planned_time": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "actual_arrival": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "actual_departure": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "duration_minutes": {
+        "format": "integer",
+        "type": "integer",
+        "default": 0,
+        "required": false
+      },
+      "check_in_lat": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "check_in_lng": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "is_geofence_verified": {
+        "format": "boolean",
+        "type": "boolean",
+        "default": false,
+        "required": false
+      },
+      "visit_purpose": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "shelf_share_percent": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "check_in_time": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "check_in_distance_meters": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "check_out_time": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "photo_evidence_url": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "signature_url": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "out_of_stock_skus": {
+        "format": "jsonb",
+        "required": false
+      },
+      "competitor_notes": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "warehouses": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "default": 1,
+        "required": false,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "location": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "address": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "state": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "city": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "latitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "longitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": false
+      }
+    }
+  },
+  "work_locations": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "name": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "location_type": {
+        "format": "text",
+        "type": "string",
+        "default": "Office",
+        "required": false
+      },
+      "address": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "state": {
+        "format": "text",
+        "type": "string",
+        "default": "Lagos",
+        "required": false
+      },
+      "lga": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "city": {
+        "format": "text",
+        "type": "string",
+        "default": "Lagos",
+        "required": false
+      },
+      "region": {
+        "format": "text",
+        "type": "string",
+        "default": "South-West",
+        "required": false
+      },
+      "latitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": true
+      },
+      "longitude": {
+        "format": "numeric",
+        "type": "number",
+        "required": true
+      },
+      "geofence_radius": {
+        "format": "integer",
+        "type": "integer",
+        "default": 150,
+        "required": false
+      },
+      "geofence_radius_meters": {
+        "format": "integer",
+        "type": "integer",
+        "default": 150,
+        "required": false
+      },
+      "status": {
+        "format": "text",
+        "type": "string",
+        "default": "active",
+        "required": true
+      },
+      "created_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "updated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "workforce_access_sessions": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "token_id": {
+        "format": "uuid",
+        "type": "string",
+        "required": true
+      },
+      "state": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "location_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "work_locations",
+          "column": "id"
+        }
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "expires_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": true
+      },
+      "last_verified_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "last_seen_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "outside_since": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "revoked_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "revoke_reason": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "workforce_activity_events": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "last_activity_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": true
+      },
+      "last_seen_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": true
+      },
+      "detected_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": true
+      },
+      "kind": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "ended_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "reason": {
+        "format": "character varying",
+        "type": "string",
+        "required": false
+      },
+      "reason_details": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "explained_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "reviewed_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "reviewed_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "workforce_activity_notices": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "event_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "workforce_activity_events",
+          "column": "id"
+        }
+      },
+      "title": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "body": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "read_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      }
+    }
+  },
+  "workforce_activity_presence": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "client_id": {
+        "format": "uuid",
+        "type": "string",
+        "required": true
+      },
+      "sequence": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "last_activity_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": true
+      },
+      "last_seen_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": true
+      },
+      "stopped_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "workforce_executive_reports": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "report_date": {
+        "format": "date",
+        "type": "string",
+        "required": true
+      },
+      "facts": {
+        "format": "jsonb",
+        "required": true
+      },
+      "narrative": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "source": {
+        "format": "text",
+        "type": "string",
+        "default": "verified_facts",
+        "required": true
+      },
+      "model": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "generated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "ai_generated_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "ai_facts_hash": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "ai_claimed_until": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "ai_last_attempt_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "workforce_movement_events": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "employees",
+          "column": "id"
+        }
+      },
+      "session_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "workforce_access_sessions",
+          "column": "id"
+        }
+      },
+      "kind": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "location_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false,
+        "references": {
+          "table": "work_locations",
+          "column": "id"
+        }
+      },
+      "observed_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "details": {
+        "format": "jsonb",
+        "required": true
+      }
+    }
+  },
+  "workforce_movement_notices": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "event_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "workforce_movement_events",
+          "column": "id"
+        }
+      },
+      "title": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "body": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "read_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "workforce_report_notices": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "companies",
+          "column": "id"
+        }
+      },
+      "user_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "users",
+          "column": "id"
+        }
+      },
+      "report_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": true,
+        "references": {
+          "table": "workforce_executive_reports",
+          "column": "id"
+        }
+      },
+      "title": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "body": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "created_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "default": "now()",
+        "required": true
+      },
+      "read_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      }
+    }
+  }
+}

@@ -14,8 +14,18 @@ try{
     const {reminderWorker}=await import('../../server/src/services/reminderWorker.js');
     await reminderWorker.processDueReminders({throwOnError:true});
     console.log('Task reminder cycle completed.');
+    const {db}=await import('../../server/src/config/database.js');
+    if(db.backend==='mysql'){
+      const {activityService}=await import('../../server/src/services/activityService.js');
+      const actors=(await db.find('users',{status:'active'})).filter(u=>['HR','HR_MANAGER','ADMIN','SUPER_ADMIN'].includes(u.role_code));
+      for(const companyId of new Set(actors.map(u=>u.company_id)))await activityService.processDue(actors.find(u=>u.company_id===companyId));
+      console.log('Workforce activity review cycle completed.');
+    }
   }else throw new Error('Unknown job. Use hr-reports or reminders.');
 }catch{
   console.error('Scheduled job failed. Review the private job log and the dashboard delivery history.');
   process.exitCode=1;
+}finally{
+  const {db}=await import('../../server/src/config/database.js');
+  await db.close();
 }

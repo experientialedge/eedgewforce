@@ -32,13 +32,23 @@ export let supabaseAdmin = null;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const anonKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+const backend = process.env.DATA_BACKEND || 'supabase';
+if (!['supabase','mysql','local'].includes(backend)) throw new Error('Choose DATA_BACKEND=supabase, mysql or local.');
+let mysqlBackend = null;
+if (!isTestMode && backend === 'mysql') {
+  if (isServerless) throw new Error('The internal MySQL backend is reserved for standalone hosting. Vercel must use Supabase.');
+  const {createMysqlDatabase,mysqlConfiguration}=await import('./mysqlDatabase.js');
+  mysqlBackend=createMysqlDatabase(mysqlConfiguration());
+  try { await mysqlBackend.ready(); } catch (error) { await mysqlBackend.close(); throw error; }
+  logger.info('Verified internal MySQL database connected.');
+}
 
 if (!isTestMode && (process.env.NODE_ENV === 'production' || isServerless)) {
   if (!process.env.JWT_SECRET || (process.env.JWT_SECRET.length < 32 || /^(your_|replace|example|changeme)/i.test(process.env.JWT_SECRET))) throw new Error('Production requires JWT_SECRET of at least 32 characters.');
-  if (!(supabaseUrl && serviceRoleKey) && !(process.env.DATA_BACKEND === 'local' && process.env.EDGEWFORCE_DATA_DIR && !isServerless)) throw new Error('Production requires Supabase URL and service role key, or an explicitly configured durable local data directory.');
+  if (!mysqlBackend && !(backend === 'supabase' && supabaseUrl && serviceRoleKey) && !(backend === 'local' && process.env.EDGEWFORCE_DATA_DIR && !isServerless)) throw new Error('Production requires a verified MySQL database, Supabase credentials, or an explicitly configured durable local data directory.');
 }
 // Dynamically initialize Supabase if credentials are provided and not in test runner
-if (!isTestMode && supabaseUrl && (serviceRoleKey || anonKey)) {
+if (!isTestMode && backend === 'supabase' && supabaseUrl && (serviceRoleKey || anonKey)) {
   try {
     const { createClient } = await import('@supabase/supabase-js');
     if (anonKey || serviceRoleKey) {
@@ -93,7 +103,7 @@ function savePersistedStoreSync(force = false) {
   fs.renameSync(temporary, storePath);
 }
 const savePersistedStore = savePersistedStoreSync;
-if (!supabase) loadPersistedStore();
+if (!supabase && !mysqlBackend) loadPersistedStore();
 
 async function cloudResult(query) {
   const { data, error } = await fetchWithTimeout(query, 15000);
@@ -125,14 +135,22 @@ const cloud = supabaseAdmin || supabase;
 function cloudTable(table) { return table === 'alerts' ? 'idle_alerts' : process.env.SUPABASE_SCHEMA_LAYOUT === 'canonical' ? resolveCanonicalTable(table) : table; }
 export const db = {
   isCloud: Boolean(cloud),
+  backend: mysqlBackend ? 'mysql' : cloud ? 'supabase' : 'local',
+  async ready() { return mysqlBackend ? mysqlBackend.ready() : true; },
+  async close() { if (mysqlBackend) await mysqlBackend.close(); },
+  async storeFile(...args) { if (!mysqlBackend) throw new Error('Internal attachment storage is unavailable.'); return mysqlBackend.storeFile(...args); },
+  async getFile(...args) { if (!mysqlBackend) return null; return mysqlBackend.getFile(...args); },
+  async deleteFile(...args) { if (!mysqlBackend) return false; return mysqlBackend.deleteFile(...args); },
   async rpc(name, args) { if (!cloud) throw new Error('Database RPC requires Supabase.'); return cloudResult(cloud.rpc(name, args)); },
   resetToSeed() {
+    if (mysqlBackend) throw new Error('Production MySQL records cannot be reset to fixtures.');
     store = JSON.parse(JSON.stringify(initialSeed));
     savePersistedStore();
     return true;
   },
 
   async find(table, filter = {}, options = {}) {
+    if (mysqlBackend) return mysqlBackend.find(table, filter, options);
     const canonicalTable = resolveCanonicalTable(table);
 
     if (cloud) {
@@ -201,6 +219,7 @@ export const db = {
   },
 
   async insert(table, record) {
+    if (mysqlBackend) return mysqlBackend.insert(table, record);
     const canonicalTable = resolveCanonicalTable(table);
 
     // Normalize canonical attendance columns
@@ -240,6 +259,7 @@ export const db = {
   },
 
   async update(table, id, updates) {
+    if (mysqlBackend) return mysqlBackend.update(table, id, updates);
     const canonicalTable = resolveCanonicalTable(table);
 
     // Normalize canonical attendance columns
@@ -287,6 +307,7 @@ export const db = {
   },
 
   async delete(table, id) {
+    if (mysqlBackend) return mysqlBackend.delete(table, id);
     const canonicalTable = resolveCanonicalTable(table);
 
     if (cloud) { const deleted = await cloudResult(cloud.from(cloudTable(table)).delete().eq('id', id).select('id')); return deleted.length > 0; }
@@ -304,6 +325,7 @@ export const db = {
    * Executes an atomic transaction callback with safe rollback capability.
    */
   async transaction(callback) {
+    if (mysqlBackend) return mysqlBackend.transaction(() => callback(this));
     if (cloud) return callback(this); // Multi-row cloud operations use RPC or explicit compensation.
     if (transactionContext.getStore()) return callback(this);
     const operation = transactionQueue.then(() => transactionContext.run(true, async () => {
