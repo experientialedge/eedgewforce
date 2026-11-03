@@ -1,4 +1,5 @@
 import {db} from '../config/database.js';
+import {deductLeaveBalance} from './leaveBalanceService.js';
 import {recordAudit} from '../middleware/auditLogger.js';
 const fail=(message,status=400)=>{throw Object.assign(new Error(message),{status});};
 export async function reviewLeave(actor,requestId,approve,reason='',req=null){
@@ -12,9 +13,7 @@ export async function reviewLeave(actor,requestId,approve,reason='',req=null){
     if(!request)fail('Leave request not found.',404);
     if(request.status!=='pending')fail('Leave request has already been reviewed.',409);
     if(approve&&['annual','sick','casual'].includes(request.leave_type.toLowerCase())){
-      const balance=await db.findOne('leave_balances',{employee_id:request.employee_id,year:Number(request.start_date.slice(0,4))}),key=request.leave_type.toLowerCase();
-      if(!balance||Number(balance[key])<request.days)fail('Leave balance is missing or insufficient. Update the balance before approval.');
-      await db.update('leave_balances',balance.id,{[key]:Number(balance[key])-request.days});
+      await deductLeaveBalance(request.employee_id,user.company_id,Number(request.start_date.slice(0,4)),request.leave_type.toLowerCase(),Number(request.days));
     }
     const updated=await db.update('leave_requests',request.id,{status:approve?'approved':'rejected',reviewed_by:user.id,reviewed_at:new Date().toISOString(),review_notes:reason});
     await db.insert('notifications',{company_id:user.company_id,employee_id:request.employee_id,type:'Leave',title:approve?'Leave approved':'Leave request update',body:`${request.leave_type} leave (${request.start_date} to ${request.end_date}): ${updated.status}. ${reason}`});

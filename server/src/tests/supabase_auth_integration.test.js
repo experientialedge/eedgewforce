@@ -52,9 +52,10 @@ test('▶ Supabase Auth Integration & Identity Lifecycle Suite', async (t) => {
     assert.equal(employee.department, 'Field Operations');
 
     // Verify leave balance initialized
-    const leave = await db.findOne('leave_balances', { employee_id: employee.id });
+    const leave = await db.findOne('leave_balances', { employee_id: employee.id,leave_type:'annual' });
     assert.ok(leave, 'Leave balance must be initialized');
-    assert.equal(leave.annual, 20);
+    assert.equal(leave.remaining_days, 20);
+    assert.equal(leave.company_id, employee.company_id);
   });
 
   await t.test('3. Login authentication returns valid session token and complete profile context', async () => {

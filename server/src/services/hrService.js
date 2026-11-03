@@ -1,4 +1,5 @@
 import { getLagosTime } from '../utils/nigeriaTime.js';
+import {ensureLeaveBalances} from './leaveBalanceService.js';
 // ==============================================================================
 // EDGEWFORCE - HUMAN RESOURCES COMMAND CENTER SERVICE
 // Workforce Analytics, Idle Monitoring, Hierarchy Enforcement & Organization Chart
@@ -561,7 +562,7 @@ export const hrService = {
           hire_date: staffData.hire_date || new Date().toISOString().slice(0, 10), address: staffData.address || '',
           status: 'active', onboarding_status: 'Account Created'
         });
-        await db.insert('leave_balances', { employee_id: createdEmployee.id, year: new Date().getFullYear(), annual: 20, sick: 12, casual: 5 });
+        await ensureLeaveBalances(createdEmployee.id,companyId,Number(getLagosTime().dateStr.slice(0,4)));
         let locationAssignment = null;
         if (locationId) locationAssignment = await locationService.assignEmployeeLocation({ company_id: companyId, employee_id: createdEmployee.id, location_id: locationId, assignment_type: 'primary', reason: 'Initial staff registration' }, actor, req);
         await recordAudit(actor, 'STAFF_REGISTERED', 'employees', createdEmployee.id, { employee_code, role_code, assigned_location: locationAssignment?.location?.name || null }, req);

@@ -4,6 +4,7 @@
 // ==============================================================================
 
 import { db } from '../config/database.js';
+import {ensureLeaveBalances} from './leaveBalanceService.js';
 import { calculateWorkingDays, calculatePayslipBreakdown } from '../utils/calculations.js';
 import { recordAudit } from '../middleware/auditLogger.js';
 import { idleService } from './idleService.js';
@@ -44,17 +45,7 @@ export const employeeService = {
     const attendanceRecords = await db.find('attendance', { employee_id: Number(employeeId) });
     const todayAttendance = attendanceRecords.find(a => String(a.date).slice(0, 10) === todayStr);
 
-    let leaveBalance = await db.findOne('leave_balances', { employee_id: Number(employeeId), year });
-    if (!leaveBalance) {
-      leaveBalance = await db.insert('leave_balances', {
-        ...companyFilter,
-        employee_id: Number(employeeId),
-        year,
-        annual: 20,
-        sick: 12,
-        casual: 5
-      });
-    }
+    const leaveBalance = await ensureLeaveBalances(employeeId,employee.company_id||1,year);
 
     const tasks = await db.find('tasks', { assigned_to: Number(employeeId) });
     const activeTasks = tasks.filter(t => t.status !== 'completed' && t.status !== 'Cancelled');
@@ -165,18 +156,10 @@ export const employeeService = {
    * Retrieves leave balances.
    */
   async getLeaveBalances(employeeId) {
-    const year = new Date().getFullYear();
-    let bal = await db.findOne('leave_balances', { employee_id: Number(employeeId), year });
-    if (!bal) {
-      bal = await db.insert('leave_balances', {
-        employee_id: Number(employeeId),
-        year,
-        annual: 20,
-        sick: 12,
-        casual: 5
-      });
-    }
-    return bal;
+    const year = Number(getLagosTime().dateStr.slice(0,4));
+    const employee=await db.findById('employees',Number(employeeId));
+    if(!employee)throw new Error('Employee profile not found.');
+    return ensureLeaveBalances(employeeId,employee.company_id||1,year);
   },
 
   /**
