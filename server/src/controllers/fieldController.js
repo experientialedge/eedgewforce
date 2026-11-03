@@ -281,10 +281,11 @@ export const fieldController = {
 
   async triggerSOS(req, res) {
     try {
-      const agentId = req.user.employee?.id || req.user.id;
+      const agentId = req.user.employee?.id;
+      if (!agentId) throw new Error('A linked active staff profile is required to send an SOS.');
       const { latitude, longitude, accuracy, message } = req.body;
       const sos = await fieldService.triggerSOS(agentId, latitude, longitude, accuracy, message, req);
-      res.status(201).json({ success: true, data: sos, ...sos, message: 'Emergency SOS beacon broadcast to all management channels.' });
+      res.status(201).json({ success: true, data: sos, ...sos, message: 'Emergency recorded. Operations and HR can view it in the emergency dashboard.' });
     } catch (err) {
       res.status(400).json({ success: false, error: { code: 'SOS_TRIGGER_FAILED', message: err.message } });
     }
@@ -293,7 +294,7 @@ export const fieldController = {
   async getSOS(req, res) {
     try {
       const isMgmt = isManagementUser(req.user);
-      const list = await fieldService.getSOS(req.query.status);
+      const list = await fieldService.getSOS(req.query.status, req.user.company_id);
       if (!isMgmt) {
         const callerEmpId = req.user.employee?.id || req.user.id;
         const filtered = list.filter(item => String(item.agent_id || item.employee_id) === String(callerEmpId));

@@ -1,3 +1,4 @@
+import { sosService } from './sosService.js';
 // ==============================================================================
 // EDGEWFORCE - EXECUTIVE MANAGEMENT SERVICE
 // CEO Enterprise Overview, Commercial Performance & Strategic Telemetry
@@ -36,7 +37,7 @@ export const executiveService = {
     const completedTasks = tasks.filter(t => t.status === 'completed' || t.status === 'Completed').length;
     const taskCompletionRate = tasks.length > 0 ? Math.round((completedTasks / tasks.length) * 100) : 100;
 
-    const openSOS = await db.find('sos', { status: 'active' });
+    const openSOS = await sosService.list(1, 'active');
 
     // Territory breakdown
     const territorySales = {};

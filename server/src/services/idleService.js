@@ -1,3 +1,4 @@
+import { createNotification } from './notificationRepository.js';
 // ==============================================================================
 // EDGEWFORCE - EMPLOYEE INACTIVITY TELEMETRY & IDLE MONITOR SERVICE
 // Detects 10-minute workstation idle events, notifies IT and HR immediately,
@@ -35,32 +36,29 @@ export const idleService = {
     const empName = employee ? `${employee.first_name} ${employee.last_name}` : (user?.full_name || 'Staff Member');
     const dept = employee?.department || 'Operations';
 
-    const session = await db.insert('employee_idle_sessions', {
+    const stored = await db.insert('employee_idle_sessions', {
       company_id: Number(actor?.company_id || employee?.company_id || 1),
       employee_id: employee?.id ? Number(employee.id) : null,
-      user_id: user?.id ? Number(user.id) : null,
-      idle_started_at: started_at || new Date(Date.now() - 600000).toISOString(),
-      detected_at: new Date().toISOString(),
-      duration_seconds: Number(duration_seconds || 600),
+      start_time: started_at || new Date(Date.now() - 600000).toISOString(),
+      end_time: new Date().toISOString(),
+      idle_duration_minutes: Math.round(Number(duration_seconds) / 60),
       reason: reason || 'Awaiting Explanation',
-      reason_details: explanation || 'Workstation telemetry noted 10m+ inactivity',
       status: reason && reason !== 'Awaiting Explanation' ? 'explained' : 'pending',
-      reported_to_it_at: new Date().toISOString(),
-      reported_to_hr_at: new Date().toISOString(),
-      workstation_snapshot: workstation_snapshot || {},
       created_at: new Date().toISOString()
     });
+
+    const session = { ...stored, user_id: user.id, idle_started_at: stored.start_time, detected_at: stored.end_time,
+      duration_seconds: Number(duration_seconds), reason_details: explanation || 'Workstation telemetry noted 10m+ inactivity', workstation_snapshot };
 
     // Also populate legacy idle_alerts table for backward compatibility
     await db.insert('idle_alerts', {
       company_id: session.company_id,
       employee_id: employee?.id ? Number(employee.id) : null,
-      started_at: session.idle_started_at,
-      ended_at: new Date().toISOString(),
+      alert_type: `idle_session:${session.id}`,
       duration_seconds: session.duration_seconds,
       reason: session.reason,
       explanation: session.reason_details,
-      resolved: session.status === 'explained'
+      status: session.status
     });
 
     // 1. Alert IT Administrators
@@ -69,7 +67,7 @@ export const idleService = {
     for (const it of itUsers) {
       const itEmp = await db.findOne('employees', { user_id: it.id });
       if (itEmp?.id) {
-        await db.insert('notifications', {
+        await createNotification({
           employee_id: itEmp.id,
           company_id: session.company_id,
           type: 'System',
@@ -88,7 +86,7 @@ export const idleService = {
     for (const hr of hrUsers) {
       const hrEmp = await db.findOne('employees', { user_id: hr.id });
       if (hrEmp?.id) {
-        await db.insert('notifications', {
+        await createNotification({
           employee_id: hrEmp.id,
           company_id: session.company_id,
           type: 'HR',
@@ -102,7 +100,7 @@ export const idleService = {
     await recordAudit(actor || user, 'EMPLOYEE_IDLE_DETECTED', 'employee_idle_sessions', session.id, {
       duration_seconds,
       employee_name: empName,
-      department: dept
+      department: dept, workstation_snapshot
     }, req);
 
     logger.info(`[IDLE TELEMETRY] Logged 10m inactivity for ${empName} (${dept}). IT and HR alerted.`);
@@ -117,31 +115,30 @@ export const idleService = {
     await activityService.identity(actor);
     const session = await db.findById('employee_idle_sessions', sessionId);
     if (!session || Number(session.company_id) !== Number(actor.company_id)) throw Object.assign(new Error('Activity event not found.'), { status: 404 });
-    if (Number(session.user_id) !== Number(actor.id)) throw Object.assign(new Error('You can only explain your own activity.'), { status: 403 });
+    if (Number(session.employee_id) !== Number(actor.employee?.id || (await db.findOne('employees', { user_id: Number(actor.id), company_id: Number(actor.company_id) }))?.id)) throw Object.assign(new Error('You can only explain your own activity.'), { status: 403 });
     if (!reason || String(reason).length > 100 || String(reason_details || '').length > 2000) throw new Error('Invalid activity explanation.');
 
     const updated = await db.update('employee_idle_sessions', session.id, {
       reason: reason || 'Break',
-      reason_details: reason_details || reason || 'Employee provided explanation',
       status: 'explained'
     });
 
     // Also update legacy table
-    const legacy = await db.findOne('idle_alerts', { company_id: session.company_id, employee_id: session.employee_id, started_at: session.idle_started_at });
+    const legacy = await db.findOne('idle_alerts', { company_id: session.company_id, employee_id: session.employee_id, alert_type: `idle_session:${session.id}` });
     if (legacy) {
       await db.update('idle_alerts', legacy.id, {
         reason: updated.reason,
-        explanation: updated.reason_details,
-        resolved: true
+        explanation: reason_details || reason,
+        status: 'explained'
       });
     }
 
     await recordAudit(actor, 'IDLE_REASON_SUBMITTED', 'employee_idle_sessions', session.id, {
       reason: updated.reason,
-      details: updated.reason_details
+      details: reason_details || reason
     }, req);
 
-    return updated;
+    return { ...updated, reason_details: reason_details || reason };
   },
 
   /**
@@ -149,14 +146,17 @@ export const idleService = {
    */
   async getIdleSessions(filters = {}, actor = null) {
     const { user } = await activityService.identity(actor);
-    const scope = { company_id: Number(user.company_id), ...(!activityService.canReview(user) ? { user_id: Number(user.id) } : {}) };
-    const all = await db.find('employee_idle_sessions', scope, { order: { column: 'detected_at', ascending: false }, limit: 100 });
+    const scope = { company_id: Number(user.company_id), ...(!activityService.canReview(user) ? { employee_id: Number((await db.findOne('employees', { user_id: Number(user.id), company_id: Number(user.company_id) }))?.id || -1) } : {}) };
+    const all = await db.find('employee_idle_sessions', scope, { order: { column: 'created_at', ascending: false }, limit: 100 });
     const employees = await db.find('employees', { company_id: Number(actor.company_id) });
 
+    const explanations = await db.find('idle_alerts', { company_id: Number(user.company_id) });
     return all.map(s => {
+      const alert = explanations.find(a => a.alert_type === `idle_session:${s.id}`);
       const emp = employees.find(e => Number(e.id) === Number(s.employee_id));
       return {
-        ...s,
+        ...s, idle_started_at: s.start_time, detected_at: s.end_time || s.created_at,
+        duration_seconds: alert?.duration_seconds ?? Number(s.idle_duration_minutes || 0) * 60, reason_details: alert?.explanation || s.reason,
         employee_name: emp ? `${emp.first_name} ${emp.last_name}` : 'Staff Member',
         department: emp?.department || 'Operations',
         employee_code: emp?.employee_code || 'EMP-000'

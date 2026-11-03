@@ -1,3 +1,5 @@
+import { schemaPatch } from '../utils/schemaPatch.js';
+import { sosService } from './sosService.js';
 import { getLagosTime } from '../utils/nigeriaTime.js';
 import {ensureLeaveBalances} from './leaveBalanceService.js';
 // ==============================================================================
@@ -29,7 +31,7 @@ export const hrService = {
     const attendance = await db.find('attendance', { date: todayStr, company_id: actor?.company_id || 1 });
     const idleRecords = (await db.find('idle_alerts', {company_id:actor?.company_id||1})).filter(r => r.resolved !== true && !r.reviewed_at && !['resolved','dismissed'].includes(String(r.status).toLowerCase()) && employees.some(e => Number(e.id) === Number(r.employee_id)));
     const activityRecords = await db.find('workforce_activity_events', { company_id: Number(actor?.company_id || 1) }, { order: { column: 'detected_at', ascending: false }, limit: 200 });
-    const openSOS = (await db.find('sos', { status: 'active',company_id:actor?.company_id||1 })).filter(r => employees.some(e => Number(e.id) === Number(r.agent_id)));
+    const openSOS = (await sosService.list(actor?.company_id || 1, 'active')).filter(r => employees.some(e => Number(e.id) === Number(r.agent_id)));
     const leaveRequests = (await db.find('leave_requests', { status: 'pending',company_id:actor?.company_id||1 })).filter(r => employees.some(e => Number(e.id) === Number(r.employee_id)));
     const tasks = await db.find('tasks', {company_id:actor?.company_id||1});
     const activeTasks = tasks.filter(t => t.status !== 'completed' && t.status !== 'Cancelled');
@@ -343,24 +345,11 @@ export const hrService = {
    * Resolves or acknowledges SOS emergency alerts.
    */
   async acknowledgeSOS(sosId, actor = null, req = null) {
-    const updated = await db.update('sos', sosId, {
-      status: 'acknowledged',
-      acknowledged_by: Number(actor?.id || 1),
-      acknowledged_at: new Date().toISOString()
-    });
-    await recordAudit(actor, 'SOS_ACKNOWLEDGED', 'sos', sosId, {}, req);
-    return updated;
+    return sosService.review(sosId, actor, undefined, req);
   },
 
   async resolveSOS(sosId, resolutionNotes = '', actor = null, req = null) {
-    const updated = await db.update('sos', sosId, {
-      status: 'resolved',
-      resolved_by: Number(actor?.id || 1),
-      resolved_at: new Date().toISOString(),
-      resolution_notes: resolutionNotes
-    });
-    await recordAudit(actor, 'SOS_RESOLVED', 'sos', sosId, { resolutionNotes }, req);
-    return updated;
+    return sosService.review(sosId, actor, resolutionNotes, req);
   },
 
   /**
@@ -387,6 +376,7 @@ export const hrService = {
   },
 
   async updateRank(id, data, actor = null, req = null) {
+    data = schemaPatch('ranks', data);
     const updated = await db.update('ranks', id, data);
     await recordAudit(actor, 'RANK_UPDATED', 'ranks', id, data, req);
     return updated;

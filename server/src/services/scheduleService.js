@@ -61,7 +61,7 @@ export const scheduleService = {
    */
   async createOrUpdateSchedule(employeeId, scheduleData, req = null) {
     const employee = await db.findById('employees', Number(employeeId));
-    if (!employee) throw new Error('Employee profile not found.');
+    if (!employee || (req?.user && Number(employee.company_id) !== Number(req.user.company_id))) throw new Error('Employee profile not found.');
 
     const date = scheduleData.date || getLagosTime().dateStr;
     const existing = await db.findOne('schedules', { employee_id: Number(employeeId), date });
@@ -75,7 +75,7 @@ export const scheduleService = {
       if (sup) supervisorName = `${sup.first_name} ${sup.last_name}`;
     } else {
       // Fallback to default field/operations supervisor
-      const defaultSup = await db.findOne('employees', { rank_code: 'SUPERVISOR' });
+      const defaultSup = await db.findOne('employees', { rank_code: 'SUPERVISOR', company_id: employee.company_id });
       if (defaultSup) {
         supervisorId = defaultSup.id;
         supervisorName = `${defaultSup.first_name} ${defaultSup.last_name}`;
@@ -121,6 +121,7 @@ export const scheduleService = {
       submitted_at: isDraft ? null : new Date().toISOString(),
       supervisor_id: supervisorId ? Number(supervisorId) : null,
       supervisor_name: supervisorName,
+      supervisor_approval_status: isDraft ? 'DRAFT' : 'PENDING',
       supervisor_status: isDraft ? 'DRAFT' : 'PENDING',
       supervisor_reviewed_at: null,
       supervisor_notes: null,
@@ -275,18 +276,20 @@ export const scheduleService = {
    */
   async reviewSupervisorSchedule(scheduleId, supervisorId, reviewData, req = null) {
     const schedule = await db.findById('schedules', Number(scheduleId));
-    if (!schedule) throw new Error('Schedule record not found.');
+    if (!schedule || (req?.user && Number(schedule.company_id) !== Number(req.user.company_id))) throw new Error('Schedule record not found.');
 
     const status = reviewData.status; // 'APPROVED' | 'REJECTED' | 'REVISION_REQUESTED'
     if (!['APPROVED', 'REJECTED', 'REVISION_REQUESTED'].includes(status)) {
       throw new Error('Invalid review status. Must be APPROVED, REJECTED, or REVISION_REQUESTED.');
     }
 
+    if (req?.user?.role_code === 'SUPERVISOR' && Number(schedule.supervisor_id) !== Number(supervisorId) && Number(schedule.employee_id) !== Number(supervisorId)) throw new Error('This schedule is outside your team.');
     const sup = await db.findById('employees', Number(supervisorId));
     const supervisorName = sup ? `${sup.first_name} ${sup.last_name}` : 'Field Supervisor';
 
     const updated = await db.update('schedules', schedule.id, {
       status: status,
+      supervisor_approval_status: status,
       supervisor_status: status,
       supervisor_reviewed_at: new Date().toISOString(),
       supervisor_notes: reviewData.notes || null,
@@ -372,9 +375,10 @@ export const scheduleService = {
    */
   async reviewHRSchedule(scheduleId, hrUserId, reviewData, req = null) {
     const schedule = await db.findById('schedules', Number(scheduleId));
-    if (!schedule) throw new Error('Schedule record not found.');
+    if (!schedule || (req?.user && Number(schedule.company_id) !== Number(req.user.company_id))) throw new Error('Schedule record not found.');
 
-    const status = reviewData.status || 'ACKNOWLEDGED'; // 'ACKNOWLEDGED' | 'APPROVED' | 'REJECTED'
+    const status = reviewData.status || 'ACKNOWLEDGED';
+    if (!['ACKNOWLEDGED', 'APPROVED', 'REJECTED'].includes(status)) throw new Error('Invalid HR review status.'); // 'ACKNOWLEDGED' | 'APPROVED' | 'REJECTED'
 
     const updated = await db.update('schedules', schedule.id, {
       hr_status: status,

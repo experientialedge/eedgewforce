@@ -4826,6 +4826,48 @@
         "type": "string",
         "default": "now()",
         "required": true
+      },
+      "employee_name": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "employee_code": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "department": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "position": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "title": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "supervisor_status": {
+        "format": "text",
+        "type": "string",
+        "required": false,
+        "default": "PENDING"
+      },
+      "hr_status": {
+        "format": "text",
+        "type": "string",
+        "required": false,
+        "default": "PENDING"
+      },
+      "submitted_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
       }
     }
   },

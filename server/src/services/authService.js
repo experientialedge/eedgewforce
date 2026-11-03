@@ -181,8 +181,7 @@ export const authService = {
       token = signUserToken(user);
     }
 
-    // Update last login timestamp asynchronously
-    db.update('users', user.id, { last_login_at: new Date().toISOString() }).catch(() => {});
+    // LOGIN audit events are the durable last-login history in the production schema.
     recordAudit(user, 'LOGIN', 'users', user.id, { email: user.email, phone: user.phone }, req).catch(() => {});
 
     const employee = await db.findOne('employees', { user_id: user.id }) ||

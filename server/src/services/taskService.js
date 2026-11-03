@@ -1,3 +1,4 @@
+import { createNotification } from './notificationRepository.js';
 // ==============================================================================
 // EDGEWFORCE - TASK INTELLIGENCE & DELIVERY PROTECTION SERVICE
 // Manages task lifecycle, client/project deliverables, 4-stage client delivery,
@@ -85,7 +86,7 @@ export const taskService = {
     });
 
     // Notify employee in-app immediately
-    await db.insert('notifications', {
+    await createNotification({
       employee_id: targetEmployee.id,
       company_id: task.company_id,
       type: 'Tasks',

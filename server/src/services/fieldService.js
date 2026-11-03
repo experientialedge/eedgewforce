@@ -1,3 +1,4 @@
+import { sosService } from './sosService.js';
 // ==============================================================================
 // EDGEWFORCE - FIELD OPERATIONS & SUPERVISOR MONITORING SERVICE
 // GPS Shift Tracking, Geofence Enforcement, Work Locations, Visits & Alerts
@@ -1164,48 +1165,11 @@ export const fieldService = {
    * Dispatches emergency SOS beacon with GPS coordinates.
    */
   async triggerSOS(agentId, latitude, longitude, accuracy = 5.0, message = 'Emergency SOS broadcast triggered', req = null) {
-    const agent = await db.findById('employees', agentId);
-    const sosEvent = await db.insert('sos', {
-      agent_id: Number(agentId),
-      latitude: Number(latitude || 6.5244),
-      longitude: Number(longitude || 3.3792),
-      accuracy: Number(accuracy || 5.0),
-      device_info: req?.headers['user-agent'] || 'Mobile Device',
-      message: message || `EMERGENCY: ${agent ? `${agent.first_name} ${agent.last_name}` : 'Field Agent'} triggered panic beacon.`,
-      status: 'active'
-    });
-
-    const managementUsers = await db.find('users');
-    const responders = managementUsers.filter(u => ['CEO', 'CTO', 'HR', 'SUPERVISOR', 'MANAGER'].includes(u.role_code));
-
-    for (const resp of responders) {
-      const respEmp = await db.findOne('employees', { user_id: resp.id });
-      if (respEmp) {
-        await db.insert('notifications', {
-          employee_id: respEmp.id,
-          type: 'SOS',
-          title: 'EMERGENCY SOS BEACON ACTIVE',
-          body: `${agent ? `${agent.first_name} ${agent.last_name}` : 'Field Officer'} triggered emergency panic beacon. Immediate attention required!`,
-          link: `/field/sos/${sosEvent.id}`
-        });
-      }
-    }
-
-    await recordAudit({ id: agentId }, 'SOS_TRIGGERED', 'sos', sosEvent.id, { lat: latitude, lng: longitude }, req);
-    return sosEvent;
+    return sosService.dispatch(agentId, latitude, longitude, accuracy, message, req);
   },
 
-  /**
-   * Retrieves active or all SOS beacons.
-   */
-  async getSOS(status = null) {
-    const list = await db.find('sos', {}, { order: { column: 'created_at', ascending: false } });
-    const employees = await db.find('employees');
-
-    return list.filter(s => !status || s.status === status).map(s => ({
-      ...s,
-      agent: employees.find(e => Number(e.id) === Number(s.agent_id))
-    }));
+  async getSOS(status = null, companyId = 1) {
+    return sosService.list(companyId, status);
   },
 
   /**
