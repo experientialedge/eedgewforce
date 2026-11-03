@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {useMapTiles} from '../../hooks/useMapTiles';
-import {mapPoint,mapRadius,escapeMapText as esc} from '../../lib/mapSupport';
+import {mapPoint,mapRadius,mapReferenceLocations,escapeMapText as esc} from '../../lib/mapSupport';
 import MapTileStatus from './MapTileStatus';
 import { Layers, Store, Users, Eye, RefreshCw, ZoomIn, ZoomOut, Navigation } from 'lucide-react';
 
@@ -111,6 +111,7 @@ export default function SupervisorLiveMap({
   const geofencesGroupRef = useRef(null);
   const boundsRef=useRef([]),lastFitRef=useRef(null);
   const {tileState,connectMap,retryMap}=useMapTiles();
+  const referenceLocations = useMemo(() => mapReferenceLocations(stores, team), [stores, team]);
 
   const [showGeofences, setShowGeofences] = useState(true);
   const [showStores, setShowStores] = useState(true);
@@ -158,7 +159,7 @@ export default function SupervisorLiveMap({
     const boundsPoints = [];
 
     // 1. Render Stores & Geofence Perimeters
-    stores.forEach(store => {
+    referenceLocations.forEach(store => {
       const point = mapPoint(store.latitude,store.longitude);
       if (!point) return;
       if(showStores||showGeofences)boundsPoints.push(point);
@@ -187,7 +188,7 @@ export default function SupervisorLiveMap({
         const storePopupHtml = `
           <div style="font-family: system-ui, sans-serif; font-size: 12px; line-height: 1.4; min-width: 220px;">
             <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-              <span style="background: #F57C00; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px;">${esc(store.code || 'STORE')}</span>
+              <span style="background: #F57C00; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px;">${esc(store.code || (store.source_kind === 'work_location' ? 'WORKPLACE' : 'STORE'))}</span>
               <span style="font-weight: 700; color: #111827; font-size: 13px;">${esc(store.name)}</span>
             </div>
             <div style="color: #6B7280; font-size: 11px; margin-bottom: 6px;">📍 ${esc(store.address || 'Address not recorded')}</div>
@@ -307,12 +308,12 @@ export default function SupervisorLiveMap({
 
     // Auto fit bounds if points exist
     boundsRef.current=boundsPoints;
-    const fitKey=JSON.stringify([stores.map(s=>s.id),team.map(a=>a.id),showStores,showGeofences,showFieldAgents,showSalesAgents,selectedEmployee?.id]);
+    const fitKey=JSON.stringify([referenceLocations.map(s=>[s.source_kind,s.id,s.latitude,s.longitude]),team.map(a=>a.id),showStores,showGeofences,showFieldAgents,showSalesAgents,selectedEmployee?.id]);
     if (boundsPoints.length > 0 && lastFitRef.current!==fitKey) {
       map.fitBounds(boundsPoints, { padding: [50, 50], maxZoom: 14 });
       lastFitRef.current=fitKey;
     }
-  }, [team, stores, showGeofences, showStores, showFieldAgents, showSalesAgents, selectedEmployee,onSelectEmployee]);
+  }, [team, referenceLocations, showGeofences, showStores, showFieldAgents, showSalesAgents, selectedEmployee,onSelectEmployee]);
 
   const handleZoomIn = () => mapInstanceRef.current?.zoomIn();
   const handleZoomOut = () => mapInstanceRef.current?.zoomOut();
@@ -346,7 +347,7 @@ export default function SupervisorLiveMap({
           }`}
         >
           <div className="w-2 h-2 rounded-full border border-white" />
-          Store boundaries
+          Location boundaries
         </button>
 
         {/* Toggle Stores */}
@@ -360,7 +361,7 @@ export default function SupervisorLiveMap({
           }`}
         >
           <Store className="w-3.5 h-3.5" />
-          Stores ({stores.length})
+          Workplaces & stores ({referenceLocations.length})
         </button>
 
         {/* Toggle Field Agents */}

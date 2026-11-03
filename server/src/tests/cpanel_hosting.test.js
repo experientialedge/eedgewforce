@@ -17,6 +17,7 @@ test('Standalone web server serves the site and never disguises missing API or a
   const base=`http://127.0.0.1:${server.address().port}`;
   try{
     const health=await fetch(base+'/api/health');assert.equal(health.status,200);assert.equal((await health.json()).status,'healthy');
+    assert.equal(health.headers.get('referrer-policy'),'strict-origin-when-cross-origin');
     for(const url of ['/api/does-not-exist','/api','/assets/missing-bundle.js']){const result=await fetch(base+url);assert.equal(result.status,404);assert.match(result.headers.get('content-type'),/json/);}
     // CI runs tests before building; the packaged-runtime smoke check also verifies these against the real build.
     const fs=await import('node:fs');if(fs.existsSync(new URL('../../../client/dist/index.html',import.meta.url))){

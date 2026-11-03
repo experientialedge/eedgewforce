@@ -13,6 +13,22 @@ export function mapRadius(record, fallback = 150) {
   const radius = Number(record?.geofence_radius ?? record?.geofence_radius_meters ?? record?.permitted_radius ?? fallback);
   return Number.isFinite(radius) && radius > 0 && radius <= 10000 ? radius : fallback;
 }
+
+// Assigned workplaces are reference locations, never evidence of a staff GPS fix.
+export function mapReferenceLocations(stores = [], team = []) {
+  const locations = new Map();
+  for (const store of stores) {
+    if (mapPoint(store?.latitude, store?.longitude)) locations.set(`store:${store.id}`, {...store, source_kind:'store'});
+  }
+  for (const agent of team) {
+    const location = agent?.store;
+    if (!location || !mapPoint(location.latitude, location.longitude)) continue;
+    const kind = location.source_kind || 'work_location';
+    const key = `${kind}:${location.id}`;
+    if (!locations.has(key)) locations.set(key, {...location, source_kind:kind, geofence_radius:location.geofence_radius ?? location.radius});
+  }
+  return [...locations.values()];
+}
 export function tileConfiguration(env = import.meta.env || {}) {
   const url = env.VITE_MAP_TILE_URL || DEFAULT_TILE_URL;
   if (!url.startsWith('https://') || !['{z}','{x}','{y}'].every(p => url.includes(p))) throw Error('Map tiles require an HTTPS URL with {z}, {x} and {y}.');
@@ -27,7 +43,9 @@ export function attachMapSupport(L, map, onState = () => {}, env, runtime = glob
   const config = tileConfiguration(env);
   let alive = true, failed = false, frame = null, tileTimer = null;
   const publish = state => { if (alive) onState(state); };
-  const tiles = L.tileLayer(config.url, {maxZoom:19, attribution:config.attribution});
+  // OSM requires a real Referer. Send only the app origin, never paths or tokens,
+  // even when a hosting platform supplies a more restrictive document policy.
+  const tiles = L.tileLayer(config.url, {maxZoom:19, attribution:config.attribution, referrerPolicy:'strict-origin-when-cross-origin'});
   const clearTimer=()=>{if(tileTimer!=null)runtime.clearTimeout?.(tileTimer);tileTimer=null;};
   tiles.on('loading', () => { failed=false;publish('loading');clearTimer();tileTimer=runtime.setTimeout?.(()=>{tileTimer=null;publish('error');},20000); });
   tiles.on('tileerror', () => { failed=true;clearTimer();publish('error'); });

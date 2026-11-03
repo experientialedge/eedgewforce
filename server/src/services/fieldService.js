@@ -1327,7 +1327,10 @@ export const fieldService = {
       const roleLabel = isSales ? 'Sales Agent' : 'Field Agent';
 
       // Find assigned work location or store (NO hardcoded universal fallback)
-      const empAssignments = assignments.filter(a => Number(a.employee_id) === Number(emp.id)&&(!a.start_date||a.start_date<=todayStr)&&(!a.end_date||a.end_date>=todayStr));
+      const empAssignments = assignments.filter(a => Number(a.employee_id) === Number(emp.id)
+        && workLocations.some(l => Number(l.id) === Number(a.location_id) && l.status === 'active')
+        && (!a.start_date || observationDay(a.start_date) <= todayStr)
+        && (!a.end_date || observationDay(a.end_date) >= todayStr));
       const primaryAssign = empAssignments.find(a => a.is_primary) || empAssignments[0];
 
       let assignedLoc = null;
@@ -1406,6 +1409,8 @@ export const fieldService = {
         territory: emp.territory,
         store: assignedLoc ? {
           id: assignedLoc.id,
+          source_kind: workLocations.includes(assignedLoc) ? 'work_location' : 'store',
+          location_type: assignedLoc.location_type,
           name: assignedLoc.name,
           address: assignedLoc.address,
           state: assignedLoc.state,
