@@ -39,6 +39,18 @@ test('Supervisor monitoring isolates companies and teams and preserves location 
   [record]=await fieldService.getSupervisorTeamTable({supervisor_id:9001});assert.equal(record.latest_coordinates.latitude,0);assert.equal(record.distance_meters,0);
   const other=await fieldService.getSupervisorTeamTable({company_id:2});assert.equal(other[0].latest_coordinates,null);assert.equal(other[0].status_color,'GREY');
  });
+ await t.test('Workplace references use Lagos assignment dates and exclude deactivated locations',async()=>{
+  const assignment=await db.findOne('employee_location_assignments',{employee_id:9003});
+  await db.update('employee_location_assignments',assignment.id,{start_date:'2026-10-21T23:00:00.000Z',end_date:'2026-10-22T22:59:59.999Z'});
+  let [record]=await fieldService.getSupervisorTeamTable({supervisor_id:9001});
+  assert.equal(record.store.source_kind,'work_location');assert.equal(record.store.location_type,'Market');assert.equal(record.store.radius,300);
+  await db.update('employee_location_assignments',assignment.id,{end_date:'2026-10-21T22:59:59.999Z'});
+  [record]=await fieldService.getSupervisorTeamTable({supervisor_id:9001});assert.equal(record.store,null);
+  await db.update('employee_location_assignments',assignment.id,{end_date:'2026-10-22T22:59:59.999Z'});
+  await db.update('work_locations',9001,{status:'inactive'});
+  [record]=await fieldService.getSupervisorTeamTable({supervisor_id:9001});assert.equal(record.store,null);
+  await db.update('work_locations',9001,{status:'active'});
+ });
  await t.test('Profile, timeline and mutation controllers deny foreign employees and other teams before writes',async()=>{
   for(const method of ['getSupervisorEmployeeProfile','getEmployeeTimeline']){
    assert.equal((await invoke(method,sup,{params:{employeeId:9004}})).status,403);

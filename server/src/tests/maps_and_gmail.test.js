@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {EventEmitter} from 'node:events';
-import {mapPoint,mapRadius,escapeMapText,tileConfiguration,attachMapSupport,DEFAULT_TILE_URL} from '../../../client/src/lib/mapSupport.js';
+import {mapPoint,mapRadius,mapReferenceLocations,escapeMapText,tileConfiguration,attachMapSupport,DEFAULT_TILE_URL} from '../../../client/src/lib/mapSupport.js';
 import {smtpConfiguration} from '../utils/smtpConfiguration.js';
 import nodemailer from 'nodemailer';import {emailService} from '../services/emailService.js';
 
@@ -15,10 +15,23 @@ test('Maps validate coordinates, radius and tile configuration',()=>{
 test('Map lifecycle reports tile failures, retries, resizes and disposes listeners',()=>{
   const events=new EventEmitter(),mapEvents=new EventEmitter(),states=[];let observer,disconnected=false,resizes=0,redraws=0,online=null,deadline=null;
   const tiles={on:(name,fn)=>{events.on(name,fn);return tiles;},addTo:()=>{events.emit('loading');return tiles;},redraw:()=>{redraws++;events.emit('loading');},off:()=>events.removeAllListeners()};
-  const L={tileLayer:(url,options)=>{assert.equal(url,DEFAULT_TILE_URL);assert.match(options.attribution,/OpenStreetMap/);return tiles;}};
+  const L={tileLayer:(url,options)=>{assert.equal(url,DEFAULT_TILE_URL);assert.match(options.attribution,/OpenStreetMap/);assert.equal(options.referrerPolicy,'strict-origin-when-cross-origin');return tiles;}};
   const map={getContainer:()=>({}),invalidateSize:()=>resizes++,once:(event,fn)=>mapEvents.once(event,fn)};
   const runtime={setTimeout:fn=>{deadline=fn;return 1;},clearTimeout:()=>deadline=null,ResizeObserver:class {constructor(fn){observer=fn;}observe(){}disconnect(){disconnected=true;}},addEventListener:(event,fn)=>online=fn,removeEventListener:()=>online=null};
   const support=attachMapSupport(L,map,s=>states.push(s),{},runtime);assert.equal(states.at(-1),'loading');deadline();assert.equal(states.at(-1),'error');events.emit('load');assert.equal(states.at(-1),'ready');events.emit('tileerror');events.emit('load');assert.equal(states.at(-1),'error');support.retry();assert.equal(redraws,1);events.emit('load');assert.equal(states.at(-1),'ready');observer();assert.ok(resizes>=2);online();assert.equal(redraws,2);mapEvents.emit('unload');assert.equal(disconnected,true);assert.equal(online,null);assert.equal(deadline,null);assert.equal(events.listenerCount('load'),0);support.retry();assert.equal(redraws,2);
+});
+
+test('Supervisor maps include assigned workplaces without manufacturing staff GPS or losing colliding store IDs',()=>{
+  const store={id:7,name:'Customer store',latitude:6.5,longitude:3.4};
+  const office={id:7,name:'Assigned office',latitude:6.6,longitude:3.5,radius:200,source_kind:'work_location'};
+  const market={...office,id:8,location_type:'Market',radius:150};
+  const team=[{store:office,latest_coordinates:null},{store:office},{store:market},{store:{id:9,latitude:null,longitude:null}}];
+  const locations=mapReferenceLocations([store],team);
+  assert.equal(locations.length,3);
+  assert.equal(locations.filter(l=>l.id===7).length,2);
+  assert.equal(mapRadius(locations.find(l=>l.name==='Assigned office')),200);
+  assert.equal(mapRadius(locations.find(l=>l.id===8)),300);
+  assert.equal(team[0].latest_coordinates,null);
 });
 test('Gmail supports 465 and 587 with app-password normalization; other SMTP passwords retain spaces',()=>{
   const env={SMTP_HOST:' SMTP.GMAIL.COM ',SMTP_USER:'sender@gmail.com',SMTP_PASS:'abcd efgh ijkl mnop',EMAIL_FROM:'sender@gmail.com'};

@@ -63,6 +63,7 @@ const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 
 // 1. Security & Headers
 app.use(helmet({
+  referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
   crossOriginResourcePolicy: false,
   crossOriginEmbedderPolicy: false,
   contentSecurityPolicy: {
