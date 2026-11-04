@@ -4,7 +4,7 @@
     "functions": 3321,
     "routes": 241,
     "databaseOperations": 707,
-    "pendingMigrations": 4,
+    "pendingMigrations": 0,
     "mismatches": 0,
     "dynamic": 22
   },
@@ -15802,17 +15802,8 @@
             "hr_reviewed_at",
             "hr_notes"
           ],
-          "missing": [
-            "employee_name",
-            "employee_code",
-            "department",
-            "position",
-            "title",
-            "submitted_at",
-            "supervisor_status",
-            "hr_status"
-          ],
-          "status": "MIGRATION REQUIRED"
+          "missing": [],
+          "status": "SCHEMA MATCH"
         },
         {
           "file": "server/src/services/scheduleService.js",
@@ -15846,17 +15837,8 @@
             "hr_reviewed_at",
             "hr_notes"
           ],
-          "missing": [
-            "employee_name",
-            "employee_code",
-            "department",
-            "position",
-            "title",
-            "submitted_at",
-            "supervisor_status",
-            "hr_status"
-          ],
-          "status": "MIGRATION REQUIRED"
+          "missing": [],
+          "status": "SCHEMA MATCH"
         },
         {
           "file": "server/src/services/scheduleService.js",
@@ -15868,7 +15850,7 @@
           "status": "SCHEMA MATCH"
         }
       ],
-      "status": "SCHEMA CHANGE REQUIRED"
+      "status": "SCHEMA MATCH (STATIC)"
     },
     {
       "file": "server/src/services/scheduleService.js",
@@ -16090,13 +16072,11 @@
             "supervisor_notes",
             "supervisor_name"
           ],
-          "missing": [
-            "supervisor_status"
-          ],
-          "status": "MIGRATION REQUIRED"
+          "missing": [],
+          "status": "SCHEMA MATCH"
         }
       ],
-      "status": "SCHEMA CHANGE REQUIRED"
+      "status": "SCHEMA MATCH (STATIC)"
     },
     {
       "file": "server/src/services/scheduleService.js",
@@ -16213,13 +16193,11 @@
             "hr_reviewed_at",
             "hr_notes"
           ],
-          "missing": [
-            "hr_status"
-          ],
-          "status": "MIGRATION REQUIRED"
+          "missing": [],
+          "status": "SCHEMA MATCH"
         }
       ],
-      "status": "SCHEMA CHANGE REQUIRED"
+      "status": "SCHEMA MATCH (STATIC)"
     },
     {
       "file": "server/src/services/scheduleService.js",
@@ -40177,17 +40155,8 @@
         "hr_reviewed_at",
         "hr_notes"
       ],
-      "missing": [
-        "employee_name",
-        "employee_code",
-        "department",
-        "position",
-        "title",
-        "submitted_at",
-        "supervisor_status",
-        "hr_status"
-      ],
-      "status": "MIGRATION REQUIRED"
+      "missing": [],
+      "status": "SCHEMA MATCH"
     },
     {
       "file": "server/src/services/scheduleService.js",
@@ -40221,17 +40190,8 @@
         "hr_reviewed_at",
         "hr_notes"
       ],
-      "missing": [
-        "employee_name",
-        "employee_code",
-        "department",
-        "position",
-        "title",
-        "submitted_at",
-        "supervisor_status",
-        "hr_status"
-      ],
-      "status": "MIGRATION REQUIRED"
+      "missing": [],
+      "status": "SCHEMA MATCH"
     },
     {
       "file": "server/src/services/scheduleService.js",
@@ -40322,10 +40282,8 @@
         "supervisor_notes",
         "supervisor_name"
       ],
-      "missing": [
-        "supervisor_status"
-      ],
-      "status": "MIGRATION REQUIRED"
+      "missing": [],
+      "status": "SCHEMA MATCH"
     },
     {
       "file": "server/src/services/scheduleService.js",
@@ -40366,10 +40324,8 @@
         "hr_reviewed_at",
         "hr_notes"
       ],
-      "missing": [
-        "hr_status"
-      ],
-      "status": "MIGRATION REQUIRED"
+      "missing": [],
+      "status": "SCHEMA MATCH"
     },
     {
       "file": "server/src/services/scheduleService.js",
