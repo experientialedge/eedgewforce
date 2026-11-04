@@ -1,9 +1,9 @@
 {
   "summary": {
     "files": 203,
-    "functions": 3325,
+    "functions": 3334,
     "routes": 241,
-    "databaseOperations": 707,
+    "databaseOperations": 710,
     "pendingMigrations": 0,
     "mismatches": 0,
     "dynamic": 22
@@ -1918,7 +1918,7 @@
     },
     {
       "file": "server/src/controllers/salesController.js",
-      "line": 198,
+      "line": 199,
       "name": "processPaystackPayment",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -1930,11 +1930,12 @@
       "operations": [
         {
           "file": "server/src/controllers/scheduleController.js",
-          "line": 11,
+          "line": 10,
           "method": "findOne",
           "table": "employees",
           "fields": [
-            "user_id"
+            "user_id",
+            "company_id"
           ],
           "missing": [],
           "status": "SCHEMA MATCH"
@@ -1944,63 +1945,70 @@
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 20,
+      "line": 15,
+      "name": "resolveReviewerId",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/controllers/scheduleController.js",
+      "line": 23,
       "name": "getMySchedules",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 33,
+      "line": 36,
       "name": "getTodaySchedule",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 46,
+      "line": 49,
       "name": "submitSchedule",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 63,
+      "line": 66,
       "name": "updateTaskStatus",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 76,
+      "line": 79,
       "name": "deleteSchedule",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 89,
+      "line": 92,
       "name": "getSupervisorSchedules",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 102,
+      "line": 105,
       "name": "reviewSupervisorSchedule",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 119,
+      "line": 122,
       "name": "getHRSchedules",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 131,
+      "line": 134,
       "name": "reviewHRSchedule",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -7213,24 +7221,17 @@
     },
     {
       "file": "server/src/services/executiveService.js",
-      "line": 13,
+      "line": 14,
       "name": "getCEODashboardMetrics",
       "operations": [
         {
           "file": "server/src/services/executiveService.js",
-          "line": 18,
+          "line": 21,
           "method": "find",
           "table": "orders",
-          "fields": [],
-          "missing": [],
-          "status": "SCHEMA MATCH"
-        },
-        {
-          "file": "server/src/services/executiveService.js",
-          "line": 23,
-          "method": "find",
-          "table": "collections",
-          "fields": [],
+          "fields": [
+            "company_id"
+          ],
           "missing": [],
           "status": "SCHEMA MATCH"
         },
@@ -7238,8 +7239,10 @@
           "file": "server/src/services/executiveService.js",
           "line": 26,
           "method": "find",
-          "table": "customers",
-          "fields": [],
+          "table": "collections",
+          "fields": [
+            "company_id"
+          ],
           "missing": [],
           "status": "SCHEMA MATCH"
         },
@@ -7247,8 +7250,20 @@
           "file": "server/src/services/executiveService.js",
           "line": 29,
           "method": "find",
+          "table": "customers",
+          "fields": [
+            "company_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/executiveService.js",
+          "line": 32,
+          "method": "find",
           "table": "employees",
           "fields": [
+            "company_id",
             "status"
           ],
           "missing": [],
@@ -7256,10 +7271,11 @@
         },
         {
           "file": "server/src/services/executiveService.js",
-          "line": 30,
+          "line": 33,
           "method": "find",
           "table": "attendance",
           "fields": [
+            "company_id",
             "date"
           ],
           "missing": [],
@@ -7267,10 +7283,12 @@
         },
         {
           "file": "server/src/services/executiveService.js",
-          "line": 36,
+          "line": 39,
           "method": "find",
           "table": "tasks",
-          "fields": [],
+          "fields": [
+            "company_id"
+          ],
           "missing": [],
           "status": "SCHEMA MATCH"
         }
@@ -7279,22 +7297,15 @@
     },
     {
       "file": "server/src/services/executiveService.js",
-      "line": 19,
+      "line": 22,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/executiveService.js",
-      "line": 20,
+      "line": 23,
       "name": "callback:filter",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/executiveService.js",
-      "line": 21,
-      "name": "callback:reduce",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
@@ -7314,8 +7325,8 @@
     },
     {
       "file": "server/src/services/executiveService.js",
-      "line": 31,
-      "name": "callback:filter",
+      "line": 30,
+      "name": "callback:reduce",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
@@ -7328,6 +7339,13 @@
     },
     {
       "file": "server/src/services/executiveService.js",
+      "line": 34,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/executiveService.js",
       "line": 37,
       "name": "callback:filter",
       "operations": [],
@@ -7335,21 +7353,28 @@
     },
     {
       "file": "server/src/services/executiveService.js",
-      "line": 45,
+      "line": 40,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/executiveService.js",
+      "line": 48,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/executiveService.js",
-      "line": 50,
+      "line": 53,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/executiveService.js",
-      "line": 71,
+      "line": 74,
       "name": "getDashboard",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -11140,7 +11165,7 @@
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 240,
+          "line": 243,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -11149,7 +11174,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 243,
+          "line": 246,
           "method": "update",
           "table": "employees",
           "fields": [
@@ -11161,7 +11186,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 249,
+          "line": 252,
           "method": "update",
           "table": "users",
           "fields": [
@@ -11176,12 +11201,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 262,
+      "line": 265,
       "name": "resendInvitation",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 263,
+          "line": 266,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -11190,7 +11215,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 266,
+          "line": 269,
           "method": "update",
           "table": "employees",
           "fields": [
@@ -11202,7 +11227,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 272,
+          "line": 275,
           "method": "update",
           "table": "users",
           "fields": [
@@ -11217,12 +11242,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 285,
+      "line": 288,
       "name": "getAuditLogs",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 286,
+          "line": 289,
           "method": "find",
           "table": "audit_logs",
           "fields": [
@@ -11237,26 +11262,26 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 292,
+      "line": 295,
       "name": "approveLeave",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 295,
+      "line": 298,
       "name": "rejectLeave",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 299,
+      "line": 302,
       "name": "assignTask",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 306,
+          "line": 309,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -11265,7 +11290,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 310,
+          "line": 313,
           "method": "find",
           "table": "ranks",
           "fields": [],
@@ -11274,7 +11299,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 319,
+          "line": 322,
           "method": "insert",
           "table": "tasks",
           "fields": [
@@ -11294,7 +11319,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 333,
+          "line": 336,
           "method": "insert",
           "table": "notifications",
           "fields": [
@@ -11311,40 +11336,40 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 311,
+      "line": 314,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 312,
+      "line": 315,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 347,
+      "line": 350,
       "name": "acknowledgeSOS",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 351,
+      "line": 354,
       "name": "resolveSOS",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 358,
+      "line": 361,
       "name": "getRanks",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 359,
+          "line": 362,
           "method": "find",
           "table": "ranks",
           "fields": [
@@ -11358,12 +11383,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 362,
+      "line": 365,
       "name": "createRank",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 364,
+          "line": 367,
           "method": "findOne",
           "table": "ranks",
           "fields": [
@@ -11374,7 +11399,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 367,
+          "line": 370,
           "method": "insert",
           "table": "ranks",
           "fields": [
@@ -11392,12 +11417,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 378,
+      "line": 381,
       "name": "updateRank",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 380,
+          "line": 383,
           "method": "update",
           "table": "ranks",
           "fields": [],
@@ -11409,12 +11434,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 388,
+      "line": 391,
       "name": "getOrganizationTree",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 390,
+          "line": 393,
           "method": "find",
           "table": "ranks",
           "fields": [],
@@ -11423,7 +11448,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 391,
+          "line": 394,
           "method": "find",
           "table": "departments",
           "fields": [],
@@ -11432,7 +11457,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 392,
+          "line": 395,
           "method": "find",
           "table": "users",
           "fields": [],
@@ -11444,78 +11469,57 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 394,
-      "name": "callback:map",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 395,
-      "name": "callback:find",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 396,
-      "name": "callback:find",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/hrService.js",
       "line": 397,
-      "name": "callback:find",
+      "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
       "line": 398,
-      "name": "callback:filter",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 406,
-      "name": "callback:map",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 410,
-      "name": "callback:sort",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 413,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 414,
+      "line": 399,
+      "name": "callback:find",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 400,
+      "name": "callback:find",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 401,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 415,
-      "name": "callback:filter",
+      "line": 409,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 413,
+      "name": "callback:sort",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
       "line": 416,
-      "name": "callback:filter",
+      "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
@@ -11528,19 +11532,40 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 436,
+      "line": 418,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 419,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 420,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 439,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 445,
+      "line": 448,
       "name": "reassignOrganizationNode",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 446,
+          "line": 449,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -11549,7 +11574,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 469,
+          "line": 472,
           "method": "update",
           "table": "employees",
           "fields": [],
@@ -11561,12 +11586,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 478,
+      "line": 481,
       "name": "deleteOrganizationNode",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 479,
+          "line": 482,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -11575,19 +11600,8 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 483,
+          "line": 486,
           "method": "find",
-          "table": "employees",
-          "fields": [
-            "reporting_manager_id"
-          ],
-          "missing": [],
-          "status": "SCHEMA MATCH"
-        },
-        {
-          "file": "server/src/services/hrService.js",
-          "line": 485,
-          "method": "update",
           "table": "employees",
           "fields": [
             "reporting_manager_id"
@@ -11601,6 +11615,17 @@
           "method": "update",
           "table": "employees",
           "fields": [
+            "reporting_manager_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/hrService.js",
+          "line": 491,
+          "method": "update",
+          "table": "employees",
+          "fields": [
             "status"
           ],
           "missing": [],
@@ -11608,7 +11633,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 490,
+          "line": 493,
           "method": "update",
           "table": "users",
           "fields": [
@@ -11622,12 +11647,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 501,
+      "line": 504,
       "name": "registerStaff",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 511,
+          "line": 514,
           "method": "findOne",
           "table": "users",
           "fields": [
@@ -11638,7 +11663,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 512,
+          "line": 515,
           "method": "findOne",
           "table": "users",
           "fields": [
@@ -11649,7 +11674,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 512,
+          "line": 515,
           "method": "findOne",
           "table": "employees",
           "fields": [
@@ -11660,7 +11685,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 513,
+          "line": 516,
           "method": "findOne",
           "table": "employees",
           "fields": [
@@ -11672,7 +11697,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 565,
+          "line": 568,
           "method": "find",
           "table": "leave_balances",
           "fields": [
@@ -11683,7 +11708,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 565,
+          "line": 568,
           "method": "delete",
           "table": "leave_balances",
           "fields": [],
@@ -11692,7 +11717,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 566,
+          "line": 569,
           "method": "delete",
           "table": "employees",
           "fields": [],
@@ -11701,7 +11726,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 568,
+          "line": 571,
           "method": "delete",
           "table": "users",
           "fields": [],
@@ -11713,12 +11738,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 531,
+      "line": 534,
       "name": "callback:transaction",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 532,
+          "line": 535,
           "method": "insert",
           "table": "users",
           "fields": [
@@ -11737,7 +11762,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 544,
+          "line": 547,
           "method": "insert",
           "table": "employees",
           "fields": [
@@ -11772,7 +11797,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 560,
+          "line": 563,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -11784,21 +11809,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 565,
-      "name": "callback:catch",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 565,
-      "name": "callback:catch",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 566,
+      "line": 568,
       "name": "callback:catch",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -11812,12 +11823,26 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 579,
+      "line": 569,
+      "name": "callback:catch",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 571,
+      "name": "callback:catch",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 582,
       "name": "getAnnouncements",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 580,
+          "line": 583,
           "method": "find",
           "table": "announcements",
           "fields": [
@@ -11832,12 +11857,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 587,
+      "line": 590,
       "name": "createAnnouncement",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 593,
+          "line": 596,
           "method": "insert",
           "table": "announcements",
           "fields": [
@@ -11859,12 +11884,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 612,
+      "line": 615,
       "name": "updateAnnouncement",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 613,
+          "line": 616,
           "method": "findById",
           "table": "announcements",
           "fields": [],
@@ -11873,7 +11898,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 616,
+          "line": 619,
           "method": "update",
           "table": "announcements",
           "fields": [
@@ -11892,12 +11917,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 632,
+      "line": 635,
       "name": "deleteAnnouncement",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 633,
+          "line": 636,
           "method": "findById",
           "table": "announcements",
           "fields": [],
@@ -11906,7 +11931,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 636,
+          "line": 639,
           "method": "delete",
           "table": "announcements",
           "fields": [],
@@ -11918,12 +11943,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 644,
+      "line": 647,
       "name": "getStaffBirthdays",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 645,
+          "line": 648,
           "method": "find",
           "table": "employees",
           "fields": [
@@ -11938,40 +11963,40 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 650,
+      "line": 653,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 692,
+      "line": 695,
       "name": "callback:sort",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 694,
+      "line": 697,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 695,
+      "line": 698,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 707,
+      "line": 710,
       "name": "updateStaffBirthday",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 708,
+          "line": 711,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -11980,7 +12005,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 711,
+          "line": 714,
           "method": "update",
           "table": "employees",
           "fields": [
@@ -11995,12 +12020,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 723,
+      "line": 726,
       "name": "broadcastBirthday",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 724,
+          "line": 727,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -12009,7 +12034,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 729,
+          "line": 732,
           "method": "insert",
           "table": "announcements",
           "fields": [
@@ -12028,7 +12053,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 742,
+          "line": 745,
           "method": "insert",
           "table": "notifications",
           "fields": [
@@ -14719,12 +14744,101 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 15,
+      "line": 12,
+      "name": "presentSettlement",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/salesService.js",
+      "line": 20,
+      "name": "getSettlements",
+      "operations": [
+        {
+          "file": "server/src/services/salesService.js",
+          "line": 27,
+          "method": "find",
+          "table": "settlements",
+          "fields": [
+            "company_id",
+            "created_at"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/salesService.js",
+          "line": 28,
+          "method": "find",
+          "table": "audit_logs",
+          "fields": [
+            "company_id",
+            "entity",
+            "action"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        }
+      ],
+      "status": "SCHEMA MATCH (STATIC)"
+    },
+    {
+      "file": "server/src/services/salesService.js",
+      "line": 29,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/salesService.js",
+      "line": 29,
+      "name": "callback:find",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/salesService.js",
+      "line": 32,
+      "name": "createSettlement",
+      "operations": [
+        {
+          "file": "server/src/services/salesService.js",
+          "line": 33,
+          "method": "findById",
+          "table": "employees",
+          "fields": [],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/salesService.js",
+          "line": 40,
+          "method": "insert",
+          "table": "settlements",
+          "fields": [
+            "company_id",
+            "agent_id",
+            "settlement_date",
+            "total_collected",
+            "bank_transfer_amount",
+            "cash_in_hand",
+            "deposit_slip_url",
+            "reconciliation_status"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        }
+      ],
+      "status": "SCHEMA MATCH (STATIC)"
+    },
+    {
+      "file": "server/src/services/salesService.js",
+      "line": 52,
       "name": "getMyReport",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 20,
+          "line": 57,
           "method": "find",
           "table": "orders",
           "fields": [
@@ -14735,7 +14849,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 40,
+          "line": 77,
           "method": "find",
           "table": "customers",
           "fields": [],
@@ -14744,7 +14858,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 48,
+          "line": 85,
           "method": "find",
           "table": "visits",
           "fields": [
@@ -14758,96 +14872,96 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 21,
+      "line": 58,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 24,
+      "line": 61,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 25,
+      "line": 62,
       "name": "callback:reduce",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 29,
+      "line": 66,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 30,
+      "line": 67,
       "name": "callback:reduce",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 34,
+      "line": 71,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 35,
+      "line": 72,
       "name": "callback:reduce",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 41,
+      "line": 78,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 42,
+      "line": 79,
       "name": "callback:reduce",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 45,
+      "line": 82,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 49,
+      "line": 86,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 50,
+      "line": 87,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 54,
+      "line": 91,
       "name": "callback:map",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 55,
+          "line": 92,
           "method": "findById",
           "table": "customers",
           "fields": [],
@@ -14859,12 +14973,12 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 78,
+      "line": 115,
       "name": "getCustomers",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 79,
+          "line": 116,
           "method": "find",
           "table": "customers",
           "fields": [],
@@ -14876,19 +14990,19 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 80,
+      "line": 117,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 95,
+      "line": 132,
       "name": "createCustomer",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 97,
+          "line": 134,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -14897,7 +15011,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 107,
+          "line": 144,
           "method": "findOne",
           "table": "customers",
           "fields": [
@@ -14908,7 +15022,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 112,
+          "line": 149,
           "method": "insert",
           "table": "customers",
           "fields": [
@@ -14935,12 +15049,12 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 136,
+      "line": 173,
       "name": "getProducts",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 137,
+          "line": 174,
           "method": "find",
           "table": "products",
           "fields": [],
@@ -14952,26 +15066,26 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 138,
+      "line": 175,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 143,
+      "line": 180,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 153,
+      "line": 190,
       "name": "createOrder",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 165,
+          "line": 202,
           "method": "findOne",
           "table": "orders",
           "fields": [
@@ -14985,12 +15099,12 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 171,
+      "line": 208,
       "name": "callback:transaction",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 172,
+          "line": 209,
           "method": "findById",
           "table": "customers",
           "fields": [],
@@ -14999,7 +15113,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 181,
+          "line": 218,
           "method": "findById",
           "table": "products",
           "fields": [],
@@ -15008,7 +15122,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 214,
+          "line": 251,
           "method": "insert",
           "table": "orders",
           "fields": [
@@ -15032,7 +15146,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 233,
+          "line": 270,
           "method": "insert",
           "table": "order_items",
           "fields": [
@@ -15048,7 +15162,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 244,
+          "line": 281,
           "method": "update",
           "table": "products",
           "fields": [
@@ -15059,7 +15173,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 247,
+          "line": 284,
           "method": "insert",
           "table": "inventory_transactions",
           "fields": [
@@ -15076,7 +15190,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 260,
+          "line": 297,
           "method": "update",
           "table": "customers",
           "fields": [
@@ -15090,12 +15204,12 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 276,
+      "line": 313,
       "name": "getOrders",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 277,
+          "line": 314,
           "method": "find",
           "table": "orders",
           "fields": [
@@ -15106,7 +15220,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 278,
+          "line": 315,
           "method": "find",
           "table": "customers",
           "fields": [],
@@ -15115,7 +15229,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 279,
+          "line": 316,
           "method": "find",
           "table": "order_items",
           "fields": [],
@@ -15124,7 +15238,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 280,
+          "line": 317,
           "method": "find",
           "table": "products",
           "fields": [],
@@ -15136,54 +15250,54 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 282,
+      "line": 319,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 288,
+      "line": 325,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 289,
+      "line": 326,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 290,
+      "line": 327,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 290,
+      "line": 327,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 291,
+      "line": 328,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 301,
+      "line": 338,
       "name": "recordPayment",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 310,
+          "line": 347,
           "method": "findOne",
           "table": "collections",
           "fields": [
@@ -15197,12 +15311,12 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 314,
+      "line": 351,
       "name": "callback:transaction",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 315,
+          "line": 352,
           "method": "findById",
           "table": "customers",
           "fields": [],
@@ -15211,7 +15325,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 322,
+          "line": 359,
           "method": "update",
           "table": "customers",
           "fields": [
@@ -15222,7 +15336,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 324,
+          "line": 361,
           "method": "insert",
           "table": "collections",
           "fields": [
@@ -15244,12 +15358,12 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 349,
+      "line": 386,
       "name": "getPayments",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 350,
+          "line": 387,
           "method": "find",
           "table": "collections",
           "fields": [
@@ -15260,7 +15374,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 351,
+          "line": 388,
           "method": "find",
           "table": "customers",
           "fields": [],
@@ -15269,7 +15383,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 352,
+          "line": 389,
           "method": "find",
           "table": "employees",
           "fields": [],
@@ -15281,40 +15395,40 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 354,
+      "line": 391,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 358,
+      "line": 395,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 360,
+      "line": 397,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 361,
+      "line": 398,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 368,
+      "line": 405,
       "name": "createCompetitorIntel",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 379,
+          "line": 416,
           "method": "insert",
           "table": "competitor_intel",
           "fields": [
@@ -15337,12 +15451,12 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 399,
+      "line": 436,
       "name": "getCompetitorIntel",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 400,
+          "line": 437,
           "method": "find",
           "table": "competitor_intel",
           "fields": [
@@ -15353,7 +15467,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 401,
+          "line": 438,
           "method": "find",
           "table": "customers",
           "fields": [],
@@ -15365,26 +15479,26 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 402,
+      "line": 439,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 404,
+      "line": 441,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 411,
+      "line": 448,
       "name": "approveOrder",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 412,
+          "line": 449,
           "method": "findById",
           "table": "orders",
           "fields": [],
@@ -15393,7 +15507,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 416,
+          "line": 453,
           "method": "update",
           "table": "orders",
           "fields": [
@@ -15406,7 +15520,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 422,
+          "line": 459,
           "method": "insert",
           "table": "order_approvals",
           "fields": [
@@ -15422,7 +15536,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 432,
+          "line": 469,
           "method": "findOne",
           "table": "deliveries",
           "fields": [
@@ -15433,7 +15547,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 434,
+          "line": 471,
           "method": "insert",
           "table": "deliveries",
           "fields": [
@@ -15451,12 +15565,12 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 449,
+      "line": 486,
       "name": "rejectOrder",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 450,
+          "line": 487,
           "method": "findById",
           "table": "orders",
           "fields": [],
@@ -15465,7 +15579,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 453,
+          "line": 490,
           "method": "update",
           "table": "orders",
           "fields": [
@@ -15479,7 +15593,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 460,
+          "line": 497,
           "method": "insert",
           "table": "order_approvals",
           "fields": [
@@ -15498,12 +15612,12 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 475,
+      "line": 512,
       "name": "requestOrderChanges",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 476,
+          "line": 513,
           "method": "findById",
           "table": "orders",
           "fields": [],
@@ -15512,7 +15626,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 479,
+          "line": 516,
           "method": "update",
           "table": "orders",
           "fields": [
@@ -15524,7 +15638,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 484,
+          "line": 521,
           "method": "insert",
           "table": "order_approvals",
           "fields": [
@@ -15543,12 +15657,12 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 499,
+      "line": 536,
       "name": "getSalesFunnel",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 501,
+          "line": 538,
           "method": "find",
           "table": "visits",
           "fields": [
@@ -15559,7 +15673,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 502,
+          "line": 539,
           "method": "find",
           "table": "orders",
           "fields": [
@@ -15570,7 +15684,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 503,
+          "line": 540,
           "method": "find",
           "table": "collections",
           "fields": [
@@ -15584,47 +15698,47 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 506,
+      "line": 543,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 508,
+      "line": 545,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 509,
+      "line": 546,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 510,
+      "line": 547,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 511,
+      "line": 548,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 532,
+      "line": 569,
       "name": "processPaystackCollection",
       "operations": [
         {
           "file": "server/src/services/salesService.js",
-          "line": 534,
+          "line": 571,
           "method": "findById",
           "table": "customers",
           "fields": [],
@@ -15633,7 +15747,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 540,
+          "line": 577,
           "method": "insert",
           "table": "collections",
           "fields": [
@@ -15653,7 +15767,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 555,
+          "line": 592,
           "method": "update",
           "table": "customers",
           "fields": [
@@ -15664,7 +15778,7 @@
         },
         {
           "file": "server/src/services/salesService.js",
-          "line": 559,
+          "line": 596,
           "method": "update",
           "table": "orders",
           "fields": [
@@ -15679,22 +15793,30 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 16,
+      "line": 12,
+      "name": "companyFilter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/scheduleService.js",
+      "line": 21,
       "name": "calculateHours",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 33,
+      "line": 38,
       "name": "getEmployeeSchedules",
       "operations": [
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 34,
+          "line": 39,
           "method": "find",
           "table": "schedules",
           "fields": [
+            "company_id",
             "employee_id",
             "date"
           ],
@@ -15706,36 +15828,37 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 37,
+      "line": 42,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 40,
+      "line": 45,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 43,
+      "line": 48,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 52,
+      "line": 57,
       "name": "getTodaySchedule",
       "operations": [
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 54,
+          "line": 59,
           "method": "find",
           "table": "schedules",
           "fields": [
+            "company_id",
             "employee_id"
           ],
           "missing": [],
@@ -15746,19 +15869,19 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 55,
+      "line": 60,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 62,
+      "line": 67,
       "name": "createOrUpdateSchedule",
       "operations": [
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 63,
+          "line": 68,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -15767,7 +15890,7 @@
         },
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 67,
+          "line": 72,
           "method": "findOne",
           "table": "schedules",
           "fields": [
@@ -15779,7 +15902,7 @@
         },
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 74,
+          "line": 79,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -15788,7 +15911,7 @@
         },
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 78,
+          "line": 83,
           "method": "findOne",
           "table": "employees",
           "fields": [
@@ -15800,7 +15923,7 @@
         },
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 135,
+          "line": 140,
           "method": "update",
           "table": "schedules",
           "fields": [
@@ -15835,7 +15958,7 @@
         },
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 137,
+          "line": 142,
           "method": "insert",
           "table": "schedules",
           "fields": [
@@ -15870,10 +15993,13 @@
         },
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 159,
+          "line": 164,
           "method": "find",
           "table": "employees",
-          "fields": [],
+          "fields": [
+            "company_id",
+            "status"
+          ],
           "missing": [],
           "status": "SCHEMA MATCH"
         }
@@ -15882,26 +16008,26 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 90,
+      "line": 95,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 160,
+      "line": 165,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 191,
+      "line": 196,
       "name": "updateTaskItemStatus",
       "operations": [
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 192,
+          "line": 197,
           "method": "findById",
           "table": "schedules",
           "fields": [],
@@ -15910,7 +16036,7 @@
         },
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 203,
+          "line": 210,
           "method": "update",
           "table": "schedules",
           "fields": [
@@ -15924,40 +16050,41 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 196,
+      "line": 201,
+      "name": "callback:some",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/scheduleService.js",
+      "line": 203,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 209,
+      "line": 216,
       "name": "getSupervisorSchedules",
       "operations": [
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 212,
+          "line": 220,
           "method": "find",
           "table": "employees",
-          "fields": [],
+          "fields": [
+            "company_id"
+          ],
           "missing": [],
           "status": "SCHEMA MATCH"
         },
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 221,
-          "method": "findById",
-          "table": "employees",
-          "fields": [],
-          "missing": [],
-          "status": "SCHEMA MATCH"
-        },
-        {
-          "file": "server/src/services/scheduleService.js",
-          "line": 229,
+          "line": 231,
           "method": "find",
           "table": "schedules",
           "fields": [
+            "company_id",
             "date"
           ],
           "missing": [],
@@ -15968,70 +16095,56 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 218,
+      "line": 226,
+      "name": "callback:some",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/scheduleService.js",
+      "line": 227,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 223,
-      "name": "callback:filter",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/scheduleService.js",
-      "line": 228,
+      "line": 230,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 231,
+      "line": 233,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 235,
+      "line": 237,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 238,
+      "line": 240,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 241,
+      "line": 243,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 245,
-      "name": "callback:filter",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/scheduleService.js",
-      "line": 254,
-      "name": "callback:filter",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/scheduleService.js",
-      "line": 255,
+      "line": 247,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -16059,19 +16172,33 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 270,
+      "line": 259,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/scheduleService.js",
+      "line": 260,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/scheduleService.js",
+      "line": 272,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 277,
+      "line": 279,
       "name": "reviewSupervisorSchedule",
       "operations": [
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 278,
+          "line": 280,
           "method": "findById",
           "table": "schedules",
           "fields": [],
@@ -16080,7 +16207,7 @@
         },
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 287,
+          "line": 289,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -16089,7 +16216,7 @@
         },
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 290,
+          "line": 292,
           "method": "update",
           "table": "schedules",
           "fields": [
@@ -16108,15 +16235,16 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 327,
+      "line": 329,
       "name": "getHRSchedules",
       "operations": [
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 328,
+          "line": 331,
           "method": "find",
           "table": "schedules",
           "fields": [
+            "company_id",
             "date"
           ],
           "missing": [],
@@ -16124,22 +16252,17 @@
         },
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 329,
+          "line": 332,
           "method": "find",
           "table": "employees",
-          "fields": [],
+          "fields": [
+            "company_id"
+          ],
           "missing": [],
           "status": "SCHEMA MATCH"
         }
       ],
       "status": "SCHEMA MATCH (STATIC)"
-    },
-    {
-      "file": "server/src/services/scheduleService.js",
-      "line": 334,
-      "name": "callback:filter",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
@@ -16157,21 +16280,14 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 344,
+      "line": 343,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 354,
-      "name": "callback:filter",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/scheduleService.js",
-      "line": 355,
+      "line": 347,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -16192,19 +16308,33 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 359,
+      "line": 360,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 376,
+      "line": 361,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/scheduleService.js",
+      "line": 362,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/scheduleService.js",
+      "line": 379,
       "name": "reviewHRSchedule",
       "operations": [
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 377,
+          "line": 380,
           "method": "findById",
           "table": "schedules",
           "fields": [],
@@ -16213,7 +16343,7 @@
         },
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 383,
+          "line": 386,
           "method": "update",
           "table": "schedules",
           "fields": [
@@ -16229,12 +16359,12 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 403,
+      "line": 406,
       "name": "deleteSchedule",
       "operations": [
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 404,
+          "line": 407,
           "method": "findById",
           "table": "schedules",
           "fields": [],
@@ -16243,7 +16373,7 @@
         },
         {
           "file": "server/src/services/scheduleService.js",
-          "line": 409,
+          "line": 412,
           "method": "delete",
           "table": "schedules",
           "fields": [],
@@ -32480,11 +32610,12 @@
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 11,
+      "line": 10,
       "method": "findOne",
       "table": "employees",
       "fields": [
-        "user_id"
+        "user_id",
+        "company_id"
       ],
       "missing": [],
       "status": "SCHEMA MATCH"
@@ -35503,19 +35634,12 @@
     },
     {
       "file": "server/src/services/executiveService.js",
-      "line": 18,
+      "line": 21,
       "method": "find",
       "table": "orders",
-      "fields": [],
-      "missing": [],
-      "status": "SCHEMA MATCH"
-    },
-    {
-      "file": "server/src/services/executiveService.js",
-      "line": 23,
-      "method": "find",
-      "table": "collections",
-      "fields": [],
+      "fields": [
+        "company_id"
+      ],
       "missing": [],
       "status": "SCHEMA MATCH"
     },
@@ -35523,8 +35647,10 @@
       "file": "server/src/services/executiveService.js",
       "line": 26,
       "method": "find",
-      "table": "customers",
-      "fields": [],
+      "table": "collections",
+      "fields": [
+        "company_id"
+      ],
       "missing": [],
       "status": "SCHEMA MATCH"
     },
@@ -35532,8 +35658,20 @@
       "file": "server/src/services/executiveService.js",
       "line": 29,
       "method": "find",
+      "table": "customers",
+      "fields": [
+        "company_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/executiveService.js",
+      "line": 32,
+      "method": "find",
       "table": "employees",
       "fields": [
+        "company_id",
         "status"
       ],
       "missing": [],
@@ -35541,10 +35679,11 @@
     },
     {
       "file": "server/src/services/executiveService.js",
-      "line": 30,
+      "line": 33,
       "method": "find",
       "table": "attendance",
       "fields": [
+        "company_id",
         "date"
       ],
       "missing": [],
@@ -35552,10 +35691,12 @@
     },
     {
       "file": "server/src/services/executiveService.js",
-      "line": 36,
+      "line": 39,
       "method": "find",
       "table": "tasks",
-      "fields": [],
+      "fields": [
+        "company_id"
+      ],
       "missing": [],
       "status": "SCHEMA MATCH"
     },
@@ -37479,7 +37620,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 240,
+      "line": 243,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -37488,7 +37629,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 243,
+      "line": 246,
       "method": "update",
       "table": "employees",
       "fields": [
@@ -37500,7 +37641,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 249,
+      "line": 252,
       "method": "update",
       "table": "users",
       "fields": [
@@ -37512,7 +37653,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 263,
+      "line": 266,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -37521,7 +37662,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 266,
+      "line": 269,
       "method": "update",
       "table": "employees",
       "fields": [
@@ -37533,7 +37674,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 272,
+      "line": 275,
       "method": "update",
       "table": "users",
       "fields": [
@@ -37545,7 +37686,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 286,
+      "line": 289,
       "method": "find",
       "table": "audit_logs",
       "fields": [
@@ -37557,7 +37698,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 306,
+      "line": 309,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -37566,7 +37707,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 310,
+      "line": 313,
       "method": "find",
       "table": "ranks",
       "fields": [],
@@ -37575,7 +37716,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 319,
+      "line": 322,
       "method": "insert",
       "table": "tasks",
       "fields": [
@@ -37595,7 +37736,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 333,
+      "line": 336,
       "method": "insert",
       "table": "notifications",
       "fields": [
@@ -37609,7 +37750,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 359,
+      "line": 362,
       "method": "find",
       "table": "ranks",
       "fields": [
@@ -37620,7 +37761,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 364,
+      "line": 367,
       "method": "findOne",
       "table": "ranks",
       "fields": [
@@ -37631,7 +37772,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 367,
+      "line": 370,
       "method": "insert",
       "table": "ranks",
       "fields": [
@@ -37646,7 +37787,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 380,
+      "line": 383,
       "method": "update",
       "table": "ranks",
       "fields": [],
@@ -37655,7 +37796,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 390,
+      "line": 393,
       "method": "find",
       "table": "ranks",
       "fields": [],
@@ -37664,7 +37805,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 391,
+      "line": 394,
       "method": "find",
       "table": "departments",
       "fields": [],
@@ -37673,7 +37814,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 392,
+      "line": 395,
       "method": "find",
       "table": "users",
       "fields": [],
@@ -37682,7 +37823,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 446,
+      "line": 449,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -37691,7 +37832,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 469,
+      "line": 472,
       "method": "update",
       "table": "employees",
       "fields": [],
@@ -37700,7 +37841,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 479,
+      "line": 482,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -37709,19 +37850,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 483,
+      "line": 486,
       "method": "find",
-      "table": "employees",
-      "fields": [
-        "reporting_manager_id"
-      ],
-      "missing": [],
-      "status": "SCHEMA MATCH"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 485,
-      "method": "update",
       "table": "employees",
       "fields": [
         "reporting_manager_id"
@@ -37735,6 +37865,17 @@
       "method": "update",
       "table": "employees",
       "fields": [
+        "reporting_manager_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 491,
+      "method": "update",
+      "table": "employees",
+      "fields": [
         "status"
       ],
       "missing": [],
@@ -37742,7 +37883,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 490,
+      "line": 493,
       "method": "update",
       "table": "users",
       "fields": [
@@ -37753,7 +37894,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 511,
+      "line": 514,
       "method": "findOne",
       "table": "users",
       "fields": [
@@ -37764,7 +37905,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 512,
+      "line": 515,
       "method": "findOne",
       "table": "users",
       "fields": [
@@ -37775,7 +37916,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 512,
+      "line": 515,
       "method": "findOne",
       "table": "employees",
       "fields": [
@@ -37786,7 +37927,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 513,
+      "line": 516,
       "method": "findOne",
       "table": "employees",
       "fields": [
@@ -37798,7 +37939,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 532,
+      "line": 535,
       "method": "insert",
       "table": "users",
       "fields": [
@@ -37817,7 +37958,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 544,
+      "line": 547,
       "method": "insert",
       "table": "employees",
       "fields": [
@@ -37852,7 +37993,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 560,
+      "line": 563,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -37861,7 +38002,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 565,
+      "line": 568,
       "method": "find",
       "table": "leave_balances",
       "fields": [
@@ -37872,7 +38013,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 565,
+      "line": 568,
       "method": "delete",
       "table": "leave_balances",
       "fields": [],
@@ -37881,7 +38022,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 566,
+      "line": 569,
       "method": "delete",
       "table": "employees",
       "fields": [],
@@ -37890,7 +38031,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 568,
+      "line": 571,
       "method": "delete",
       "table": "users",
       "fields": [],
@@ -37899,7 +38040,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 580,
+      "line": 583,
       "method": "find",
       "table": "announcements",
       "fields": [
@@ -37911,7 +38052,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 593,
+      "line": 596,
       "method": "insert",
       "table": "announcements",
       "fields": [
@@ -37930,7 +38071,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 613,
+      "line": 616,
       "method": "findById",
       "table": "announcements",
       "fields": [],
@@ -37939,7 +38080,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 616,
+      "line": 619,
       "method": "update",
       "table": "announcements",
       "fields": [
@@ -37955,7 +38096,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 633,
+      "line": 636,
       "method": "findById",
       "table": "announcements",
       "fields": [],
@@ -37964,7 +38105,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 636,
+      "line": 639,
       "method": "delete",
       "table": "announcements",
       "fields": [],
@@ -37973,7 +38114,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 645,
+      "line": 648,
       "method": "find",
       "table": "employees",
       "fields": [
@@ -37985,7 +38126,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 708,
+      "line": 711,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -37994,7 +38135,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 711,
+      "line": 714,
       "method": "update",
       "table": "employees",
       "fields": [
@@ -38006,7 +38147,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 724,
+      "line": 727,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -38015,7 +38156,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 729,
+      "line": 732,
       "method": "insert",
       "table": "announcements",
       "fields": [
@@ -38034,7 +38175,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 742,
+      "line": 745,
       "method": "insert",
       "table": "notifications",
       "fields": [
@@ -39496,7 +39637,59 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 20,
+      "line": 27,
+      "method": "find",
+      "table": "settlements",
+      "fields": [
+        "company_id",
+        "created_at"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/salesService.js",
+      "line": 28,
+      "method": "find",
+      "table": "audit_logs",
+      "fields": [
+        "company_id",
+        "entity",
+        "action"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/salesService.js",
+      "line": 33,
+      "method": "findById",
+      "table": "employees",
+      "fields": [],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/salesService.js",
+      "line": 40,
+      "method": "insert",
+      "table": "settlements",
+      "fields": [
+        "company_id",
+        "agent_id",
+        "settlement_date",
+        "total_collected",
+        "bank_transfer_amount",
+        "cash_in_hand",
+        "deposit_slip_url",
+        "reconciliation_status"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/salesService.js",
+      "line": 57,
       "method": "find",
       "table": "orders",
       "fields": [
@@ -39507,7 +39700,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 40,
+      "line": 77,
       "method": "find",
       "table": "customers",
       "fields": [],
@@ -39516,7 +39709,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 48,
+      "line": 85,
       "method": "find",
       "table": "visits",
       "fields": [
@@ -39527,7 +39720,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 55,
+      "line": 92,
       "method": "findById",
       "table": "customers",
       "fields": [],
@@ -39536,7 +39729,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 79,
+      "line": 116,
       "method": "find",
       "table": "customers",
       "fields": [],
@@ -39545,7 +39738,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 97,
+      "line": 134,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -39554,7 +39747,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 107,
+      "line": 144,
       "method": "findOne",
       "table": "customers",
       "fields": [
@@ -39565,7 +39758,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 112,
+      "line": 149,
       "method": "insert",
       "table": "customers",
       "fields": [
@@ -39589,7 +39782,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 137,
+      "line": 174,
       "method": "find",
       "table": "products",
       "fields": [],
@@ -39598,7 +39791,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 165,
+      "line": 202,
       "method": "findOne",
       "table": "orders",
       "fields": [
@@ -39609,7 +39802,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 172,
+      "line": 209,
       "method": "findById",
       "table": "customers",
       "fields": [],
@@ -39618,7 +39811,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 181,
+      "line": 218,
       "method": "findById",
       "table": "products",
       "fields": [],
@@ -39627,7 +39820,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 214,
+      "line": 251,
       "method": "insert",
       "table": "orders",
       "fields": [
@@ -39651,7 +39844,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 233,
+      "line": 270,
       "method": "insert",
       "table": "order_items",
       "fields": [
@@ -39667,7 +39860,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 244,
+      "line": 281,
       "method": "update",
       "table": "products",
       "fields": [
@@ -39678,7 +39871,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 247,
+      "line": 284,
       "method": "insert",
       "table": "inventory_transactions",
       "fields": [
@@ -39695,7 +39888,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 260,
+      "line": 297,
       "method": "update",
       "table": "customers",
       "fields": [
@@ -39706,7 +39899,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 277,
+      "line": 314,
       "method": "find",
       "table": "orders",
       "fields": [
@@ -39717,7 +39910,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 278,
+      "line": 315,
       "method": "find",
       "table": "customers",
       "fields": [],
@@ -39726,7 +39919,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 279,
+      "line": 316,
       "method": "find",
       "table": "order_items",
       "fields": [],
@@ -39735,7 +39928,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 280,
+      "line": 317,
       "method": "find",
       "table": "products",
       "fields": [],
@@ -39744,7 +39937,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 310,
+      "line": 347,
       "method": "findOne",
       "table": "collections",
       "fields": [
@@ -39755,7 +39948,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 315,
+      "line": 352,
       "method": "findById",
       "table": "customers",
       "fields": [],
@@ -39764,7 +39957,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 322,
+      "line": 359,
       "method": "update",
       "table": "customers",
       "fields": [
@@ -39775,7 +39968,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 324,
+      "line": 361,
       "method": "insert",
       "table": "collections",
       "fields": [
@@ -39794,7 +39987,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 350,
+      "line": 387,
       "method": "find",
       "table": "collections",
       "fields": [
@@ -39805,7 +39998,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 351,
+      "line": 388,
       "method": "find",
       "table": "customers",
       "fields": [],
@@ -39814,7 +40007,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 352,
+      "line": 389,
       "method": "find",
       "table": "employees",
       "fields": [],
@@ -39823,7 +40016,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 379,
+      "line": 416,
       "method": "insert",
       "table": "competitor_intel",
       "fields": [
@@ -39843,7 +40036,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 400,
+      "line": 437,
       "method": "find",
       "table": "competitor_intel",
       "fields": [
@@ -39854,7 +40047,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 401,
+      "line": 438,
       "method": "find",
       "table": "customers",
       "fields": [],
@@ -39863,7 +40056,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 412,
+      "line": 449,
       "method": "findById",
       "table": "orders",
       "fields": [],
@@ -39872,7 +40065,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 416,
+      "line": 453,
       "method": "update",
       "table": "orders",
       "fields": [
@@ -39885,7 +40078,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 422,
+      "line": 459,
       "method": "insert",
       "table": "order_approvals",
       "fields": [
@@ -39901,7 +40094,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 432,
+      "line": 469,
       "method": "findOne",
       "table": "deliveries",
       "fields": [
@@ -39912,7 +40105,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 434,
+      "line": 471,
       "method": "insert",
       "table": "deliveries",
       "fields": [
@@ -39927,7 +40120,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 450,
+      "line": 487,
       "method": "findById",
       "table": "orders",
       "fields": [],
@@ -39936,7 +40129,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 453,
+      "line": 490,
       "method": "update",
       "table": "orders",
       "fields": [
@@ -39950,7 +40143,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 460,
+      "line": 497,
       "method": "insert",
       "table": "order_approvals",
       "fields": [
@@ -39966,7 +40159,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 476,
+      "line": 513,
       "method": "findById",
       "table": "orders",
       "fields": [],
@@ -39975,7 +40168,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 479,
+      "line": 516,
       "method": "update",
       "table": "orders",
       "fields": [
@@ -39987,7 +40180,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 484,
+      "line": 521,
       "method": "insert",
       "table": "order_approvals",
       "fields": [
@@ -40003,7 +40196,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 501,
+      "line": 538,
       "method": "find",
       "table": "visits",
       "fields": [
@@ -40014,7 +40207,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 502,
+      "line": 539,
       "method": "find",
       "table": "orders",
       "fields": [
@@ -40025,7 +40218,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 503,
+      "line": 540,
       "method": "find",
       "table": "collections",
       "fields": [
@@ -40036,7 +40229,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 534,
+      "line": 571,
       "method": "findById",
       "table": "customers",
       "fields": [],
@@ -40045,7 +40238,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 540,
+      "line": 577,
       "method": "insert",
       "table": "collections",
       "fields": [
@@ -40065,7 +40258,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 555,
+      "line": 592,
       "method": "update",
       "table": "customers",
       "fields": [
@@ -40076,7 +40269,7 @@
     },
     {
       "file": "server/src/services/salesService.js",
-      "line": 559,
+      "line": 596,
       "method": "update",
       "table": "orders",
       "fields": [
@@ -40088,10 +40281,11 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 34,
+      "line": 39,
       "method": "find",
       "table": "schedules",
       "fields": [
+        "company_id",
         "employee_id",
         "date"
       ],
@@ -40100,10 +40294,11 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 54,
+      "line": 59,
       "method": "find",
       "table": "schedules",
       "fields": [
+        "company_id",
         "employee_id"
       ],
       "missing": [],
@@ -40111,7 +40306,7 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 63,
+      "line": 68,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -40120,7 +40315,7 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 67,
+      "line": 72,
       "method": "findOne",
       "table": "schedules",
       "fields": [
@@ -40132,7 +40327,7 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 74,
+      "line": 79,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -40141,7 +40336,7 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 78,
+      "line": 83,
       "method": "findOne",
       "table": "employees",
       "fields": [
@@ -40153,7 +40348,7 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 135,
+      "line": 140,
       "method": "update",
       "table": "schedules",
       "fields": [
@@ -40188,7 +40383,7 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 137,
+      "line": 142,
       "method": "insert",
       "table": "schedules",
       "fields": [
@@ -40223,16 +40418,19 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 159,
+      "line": 164,
       "method": "find",
       "table": "employees",
-      "fields": [],
+      "fields": [
+        "company_id",
+        "status"
+      ],
       "missing": [],
       "status": "SCHEMA MATCH"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 192,
+      "line": 197,
       "method": "findById",
       "table": "schedules",
       "fields": [],
@@ -40241,7 +40439,7 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 203,
+      "line": 210,
       "method": "update",
       "table": "schedules",
       "fields": [
@@ -40252,28 +40450,22 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 212,
+      "line": 220,
       "method": "find",
       "table": "employees",
-      "fields": [],
+      "fields": [
+        "company_id"
+      ],
       "missing": [],
       "status": "SCHEMA MATCH"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 221,
-      "method": "findById",
-      "table": "employees",
-      "fields": [],
-      "missing": [],
-      "status": "SCHEMA MATCH"
-    },
-    {
-      "file": "server/src/services/scheduleService.js",
-      "line": 229,
+      "line": 231,
       "method": "find",
       "table": "schedules",
       "fields": [
+        "company_id",
         "date"
       ],
       "missing": [],
@@ -40281,7 +40473,7 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 278,
+      "line": 280,
       "method": "findById",
       "table": "schedules",
       "fields": [],
@@ -40290,7 +40482,7 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 287,
+      "line": 289,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -40299,7 +40491,7 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 290,
+      "line": 292,
       "method": "update",
       "table": "schedules",
       "fields": [
@@ -40315,10 +40507,11 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 328,
+      "line": 331,
       "method": "find",
       "table": "schedules",
       "fields": [
+        "company_id",
         "date"
       ],
       "missing": [],
@@ -40326,16 +40519,18 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 329,
+      "line": 332,
       "method": "find",
       "table": "employees",
-      "fields": [],
+      "fields": [
+        "company_id"
+      ],
       "missing": [],
       "status": "SCHEMA MATCH"
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 377,
+      "line": 380,
       "method": "findById",
       "table": "schedules",
       "fields": [],
@@ -40344,7 +40539,7 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 383,
+      "line": 386,
       "method": "update",
       "table": "schedules",
       "fields": [
@@ -40357,7 +40552,7 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 404,
+      "line": 407,
       "method": "findById",
       "table": "schedules",
       "fields": [],
@@ -40366,7 +40561,7 @@
     },
     {
       "file": "server/src/services/scheduleService.js",
-      "line": 409,
+      "line": 412,
       "method": "delete",
       "table": "schedules",
       "fields": [],

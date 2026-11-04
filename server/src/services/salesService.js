@@ -7,8 +7,45 @@ import { db } from '../config/database.js';
 import { calculateOrderTotals, calculateCommission, VAT_RATE } from '../utils/calculations.js';
 import { recordAudit } from '../middleware/auditLogger.js';
 import { storageService } from './storageService.js';
+import { getLagosTime } from '../utils/nigeriaTime.js';
+
+function presentSettlement(row, metadata = {}) {
+  return { ...row, amount: row.bank_transfer_amount, expected_amount: row.total_collected,
+    difference: Number(row.bank_transfer_amount || 0) - Number(row.total_collected || 0),
+    bank_slip_url: row.deposit_slip_url, status: row.reconciliation_status,
+    deposit_reference: metadata.deposit_reference || '', notes: metadata.notes || '' };
+}
 
 export const salesService = {
+  async getSettlements(agentId, companyId) {
+    if (!Number.isSafeInteger(Number(companyId)) || Number(companyId) <= 0) throw new Error('Company context is required.');
+    const filter = { company_id: Number(companyId) };
+    if (agentId !== undefined && agentId !== null && agentId !== '') {
+      if (!Number.isSafeInteger(Number(agentId)) || Number(agentId) <= 0) throw new Error('Invalid employee identifier.');
+      filter.agent_id = Number(agentId);
+    }
+    const rows = await db.find('settlements', filter, { order: { column: 'created_at', ascending: false } });
+    const logs = await db.find('audit_logs', { company_id: Number(companyId), entity: 'settlements', action: 'SETTLEMENT_SUBMITTED' });
+    return rows.map(row => presentSettlement(row, logs.find(log => String(log.entity_id) === String(row.id))?.metadata));
+  },
+
+  async createSettlement(data, employeeId, file = null, req) {
+    const employee = await db.findById('employees', Number(employeeId));
+    if (!employee || employee.status !== 'active' || Number(employee.user_id) !== Number(req?.user?.id) || Number(employee.company_id) !== Number(req?.user?.company_id)) throw new Error('An active linked employee profile is required.');
+    const amount = Number(data.amount);
+    const expected = data.expected_amount === undefined || data.expected_amount === '' ? amount : Number(data.expected_amount);
+    if (!String(data.amount ?? '').trim() || !Number.isFinite(amount) || amount < 0 || !Number.isFinite(expected) || expected < 0) throw new Error('Settlement amounts must be valid non-negative numbers.');
+    if (String(data.deposit_reference || '').length > 200 || String(data.notes || '').length > 2000) throw new Error('Settlement reference or notes are too long.');
+    const slipUrl = file ? await storageService.uploadFile(file, 'settlements') : null;
+    const row = await db.insert('settlements', {
+      company_id: Number(employee.company_id), agent_id: Number(employee.id), settlement_date: getLagosTime().dateStr,
+      total_collected: expected, bank_transfer_amount: amount, cash_in_hand: Math.max(0, expected - amount),
+      deposit_slip_url: slipUrl, reconciliation_status: 'PENDING_AUDIT'
+    });
+    const metadata = { deposit_reference: String(data.deposit_reference || ''), notes: String(data.notes || '') };
+    await recordAudit(req.user, 'SETTLEMENT_SUBMITTED', 'settlements', row.id, metadata, req);
+    return presentSettlement(row, metadata);
+  },
   /**
    * Generates the 12-section Sales Cockpit KPI report and commission metrics.
    */

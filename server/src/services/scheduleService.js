@@ -9,6 +9,11 @@ import { notificationService } from './notificationService.js';
 import { recordAudit } from '../middleware/auditLogger.js';
 import { logger } from '../utils/logger.js';
 
+function companyFilter(companyId) {
+  if (!Number.isSafeInteger(Number(companyId)) || Number(companyId) <= 0) throw new Error('Company context is required.');
+  return { company_id: Number(companyId) };
+}
+
 export const scheduleService = {
   /**
    * Calculates total hours between two HH:MM strings or from tasks array
@@ -30,8 +35,8 @@ export const scheduleService = {
   /**
    * Retrieves schedules for the authenticated employee.
    */
-  async getEmployeeSchedules(employeeId, filters = {}) {
-    let schedules = await db.find('schedules', { employee_id: Number(employeeId) }, { order: { column: 'date', ascending: false } });
+  async getEmployeeSchedules(employeeId, filters = {}, companyId) {
+    let schedules = await db.find('schedules', { ...companyFilter(companyId), employee_id: Number(employeeId) }, { order: { column: 'date', ascending: false } });
 
     if (filters.date) {
       schedules = schedules.filter(s => s.date === filters.date);
@@ -49,9 +54,9 @@ export const scheduleService = {
   /**
    * Retrieves today's schedule for the employee.
    */
-  async getTodaySchedule(employeeId) {
+  async getTodaySchedule(employeeId, companyId) {
     const todayStr = getLagosTime().dateStr;
-    const schedules = await db.find('schedules', { employee_id: Number(employeeId) });
+    const schedules = await db.find('schedules', { ...companyFilter(companyId), employee_id: Number(employeeId) });
     const todaySchedule = schedules.find(s => s.date === todayStr);
     return todaySchedule || null;
   },
@@ -156,7 +161,7 @@ export const scheduleService = {
 
       // 2. Notify HR Team (HR Manager / CEO / Admins)
       try {
-        const hrEmployees = await db.find('employees');
+        const hrEmployees = await db.find('employees', { company_id: employee.company_id, status: 'active' });
         const hrStaff = hrEmployees.filter(e => e.rank_code === 'HR' || e.department === 'Human Resources');
         for (const hr of hrStaff) {
           if (hr.id !== Number(employeeId)) {
@@ -174,11 +179,11 @@ export const scheduleService = {
       }
 
       if (req) {
-        await recordAudit(req, 'SUBMIT_DAILY_SCHEDULE', 'schedules', result.id, {
+        await recordAudit(req.user, 'SUBMIT_DAILY_SCHEDULE', 'schedules', result.id, {
           employee_id: employee.id,
           date,
           tasks_count: tasks.length
-        });
+        }, req);
       }
     }
 
@@ -191,10 +196,12 @@ export const scheduleService = {
   async updateTaskItemStatus(scheduleId, employeeId, taskId, taskStatus) {
     const schedule = await db.findById('schedules', Number(scheduleId));
     if (!schedule) throw new Error('Schedule not found.');
-    if (schedule.employee_id !== Number(employeeId)) throw new Error('Unauthorized schedule modification.');
+    if (Number(schedule.employee_id) !== Number(employeeId)) throw new Error('Unauthorized schedule modification.');
+    if (!['Planned', 'In Progress', 'Completed', 'Cancelled'].includes(taskStatus)) throw new Error('Invalid task status.');
+    if (!(schedule.tasks || []).some(t => String(t.id) === String(taskId))) throw new Error('Task not found in this schedule.');
 
     const updatedTasks = (schedule.tasks || []).map(t => {
-      if (t.id === taskId) {
+      if (String(t.id) === String(taskId)) {
         return { ...t, status: taskStatus };
       }
       return t;
@@ -206,27 +213,22 @@ export const scheduleService = {
   /**
    * Retrieves schedules for supervisor's subordinate team members.
    */
-  async getSupervisorSchedules(supervisorId, filters = {}, userRole = '') {
-    const isGlobalManager = ['SUPER_ADMIN', 'ADMIN', 'CEO', 'CTO', 'IT_ADMIN', 'MANAGER', 'HR_MANAGER'].includes(userRole);
+  async getSupervisorSchedules(supervisorId, filters = {}, userRole = '', companyId) {
+    const scope = companyFilter(companyId);
+    const isGlobalManager = ['SUPER_ADMIN', 'ADMIN', 'CEO', 'CTO', 'IT_ADMIN', 'MANAGER', 'HR', 'HR_MANAGER'].includes(userRole);
     
-    let employees = await db.find('employees');
+    let employees = await db.find('employees', scope);
     let teamEmployees = [];
 
     if (isGlobalManager) {
       teamEmployees = employees;
     } else {
+      if (!supervisorId || !employees.some(e => Number(e.id) === Number(supervisorId) && e.status === 'active')) throw new Error('An active supervisor profile is required.');
       teamEmployees = employees.filter(e => String(e.supervisor_id) === String(supervisorId) || String(e.id) === String(supervisorId));
-      if (teamEmployees.length === 0) {
-        // If supervisor has no explicit supervisor_id links, include employees in same territory/department or field staff
-        const sup = await db.findById('employees', Number(supervisorId));
-        if (sup) {
-          teamEmployees = employees.filter(e => e.department === sup.department || ['Commercial Sales', 'Field Operations'].includes(e.department));
-        }
-      }
     }
 
-    const teamIds = teamEmployees.map(e => e.id);
-    let allSchedules = await db.find('schedules', {}, { order: { column: 'date', ascending: false } });
+    const teamIds = teamEmployees.map(e => Number(e.id));
+    let allSchedules = await db.find('schedules', scope, { order: { column: 'date', ascending: false } });
 
     let filtered = allSchedules.filter(s => teamIds.includes(Number(s.employee_id)));
 
@@ -284,8 +286,8 @@ export const scheduleService = {
     }
 
     if (req?.user?.role_code === 'SUPERVISOR' && Number(schedule.supervisor_id) !== Number(supervisorId) && Number(schedule.employee_id) !== Number(supervisorId)) throw new Error('This schedule is outside your team.');
-    const sup = await db.findById('employees', Number(supervisorId));
-    const supervisorName = sup ? `${sup.first_name} ${sup.last_name}` : 'Field Supervisor';
+    const sup = supervisorId ? await db.findById('employees', Number(supervisorId)) : null;
+    const supervisorName = sup ? `${sup.first_name} ${sup.last_name}` : (req?.user?.full_name || 'Operations Manager');
 
     const updated = await db.update('schedules', schedule.id, {
       status: status,
@@ -311,11 +313,11 @@ export const scheduleService = {
     }
 
     if (req) {
-      await recordAudit(req, 'SUPERVISOR_REVIEW_SCHEDULE', 'schedules', schedule.id, {
+      await recordAudit(req.user, 'SUPERVISOR_REVIEW_SCHEDULE', 'schedules', schedule.id, {
         supervisor_id: supervisorId,
         status,
         notes: reviewData.notes
-      });
+      }, req);
     }
 
     return updated;
@@ -324,9 +326,10 @@ export const scheduleService = {
   /**
    * Retrieves company-wide daily schedules for HR Command Center.
    */
-  async getHRSchedules(filters = {}) {
-    let schedules = await db.find('schedules', {}, { order: { column: 'date', ascending: false } });
-    let employees = await db.find('employees');
+  async getHRSchedules(filters = {}, companyId) {
+    const scope = companyFilter(companyId);
+    let schedules = await db.find('schedules', scope, { order: { column: 'date', ascending: false } });
+    let employees = await db.find('employees', scope);
 
     const targetDate = filters.date || getLagosTime().dateStr;
 
@@ -352,7 +355,7 @@ export const scheduleService = {
 
     // Company-wide compliance metrics for target date
     const targetDateSchedules = schedules.filter(s => s.date === targetDate);
-    const activeStaff = employees.filter(e => e.status !== 'suspended' && e.status !== 'inactive');
+    const activeStaff = employees.filter(e => e.status === 'active');
     const totalStaffCount = activeStaff.length;
     const submittedCount = targetDateSchedules.filter(s => s.status !== 'DRAFT').length;
     const approvedCount = targetDateSchedules.filter(s => s.status === 'APPROVED' || s.supervisor_status === 'APPROVED').length;
@@ -387,11 +390,11 @@ export const scheduleService = {
     });
 
     if (req) {
-      await recordAudit(req, 'HR_REVIEW_SCHEDULE', 'schedules', schedule.id, {
+      await recordAudit(req.user, 'HR_REVIEW_SCHEDULE', 'schedules', schedule.id, {
         hr_user_id: hrUserId,
         status,
         notes: reviewData.notes
-      });
+      }, req);
     }
 
     return updated;
