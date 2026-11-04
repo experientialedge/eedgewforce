@@ -54,6 +54,7 @@ export const sosService = {
     const event = await db.findById(table, Number(numeric));
     if (!event || Number(event.company_id) !== Number(actor.company_id)) throw failure('Emergency not found.', 404);
     const resolving = resolutionNotes !== undefined;
+    if (!resolving && String(event.status).toLowerCase() === 'resolved') throw failure('This emergency is already resolved.', 409);
     const updated = resolving
       ? await db.update(table, event.id, { status: 'resolved', resolved_by: Number(actor.id), resolved_at: new Date().toISOString(), resolution_notes: String(resolutionNotes || '').slice(0, 4000) })
       : await db.update(table, event.id, { status: 'acknowledged', acknowledged_by: Number(actor.id), acknowledged_at: new Date().toISOString() });
