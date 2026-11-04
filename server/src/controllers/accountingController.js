@@ -86,7 +86,7 @@ export const accountingController = {
 export const executiveController = {
   async getDashboard(req, res) {
     try {
-      const metrics = await executiveService.getCEODashboardMetrics();
+      const metrics = await executiveService.getCEODashboardMetrics(req.user.company_id);
       res.json({ success: true, data: metrics, ...metrics });
     } catch (err) {
       res.status(500).json({ success: false, error: { message: err.message } });

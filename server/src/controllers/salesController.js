@@ -187,8 +187,9 @@ export const salesController = {
   async getSettlements(req, res) {
     try {
       const isMgmt = isManagementUser(req.user);
-      const agentId = !isMgmt ? (req.user.employee?.id || req.user.id) : req.query.agent_id;
-      const settlements = await salesService.getSettlements(agentId);
+      if (!isMgmt && !req.user.employee?.id) return res.status(403).json({ success: false, error: { message: 'A linked staff profile is required.' } });
+      const agentId = !isMgmt ? req.user.employee.id : req.query.agent_id;
+      const settlements = await salesService.getSettlements(agentId, req.user.company_id);
       res.json({ success: true, data: settlements, settlements });
     } catch (err) {
       res.status(500).json({ success: false, error: { message: err.message } });

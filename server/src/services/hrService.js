@@ -237,8 +237,11 @@ export const hrService = {
    * Sets staff account status (active, suspended, deactivated).
    */
   async updateStaffStatus(employeeId, status, actor = null, req = null) {
+    status = String(status || '').toLowerCase();
+    if (status === 'deactivated') status = 'inactive';
+    if (!['active', 'suspended', 'inactive'].includes(status)) throw new Error('Invalid staff account status.');
     const employee = await db.findById('employees', employeeId);
-    if (!employee) throw new Error('Employee not found');
+    if (!employee || (actor && Number(employee.company_id) !== Number(actor.company_id))) throw new Error('Employee not found');
 
     const updatedEmp = await db.update('employees', employee.id, {
       status,

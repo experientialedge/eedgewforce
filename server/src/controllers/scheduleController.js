@@ -7,10 +7,13 @@ import { scheduleService } from '../services/scheduleService.js';
 import { db } from '../config/database.js';
 
 async function resolveEmployeeId(req) {
-  if (req.user?.employee?.id) return req.user.employee.id;
-  const emp = await db.findOne('employees', { user_id: req.user.id });
-  if (emp) return emp.id;
-  return req.user.id;
+  const emp = await db.findOne('employees', { user_id: req.user.id, company_id: req.user.company_id });
+  if (!emp || String(emp.status).toLowerCase() !== 'active') throw new Error('An active linked employee profile is required.');
+  return emp.id;
+}
+
+async function resolveReviewerId(req) {
+  return req.user.role_code === 'SUPERVISOR' ? resolveEmployeeId(req) : null;
 }
 
 export const scheduleController = {
@@ -20,7 +23,7 @@ export const scheduleController = {
   async getMySchedules(req, res) {
     try {
       const empId = await resolveEmployeeId(req);
-      const schedules = await scheduleService.getEmployeeSchedules(empId, req.query);
+      const schedules = await scheduleService.getEmployeeSchedules(empId, req.query, req.user.company_id);
       res.json({ success: true, data: schedules });
     } catch (err) {
       res.status(400).json({ success: false, error: { message: err.message } });
@@ -33,7 +36,7 @@ export const scheduleController = {
   async getTodaySchedule(req, res) {
     try {
       const empId = await resolveEmployeeId(req);
-      const schedule = await scheduleService.getTodaySchedule(empId);
+      const schedule = await scheduleService.getTodaySchedule(empId, req.user.company_id);
       res.json({ success: true, data: schedule });
     } catch (err) {
       res.status(400).json({ success: false, error: { message: err.message } });
@@ -88,8 +91,8 @@ export const scheduleController = {
    */
   async getSupervisorSchedules(req, res) {
     try {
-      const supId = await resolveEmployeeId(req);
-      const result = await scheduleService.getSupervisorSchedules(supId, req.query, req.user.role_code);
+      const supId = await resolveReviewerId(req);
+      const result = await scheduleService.getSupervisorSchedules(supId, req.query, req.user.role_code, req.user.company_id);
       res.json({ success: true, data: result });
     } catch (err) {
       res.status(400).json({ success: false, error: { message: err.message } });
@@ -101,7 +104,7 @@ export const scheduleController = {
    */
   async reviewSupervisorSchedule(req, res) {
     try {
-      const supId = await resolveEmployeeId(req);
+      const supId = await resolveReviewerId(req);
       const updated = await scheduleService.reviewSupervisorSchedule(req.params.id, supId, req.body, req);
       res.json({
         success: true,
@@ -118,7 +121,7 @@ export const scheduleController = {
    */
   async getHRSchedules(req, res) {
     try {
-      const result = await scheduleService.getHRSchedules(req.query);
+      const result = await scheduleService.getHRSchedules(req.query, req.user.company_id);
       res.json({ success: true, data: result });
     } catch (err) {
       res.status(400).json({ success: false, error: { message: err.message } });
