@@ -3,7 +3,7 @@ import { idleService } from '../services/idleService.js';
 import { scheduleService } from '../services/scheduleService.js';
 import { notificationService } from '../services/notificationService.js';
 import { emailService } from '../services/emailService.js';
-import { upgradeMysqlSchedules } from '../config/mysqlUpgrades.js';
+import { upgradeMysqlSchedules, upgradeMysqlOperationalIndexes } from '../config/mysqlUpgrades.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import mysql from 'mysql2/promise';
@@ -79,6 +79,20 @@ test('Real MySQL: transactions, staff sign-in, workplace attendance, collaborati
       await scheduleService.reviewSupervisorSchedule(schedule.id,employee.id,{status:'APPROVED'});
       await scheduleService.reviewHRSchedule(schedule.id,actor.id,{status:'ACKNOWLEDGED'});
       assert.equal((await db.findById('schedules',schedule.id)).hr_status,'ACKNOWLEDGED');
+    });
+    await t.test('Operational indexes upgrade an older copy and prevent duplicate leave balances',async()=>{
+      const balances=await db.find('leave_balances');
+      const [indexes]=await connection.query("SHOW INDEX FROM leave_balances WHERE Non_unique=0 AND Key_name <> 'PRIMARY'");
+      for(const name of new Set(indexes.map(i=>i.Key_name)))await connection.query('ALTER TABLE leave_balances DROP INDEX `'+name+'`');
+      await connection.query('ALTER TABLE leave_balances MODIFY COLUMN leave_type LONGTEXT NULL');
+      const upgradePool=mysql.createPool(config);
+      try {await upgradeMysqlOperationalIndexes(upgradePool,config.database);await upgradeMysqlOperationalIndexes(upgradePool,config.database);} finally {await upgradePool.end();}
+      assert.deepEqual(await db.find('leave_balances'),balances);
+      const balance=balances[0];assert.ok(balance);
+      const {id,...copy}=balance;
+      await assert.rejects(db.insert('leave_balances',copy),/Duplicate entry/);
+      const [queueIndexes]=await connection.query("SHOW INDEX FROM notifications WHERE Key_name='edgewforce_notifications_inbox'");
+      assert.equal(queueIndexes.length,2);
     });
     await t.test('Emergency dispatch, notification read-state and inactivity use actual SQL columns',async()=>{
       t.mock.method(emailService,'sendIdleAlertEmail',async()=>({skipped:true}));

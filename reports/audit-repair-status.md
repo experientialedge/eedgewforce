@@ -7,7 +7,7 @@ Status meanings:
 - **SCHEMA MATCH (STATIC)**: directly referenced tables/RPCs and identifiable fields match the observed production schema. This is not an end-to-end test result.
 - **SCHEMA CHANGE REQUIRED**: a schema upgrade is still needed; the current observation now has no entries in this category.
 - **DYNAMIC REVIEW**: table names or payload keys depend on runtime values; see the review below.
-- **NO DIRECT DATABASE ACCESS**: the function needs no independent table, or delegates to a service. It is not marked runtime-verified.
+- **NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)**: no direct call to the audited db/tx/trx interface was found. This includes UI functions, service delegates and SQL adapters. It does not establish an absence of database effects or runtime verification.
 
 ## Repairs and verification
 
@@ -52,3 +52,8 @@ Browser control recovered on 4 November 2026. The signed-in owner SQL editor ins
 Hostinger currently runs an older package. The latest archive was selected successfully (1.29 MB), but Hostinger returned **Failed to prepare service. Please try again later.** Its file-manager launch also did not complete. Existing environment settings and the live deployment were preserved. No additional account permission is required for this failure; the Hostinger upload service must recover before that separate deployment can be completed.
 
 Real emergency broadcasts and real report emails were not generated as test traffic. No production staff, historical incidents, inventory or passwords were removed or reset.
+
+
+## Additional database rules and indexes
+
+The deeper catalog review found workflow CHECK mismatches that a column-only audit cannot detect. Migration 018 is installed in Supabase, with six compatible workflow rules, a leave-balance uniqueness safeguard and twelve lookup indexes. Temporary-table live assertions passed and were rolled back. See [the operational database report](database-operational-additions.md) and [stored-routine target-column audit](database-routine-column-audit.json) for evidence and limits.

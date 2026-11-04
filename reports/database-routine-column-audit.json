@@ -1,0 +1,791 @@
+{
+  "capturedAt": "2026-11-04T09:58:06.218746+00:00",
+  "routines": [
+    {
+      "name": "rls_auto_enable",
+      "arguments": "",
+      "securityDefiner": true,
+      "targetColumnChecks": []
+    },
+    {
+      "name": "handle_new_auth_user",
+      "arguments": "",
+      "securityDefiner": true,
+      "targetColumnChecks": [
+        {
+          "method": "update",
+          "table": "users",
+          "fields": [
+            "auth_user_id",
+            "updated_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "employees",
+          "fields": [
+            "auth_user_id",
+            "updated_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    },
+    {
+      "name": "assign_employee_workplace",
+      "arguments": "p_company_id integer, p_employee_id integer, p_location_id integer, p_type text, p_start timestamp with time zone, p_end timestamp with time zone, p_actor_id integer, p_actor_name text, p_reason text",
+      "securityDefiner": false,
+      "targetColumnChecks": [
+        {
+          "method": "insert",
+          "table": "employee_location_assignments",
+          "fields": [
+            "company_id",
+            "employee_id",
+            "location_id",
+            "assignment_type",
+            "is_primary",
+            "is_active",
+            "start_date",
+            "end_date",
+            "assigned_by",
+            "reason"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "insert",
+          "table": "location_assignment_history",
+          "fields": [
+            "company_id",
+            "employee_id",
+            "previous_location_id",
+            "previous_location_name",
+            "new_location_id",
+            "new_location_name",
+            "assignment_type",
+            "action",
+            "changed_by",
+            "changed_by_name",
+            "reason"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "employee_location_assignments",
+          "fields": [
+            "is_primary",
+            "is_active",
+            "updated_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "employee_location_assignments",
+          "fields": [
+            "assignment_type",
+            "is_primary",
+            "is_active",
+            "start_date",
+            "end_date",
+            "assigned_by",
+            "reason",
+            "updated_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "employees",
+          "fields": [
+            "work_location",
+            "updated_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    },
+    {
+      "name": "remove_employee_workplace",
+      "arguments": "p_company_id integer, p_assignment_id integer, p_actor_id integer, p_actor_name text, p_reason text",
+      "securityDefiner": false,
+      "targetColumnChecks": [
+        {
+          "method": "insert",
+          "table": "location_assignment_history",
+          "fields": [
+            "company_id",
+            "employee_id",
+            "previous_location_id",
+            "previous_location_name",
+            "assignment_type",
+            "action",
+            "changed_by",
+            "changed_by_name",
+            "reason"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "employee_location_assignments",
+          "fields": [
+            "is_active",
+            "is_primary",
+            "updated_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "employees",
+          "fields": [
+            "work_location",
+            "updated_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    },
+    {
+      "name": "save_employee_attendance",
+      "arguments": "p_employee_id integer, p_company_id integer, p_record jsonb",
+      "securityDefiner": false,
+      "targetColumnChecks": [
+        {
+          "method": "insert",
+          "table": "attendance",
+          "fields": [],
+          "missing": [],
+          "status": "DYNAMIC SQL; RUNTIME VALIDATION REQUIRED"
+        },
+        {
+          "method": "update",
+          "table": "attendance",
+          "fields": [],
+          "missing": [],
+          "status": "DYNAMIC SQL; RUNTIME VALIDATION REQUIRED"
+        }
+      ]
+    },
+    {
+      "name": "application_release_readiness",
+      "arguments": "",
+      "securityDefiner": false,
+      "targetColumnChecks": []
+    },
+    {
+      "name": "collaboration_create_project",
+      "arguments": "p_actor_id integer, p_company_id integer, p_data jsonb",
+      "securityDefiner": true,
+      "targetColumnChecks": [
+        {
+          "method": "insert",
+          "table": "collaboration_projects",
+          "fields": [
+            "company_id",
+            "owner_id",
+            "name",
+            "description",
+            "color"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "insert",
+          "table": "collaboration_members",
+          "fields": [
+            "company_id",
+            "project_id",
+            "user_id",
+            "role"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "insert",
+          "table": "collaboration_members",
+          "fields": [
+            "company_id",
+            "project_id",
+            "user_id"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "insert",
+          "table": "collaboration_channels",
+          "fields": [
+            "company_id",
+            "project_id",
+            "name",
+            "description",
+            "created_by"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    },
+    {
+      "name": "collaboration_commit",
+      "arguments": "p_actor_id integer, p_company_id integer, p_project_id integer, p_action text, p_data jsonb",
+      "securityDefiner": true,
+      "targetColumnChecks": [
+        {
+          "method": "insert",
+          "table": "collaboration_members",
+          "fields": [
+            "company_id",
+            "project_id",
+            "user_id",
+            "role"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "insert",
+          "table": "collaboration_channels",
+          "fields": [
+            "company_id",
+            "project_id",
+            "name",
+            "description",
+            "created_by"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "insert",
+          "table": "collaboration_messages",
+          "fields": [
+            "company_id",
+            "project_id",
+            "channel_id",
+            "user_id",
+            "parent_id",
+            "body",
+            "client_nonce"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "insert",
+          "table": "collaboration_notices",
+          "fields": [
+            "company_id",
+            "project_id",
+            "user_id",
+            "source_key",
+            "kind",
+            "title",
+            "body"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "insert",
+          "table": "collaboration_tasks",
+          "fields": [
+            "company_id",
+            "project_id",
+            "title",
+            "description",
+            "assignee_ids",
+            "priority",
+            "scheduled_at",
+            "due_at",
+            "remind_at",
+            "recurrence",
+            "series_id",
+            "created_by"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "insert",
+          "table": "collaboration_notices",
+          "fields": [
+            "company_id",
+            "project_id",
+            "user_id",
+            "task_id",
+            "source_key",
+            "kind",
+            "title",
+            "body"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "insert",
+          "table": "collaboration_tasks",
+          "fields": [
+            "company_id",
+            "project_id",
+            "title",
+            "description",
+            "assignee_ids",
+            "priority",
+            "scheduled_at",
+            "due_at",
+            "remind_at",
+            "recurrence",
+            "series_id",
+            "created_by",
+            "origin_task_id"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "insert",
+          "table": "collaboration_events",
+          "fields": [
+            "company_id",
+            "project_id",
+            "user_id",
+            "body"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "collaboration_tasks",
+          "fields": [
+            "status",
+            "version",
+            "updated_at",
+            "completed_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    },
+    {
+      "name": "collaboration_process_due",
+      "arguments": "p_user_id integer, p_now timestamp with time zone",
+      "securityDefiner": true,
+      "targetColumnChecks": [
+        {
+          "method": "insert",
+          "table": "collaboration_notices",
+          "fields": [
+            "company_id",
+            "project_id",
+            "user_id",
+            "task_id",
+            "source_key",
+            "kind",
+            "title",
+            "body"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    },
+    {
+      "name": "workforce_activity_process_user",
+      "arguments": "p_user_id integer, p_now timestamp with time zone",
+      "securityDefiner": false,
+      "targetColumnChecks": [
+        {
+          "method": "insert",
+          "table": "workforce_activity_events",
+          "fields": [
+            "company_id",
+            "user_id",
+            "employee_id",
+            "last_activity_at",
+            "last_seen_at",
+            "detected_at",
+            "kind"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "workforce_activity_events",
+          "fields": [
+            "ended_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    },
+    {
+      "name": "workforce_activity_deliver",
+      "arguments": "p_company_id integer",
+      "securityDefiner": false,
+      "targetColumnChecks": [
+        {
+          "method": "insert",
+          "table": "workforce_activity_notices",
+          "fields": [
+            "company_id",
+            "user_id",
+            "event_id",
+            "title",
+            "body"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    },
+    {
+      "name": "workforce_activity_process_due",
+      "arguments": "p_company_id integer",
+      "securityDefiner": false,
+      "targetColumnChecks": []
+    },
+    {
+      "name": "workforce_activity_heartbeat",
+      "arguments": "p_user_id integer, p_company_id integer, p_client_id uuid, p_sequence integer, p_stop boolean",
+      "securityDefiner": false,
+      "targetColumnChecks": [
+        {
+          "method": "insert",
+          "table": "workforce_activity_presence",
+          "fields": [
+            "company_id",
+            "user_id",
+            "employee_id",
+            "client_id",
+            "sequence",
+            "last_activity_at",
+            "last_seen_at",
+            "stopped_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "workforce_activity_presence",
+          "fields": [
+            "stopped_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    },
+    {
+      "name": "workforce_access_commit",
+      "arguments": "p_session_id integer, p_user_id integer, p_company_id integer, p_action text, p_data jsonb",
+      "securityDefiner": false,
+      "targetColumnChecks": [
+        {
+          "method": "insert",
+          "table": "workforce_movement_events",
+          "fields": [
+            "company_id",
+            "user_id",
+            "employee_id",
+            "session_id",
+            "kind",
+            "location_id",
+            "details",
+            "observed_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "insert",
+          "table": "workforce_movement_events",
+          "fields": [
+            "company_id",
+            "user_id",
+            "employee_id",
+            "session_id",
+            "kind",
+            "location_id",
+            "details",
+            "observed_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "insert",
+          "table": "workforce_movement_notices",
+          "fields": [
+            "company_id",
+            "user_id",
+            "event_id",
+            "title",
+            "body"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "workforce_access_sessions",
+          "fields": [
+            "state",
+            "location_id",
+            "last_verified_at",
+            "last_seen_at",
+            "outside_since",
+            "expires_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "workforce_access_sessions",
+          "fields": [
+            "state",
+            "revoked_at",
+            "revoke_reason"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "workforce_access_sessions",
+          "fields": [
+            "last_verified_at",
+            "last_seen_at",
+            "outside_since"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "workforce_access_sessions",
+          "fields": [
+            "last_seen_at",
+            "outside_since"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "workforce_access_sessions",
+          "fields": [
+            "outside_since",
+            "last_seen_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "workforce_access_sessions",
+          "fields": [
+            "state",
+            "revoked_at",
+            "revoke_reason"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    },
+    {
+      "name": "workforce_executive_rollup",
+      "arguments": "p_company_id integer, p_day date, p_notify boolean",
+      "securityDefiner": false,
+      "targetColumnChecks": [
+        {
+          "method": "insert",
+          "table": "workforce_executive_reports",
+          "fields": [
+            "company_id",
+            "report_date",
+            "facts"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "insert",
+          "table": "workforce_report_notices",
+          "fields": [
+            "company_id",
+            "user_id",
+            "report_id",
+            "title",
+            "body"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    },
+    {
+      "name": "workforce_daily_reports",
+      "arguments": "",
+      "securityDefiner": false,
+      "targetColumnChecks": []
+    },
+    {
+      "name": "workforce_report_claim_ai",
+      "arguments": "p_report_id integer, p_company_id integer",
+      "securityDefiner": false,
+      "targetColumnChecks": [
+        {
+          "method": "update",
+          "table": "workforce_executive_reports",
+          "fields": [
+            "ai_claimed_until",
+            "ai_last_attempt_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    },
+    {
+      "name": "nexus_claim_generation",
+      "arguments": "p_company_id integer",
+      "securityDefiner": false,
+      "targetColumnChecks": [
+        {
+          "method": "insert",
+          "table": "nexus_generation_leases",
+          "fields": [
+            "company_id",
+            "last_attempt_at"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    },
+    {
+      "name": "nexus_operational_snapshot",
+      "arguments": "p_company_id integer, p_period integer",
+      "securityDefiner": false,
+      "targetColumnChecks": []
+    },
+    {
+      "name": "hr_report_prepare",
+      "arguments": "p_company_id integer, p_day date, p_snapshot jsonb",
+      "securityDefiner": false,
+      "targetColumnChecks": [
+        {
+          "method": "insert",
+          "table": "hr_report_runs",
+          "fields": [
+            "company_id",
+            "report_date",
+            "snapshot"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    },
+    {
+      "name": "hr_report_claim",
+      "arguments": "p_company_id integer, p_run_id integer, p_recipient text",
+      "securityDefiner": false,
+      "targetColumnChecks": [
+        {
+          "method": "insert",
+          "table": "hr_report_deliveries",
+          "fields": [
+            "company_id",
+            "run_id",
+            "recipient",
+            "state"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    },
+    {
+      "name": "hr_reporting_readiness",
+      "arguments": "",
+      "securityDefiner": false,
+      "targetColumnChecks": []
+    },
+    {
+      "name": "hr_review_leave",
+      "arguments": "p_company_id integer, p_actor_id integer, p_request_id integer, p_approve boolean, p_reason text",
+      "securityDefiner": false,
+      "targetColumnChecks": [
+        {
+          "method": "insert",
+          "table": "notifications",
+          "fields": [
+            "company_id",
+            "employee_id",
+            "type",
+            "title",
+            "body"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "leave_balances",
+          "fields": [],
+          "missing": [],
+          "status": "DYNAMIC SQL; RUNTIME VALIDATION REQUIRED"
+        },
+        {
+          "method": "update",
+          "table": "leave_balances",
+          "fields": [
+            "used_days",
+            "remaining_days"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        },
+        {
+          "method": "update",
+          "table": "leave_requests",
+          "fields": [
+            "status",
+            "reviewed_by",
+            "reviewed_at",
+            "review_notes"
+          ],
+          "missing": [],
+          "status": "EXPLICIT COLUMNS MATCH"
+        }
+      ]
+    }
+  ],
+  "limits": "Only statically identifiable INSERT and UPDATE target columns are checked here. Dynamic SQL and SELECT expressions require the runtime checks and manual review described in the report."
+}
