@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { dispatchEmergency } from '../../lib/emergency';
+import React, { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
 import { ShieldAlert, AlertTriangle, Radio, CheckCircle2 } from 'lucide-react';
 import { getCurrentGPSLocation } from '../../lib/geo';
@@ -11,29 +12,13 @@ export default function SOSModal({ isOpen, onClose, onDispatched }) {
   const [dispatched, setDispatched] = useState(false);
   const [error, setError] = useState('');
 
+  useEffect(() => { if (isOpen) { setDispatched(false); setError(''); } }, [isOpen]);
+
   const handleTrigger = async () => {
     setSubmitting(true);
     setError('');
     try {
-      let lat = 6.4281;
-      let lng = 3.4219;
-      let accuracy = 5.0;
-
-      try {
-        const p = await getCurrentGPSLocation();
-        lat = p.latitude;
-        lng = p.longitude;
-        accuracy = p.accuracy;
-      } catch {
-        // Fallback coordinates if GPS timeout
-      }
-
-      await api.post('/field/sos-beacon', {
-        latitude: lat,
-        longitude: lng,
-        accuracy,
-        message
-      });
+      await dispatchEmergency(message, getCurrentGPSLocation, payload => api.post('/field/sos-beacon', payload));
 
       playSOSAlarm();
       setDispatched(true);
@@ -63,7 +48,7 @@ export default function SOSModal({ isOpen, onClose, onDispatched }) {
               BEACON BROADCAST ACTIVE
             </h4>
             <p className="text-xs text-zinc-600 dark:text-zinc-300">
-              Your live GPS telemetry and distress alert have been transmitted to all regional supervisors, HR, and executive management.
+              Your emergency and GPS location are recorded in EdgeWForce for supervisors, HR and executive management.
             </p>
             <button onClick={onClose} className="btn-secondary w-full text-xs">
               Dismiss Modal (Beacon Remains Active)
@@ -77,7 +62,7 @@ export default function SOSModal({ isOpen, onClose, onDispatched }) {
                 <span>Confirm Emergency Dispatch</span>
               </div>
               <p>
-                Triggering this beacon will immediately notify all operations managers, HR leaders, and emergency response channels with your live GPS location.
+                Triggering this beacon will immediately notify operations managers, field supervisors and HR in EdgeWForce with your live GPS location.
               </p>
             </div>
 

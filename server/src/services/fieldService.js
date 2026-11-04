@@ -1164,7 +1164,7 @@ export const fieldService = {
   /**
    * Dispatches emergency SOS beacon with GPS coordinates.
    */
-  async triggerSOS(agentId, latitude, longitude, accuracy = 5.0, message = 'Emergency SOS broadcast triggered', req = null) {
+  async triggerSOS(agentId, latitude, longitude, accuracy = null, message = 'Emergency SOS broadcast triggered', req = null) {
     return sosService.dispatch(agentId, latitude, longitude, accuracy, message, req);
   },
 

@@ -1,7 +1,7 @@
 {
   "summary": {
-    "files": 201,
-    "functions": 3318,
+    "files": 202,
+    "functions": 3321,
     "routes": 241,
     "databaseOperations": 707,
     "pendingMigrations": 4,
@@ -16441,7 +16441,7 @@
         },
         {
           "file": "server/src/services/sosService.js",
-          "line": 58,
+          "line": 59,
           "method": "update",
           "table": "(dynamic)",
           "fields": [
@@ -16455,7 +16455,7 @@
         },
         {
           "file": "server/src/services/sosService.js",
-          "line": 59,
+          "line": 60,
           "method": "update",
           "table": "(dynamic)",
           "fields": [
@@ -20239,21 +20239,35 @@
     },
     {
       "file": "client/src/components/field/SOSModal.jsx",
-      "line": 8,
+      "line": 9,
       "name": "SOSModal",
       "operations": [],
       "status": "NO DIRECT DATABASE ACCESS"
     },
     {
       "file": "client/src/components/field/SOSModal.jsx",
-      "line": 14,
+      "line": 15,
+      "name": "callback:useEffect",
+      "operations": [],
+      "status": "NO DIRECT DATABASE ACCESS"
+    },
+    {
+      "file": "client/src/components/field/SOSModal.jsx",
+      "line": 17,
       "name": "handleTrigger",
       "operations": [],
       "status": "NO DIRECT DATABASE ACCESS"
     },
     {
       "file": "client/src/components/field/SOSModal.jsx",
-      "line": 92,
+      "line": 21,
+      "name": "callback:dispatchEmergency",
+      "operations": [],
+      "status": "NO DIRECT DATABASE ACCESS"
+    },
+    {
+      "file": "client/src/components/field/SOSModal.jsx",
+      "line": 77,
       "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DATABASE ACCESS"
@@ -30983,6 +30997,13 @@
       "status": "NO DIRECT DATABASE ACCESS"
     },
     {
+      "file": "client/src/lib/emergency.js",
+      "line": 2,
+      "name": "dispatchEmergency",
+      "operations": [],
+      "status": "NO DIRECT DATABASE ACCESS"
+    },
+    {
       "file": "client/src/lib/formatters.js",
       "line": 8,
       "name": "formatMoney",
@@ -40463,7 +40484,7 @@
     },
     {
       "file": "server/src/services/sosService.js",
-      "line": 58,
+      "line": 59,
       "method": "update",
       "table": "(dynamic)",
       "fields": [
@@ -40477,7 +40498,7 @@
     },
     {
       "file": "server/src/services/sosService.js",
-      "line": 59,
+      "line": 60,
       "method": "update",
       "table": "(dynamic)",
       "fields": [

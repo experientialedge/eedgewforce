@@ -1,6 +1,6 @@
 # EdgeWForce complete application function and schema inventory
 
-{"files":201,"functions":3318,"routes":241,"databaseOperations":707,"pendingMigrations":4,"mismatches":0,"dynamic":22}
+{"files":202,"functions":3321,"routes":241,"databaseOperations":707,"pendingMigrations":4,"mismatches":0,"dynamic":22}
 
 Observed schema captured at 2026-11-03T23:50:55.078Z. Static matches verify referenced tables and literal fields against the observed Supabase schema. MIGRATION REQUIRED means the committed target schema is repaired but the live database still needs migration 017. They do not prove end-to-end behavior. Dynamic payloads require runtime verification. Functions without direct database calls may call other functions. Tests and generated code are excluded.
 
@@ -1598,9 +1598,11 @@ Observed schema captured at 2026-11-03T23:50:55.078Z. Static matches verify refe
 | client/src/components/field/SenriVisitWorkflow.jsx:512 | anonymous | NO DIRECT DATABASE ACCESS |  |
 | client/src/components/field/SenriVisitWorkflow.jsx:566 | anonymous | NO DIRECT DATABASE ACCESS |  |
 | client/src/components/field/SenriVisitWorkflow.jsx:615 | anonymous | NO DIRECT DATABASE ACCESS |  |
-| client/src/components/field/SOSModal.jsx:8 | SOSModal | NO DIRECT DATABASE ACCESS |  |
-| client/src/components/field/SOSModal.jsx:14 | handleTrigger | NO DIRECT DATABASE ACCESS |  |
-| client/src/components/field/SOSModal.jsx:92 | anonymous | NO DIRECT DATABASE ACCESS |  |
+| client/src/components/field/SOSModal.jsx:9 | SOSModal | NO DIRECT DATABASE ACCESS |  |
+| client/src/components/field/SOSModal.jsx:15 | callback:useEffect | NO DIRECT DATABASE ACCESS |  |
+| client/src/components/field/SOSModal.jsx:17 | handleTrigger | NO DIRECT DATABASE ACCESS |  |
+| client/src/components/field/SOSModal.jsx:21 | callback:dispatchEmergency | NO DIRECT DATABASE ACCESS |  |
+| client/src/components/field/SOSModal.jsx:77 | anonymous | NO DIRECT DATABASE ACCESS |  |
 | client/src/components/field/StoreRequestModal.jsx:7 | StoreRequestModal | NO DIRECT DATABASE ACCESS |  |
 | client/src/components/field/StoreRequestModal.jsx:35 | callback:useEffect | NO DIRECT DATABASE ACCESS |  |
 | client/src/components/field/StoreRequestModal.jsx:41 | captureLocation | NO DIRECT DATABASE ACCESS |  |
@@ -3133,6 +3135,7 @@ Observed schema captured at 2026-11-03T23:50:55.078Z. Static matches verify refe
 | client/src/lib/commandCenterMetrics.js:34 | callback:filter | NO DIRECT DATABASE ACCESS |  |
 | client/src/lib/commandCenterMetrics.js:34 | callback:reduce | NO DIRECT DATABASE ACCESS |  |
 | client/src/lib/commandCenterMetrics.js:36 | callback:filter | NO DIRECT DATABASE ACCESS |  |
+| client/src/lib/emergency.js:2 | dispatchEmergency | NO DIRECT DATABASE ACCESS |  |
 | client/src/lib/formatters.js:8 | formatMoney | NO DIRECT DATABASE ACCESS |  |
 | client/src/lib/formatters.js:13 | formatMoneyShort | NO DIRECT DATABASE ACCESS |  |
 | client/src/lib/formatters.js:27 | formatNigerianPhone | NO DIRECT DATABASE ACCESS |  |
@@ -4229,8 +4232,8 @@ Observed schema captured at 2026-11-03T23:50:55.078Z. Static matches verify refe
 | server/src/services/sosService.js:43 | findAll | sos | company_id |  | SCHEMA MATCH |
 | server/src/services/sosService.js:43 | find | employees | company_id |  | SCHEMA MATCH |
 | server/src/services/sosService.js:54 | findById | (dynamic) |  |  | DYNAMIC |
-| server/src/services/sosService.js:58 | update | (dynamic) | status, resolved_by, resolved_at, resolution_notes |  | DYNAMIC |
-| server/src/services/sosService.js:59 | update | (dynamic) | status, acknowledged_by, acknowledged_at |  | DYNAMIC |
+| server/src/services/sosService.js:59 | update | (dynamic) | status, resolved_by, resolved_at, resolution_notes |  | DYNAMIC |
+| server/src/services/sosService.js:60 | update | (dynamic) | status, acknowledged_by, acknowledged_at |  | DYNAMIC |
 | server/src/services/staffFileImportService.js:80 | find | employees |  |  | SCHEMA MATCH |
 | server/src/services/staffFileImportService.js:80 | find | users |  |  | SCHEMA MATCH |
 | server/src/services/staffFileImportService.js:80 | find | work_locations | company_id, status |  | SCHEMA MATCH |

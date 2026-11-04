@@ -52,6 +52,7 @@ test('Production column contracts: emergencies, notifications, inactivity, sched
     assert.equal((await db.findById('sos_events', event.id)).status, 'acknowledged');
     await sosService.review(event.id, actor, 'Fixture resolved');
     assert.equal((await db.findById('sos_events', event.id)).status, 'resolved');
+    await assert.rejects(sosService.review(event.id, actor), /already resolved/);
     const legacy = list.find(r => String(r.id).startsWith('legacy:'));
     await sosService.review(legacy.id, actor, 'Legacy resolved');
   });
