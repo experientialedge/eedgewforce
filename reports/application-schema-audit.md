@@ -1,8 +1,8 @@
 # EdgeWForce complete application function and schema inventory
 
-{"files":202,"functions":3321,"routes":241,"databaseOperations":707,"pendingMigrations":4,"mismatches":0,"dynamic":22}
+{"files":202,"functions":3321,"routes":241,"databaseOperations":707,"pendingMigrations":0,"mismatches":0,"dynamic":22}
 
-Observed schema captured at 2026-11-03T23:50:55.078Z. Static matches verify referenced tables and literal fields against the observed Supabase schema. MIGRATION REQUIRED means the committed target schema is repaired but the live database still needs migration 017. They do not prove end-to-end behavior. Dynamic payloads require runtime verification. Functions without direct database calls may call other functions. Tests and generated code are excluded.
+Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify referenced tables and literal fields against the observed Supabase schema. MIGRATION REQUIRED means the committed target schema is repaired but the live database still needs migration 017. They do not prove end-to-end behavior. Dynamic payloads require runtime verification. Functions without direct database calls may call other functions. Tests and generated code are excluded.
 
 ## Every application function
 
@@ -1115,7 +1115,7 @@ Observed schema captured at 2026-11-03T23:50:55.078Z. Static matches verify refe
 | server/src/services/scheduleService.js:43 | callback:filter | NO DIRECT DATABASE ACCESS |  |
 | server/src/services/scheduleService.js:52 | getTodaySchedule | SCHEMA MATCH (STATIC) | find:schedules |
 | server/src/services/scheduleService.js:55 | callback:find | NO DIRECT DATABASE ACCESS |  |
-| server/src/services/scheduleService.js:62 | createOrUpdateSchedule | SCHEMA CHANGE REQUIRED | findById:employees, findOne:schedules, findById:employees, findOne:employees, update:schedules, insert:schedules, find:employees |
+| server/src/services/scheduleService.js:62 | createOrUpdateSchedule | SCHEMA MATCH (STATIC) | findById:employees, findOne:schedules, findById:employees, findOne:employees, update:schedules, insert:schedules, find:employees |
 | server/src/services/scheduleService.js:90 | callback:map | NO DIRECT DATABASE ACCESS |  |
 | server/src/services/scheduleService.js:160 | callback:filter | NO DIRECT DATABASE ACCESS |  |
 | server/src/services/scheduleService.js:191 | updateTaskItemStatus | SCHEMA MATCH (STATIC) | findById:schedules, update:schedules |
@@ -1135,7 +1135,7 @@ Observed schema captured at 2026-11-03T23:50:55.078Z. Static matches verify refe
 | server/src/services/scheduleService.js:257 | callback:filter | NO DIRECT DATABASE ACCESS |  |
 | server/src/services/scheduleService.js:258 | callback:filter | NO DIRECT DATABASE ACCESS |  |
 | server/src/services/scheduleService.js:270 | callback:map | NO DIRECT DATABASE ACCESS |  |
-| server/src/services/scheduleService.js:277 | reviewSupervisorSchedule | SCHEMA CHANGE REQUIRED | findById:schedules, findById:employees, update:schedules |
+| server/src/services/scheduleService.js:277 | reviewSupervisorSchedule | SCHEMA MATCH (STATIC) | findById:schedules, findById:employees, update:schedules |
 | server/src/services/scheduleService.js:327 | getHRSchedules | SCHEMA MATCH (STATIC) | find:schedules, find:employees |
 | server/src/services/scheduleService.js:334 | callback:filter | NO DIRECT DATABASE ACCESS |  |
 | server/src/services/scheduleService.js:337 | callback:filter | NO DIRECT DATABASE ACCESS |  |
@@ -1146,7 +1146,7 @@ Observed schema captured at 2026-11-03T23:50:55.078Z. Static matches verify refe
 | server/src/services/scheduleService.js:357 | callback:filter | NO DIRECT DATABASE ACCESS |  |
 | server/src/services/scheduleService.js:358 | callback:filter | NO DIRECT DATABASE ACCESS |  |
 | server/src/services/scheduleService.js:359 | callback:filter | NO DIRECT DATABASE ACCESS |  |
-| server/src/services/scheduleService.js:376 | reviewHRSchedule | SCHEMA CHANGE REQUIRED | findById:schedules, update:schedules |
+| server/src/services/scheduleService.js:376 | reviewHRSchedule | SCHEMA MATCH (STATIC) | findById:schedules, update:schedules |
 | server/src/services/scheduleService.js:403 | deleteSchedule | SCHEMA MATCH (STATIC) | findById:schedules, delete:schedules |
 | server/src/services/sosService.js:8 | failure | NO DIRECT DATABASE ACCESS |  |
 | server/src/services/sosService.js:9 | present | NO DIRECT DATABASE ACCESS |  |
@@ -4207,8 +4207,8 @@ Observed schema captured at 2026-11-03T23:50:55.078Z. Static matches verify refe
 | server/src/services/scheduleService.js:67 | findOne | schedules | employee_id, date |  | SCHEMA MATCH |
 | server/src/services/scheduleService.js:74 | findById | employees |  |  | SCHEMA MATCH |
 | server/src/services/scheduleService.js:78 | findOne | employees | rank_code, company_id |  | SCHEMA MATCH |
-| server/src/services/scheduleService.js:135 | update | schedules | company_id, employee_id, employee_name, employee_code, department, position, date, title, shift_start, shift_end, work_location, tasks, total_planned_hours, notes, status, submitted_at, supervisor_id, supervisor_name, supervisor_approval_status, supervisor_status, supervisor_reviewed_at, supervisor_notes, hr_status, hr_reviewed_at, hr_notes | employee_name, employee_code, department, position, title, submitted_at, supervisor_status, hr_status | MIGRATION REQUIRED |
-| server/src/services/scheduleService.js:137 | insert | schedules | company_id, employee_id, employee_name, employee_code, department, position, date, title, shift_start, shift_end, work_location, tasks, total_planned_hours, notes, status, submitted_at, supervisor_id, supervisor_name, supervisor_approval_status, supervisor_status, supervisor_reviewed_at, supervisor_notes, hr_status, hr_reviewed_at, hr_notes | employee_name, employee_code, department, position, title, submitted_at, supervisor_status, hr_status | MIGRATION REQUIRED |
+| server/src/services/scheduleService.js:135 | update | schedules | company_id, employee_id, employee_name, employee_code, department, position, date, title, shift_start, shift_end, work_location, tasks, total_planned_hours, notes, status, submitted_at, supervisor_id, supervisor_name, supervisor_approval_status, supervisor_status, supervisor_reviewed_at, supervisor_notes, hr_status, hr_reviewed_at, hr_notes |  | SCHEMA MATCH |
+| server/src/services/scheduleService.js:137 | insert | schedules | company_id, employee_id, employee_name, employee_code, department, position, date, title, shift_start, shift_end, work_location, tasks, total_planned_hours, notes, status, submitted_at, supervisor_id, supervisor_name, supervisor_approval_status, supervisor_status, supervisor_reviewed_at, supervisor_notes, hr_status, hr_reviewed_at, hr_notes |  | SCHEMA MATCH |
 | server/src/services/scheduleService.js:159 | find | employees |  |  | SCHEMA MATCH |
 | server/src/services/scheduleService.js:192 | findById | schedules |  |  | SCHEMA MATCH |
 | server/src/services/scheduleService.js:203 | update | schedules | tasks |  | SCHEMA MATCH |
@@ -4217,11 +4217,11 @@ Observed schema captured at 2026-11-03T23:50:55.078Z. Static matches verify refe
 | server/src/services/scheduleService.js:229 | find | schedules | date |  | SCHEMA MATCH |
 | server/src/services/scheduleService.js:278 | findById | schedules |  |  | SCHEMA MATCH |
 | server/src/services/scheduleService.js:287 | findById | employees |  |  | SCHEMA MATCH |
-| server/src/services/scheduleService.js:290 | update | schedules | status, supervisor_approval_status, supervisor_status, supervisor_reviewed_at, supervisor_notes, supervisor_name | supervisor_status | MIGRATION REQUIRED |
+| server/src/services/scheduleService.js:290 | update | schedules | status, supervisor_approval_status, supervisor_status, supervisor_reviewed_at, supervisor_notes, supervisor_name |  | SCHEMA MATCH |
 | server/src/services/scheduleService.js:328 | find | schedules | date |  | SCHEMA MATCH |
 | server/src/services/scheduleService.js:329 | find | employees |  |  | SCHEMA MATCH |
 | server/src/services/scheduleService.js:377 | findById | schedules |  |  | SCHEMA MATCH |
-| server/src/services/scheduleService.js:383 | update | schedules | hr_status, hr_reviewed_at, hr_notes | hr_status | MIGRATION REQUIRED |
+| server/src/services/scheduleService.js:383 | update | schedules | hr_status, hr_reviewed_at, hr_notes |  | SCHEMA MATCH |
 | server/src/services/scheduleService.js:404 | findById | schedules |  |  | SCHEMA MATCH |
 | server/src/services/scheduleService.js:409 | delete | schedules |  |  | SCHEMA MATCH |
 | server/src/services/sosService.js:18 | findById | employees |  |  | SCHEMA MATCH |

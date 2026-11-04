@@ -5,7 +5,7 @@ This report accompanies the complete [function inventory](application-schema-aud
 Status meanings:
 
 - **SCHEMA MATCH (STATIC)**: directly referenced tables/RPCs and identifiable fields match the observed production schema. This is not an end-to-end test result.
-- **SCHEMA CHANGE REQUIRED**: the schedule migration is present in the release but not installed in Supabase.
+- **SCHEMA CHANGE REQUIRED**: a schema upgrade is still needed; the current observation now has no entries in this category.
 - **DYNAMIC REVIEW**: table names or payload keys depend on runtime values; see the review below.
 - **NO DIRECT DATABASE ACCESS**: the function needs no independent table, or delegates to a service. It is not marked runtime-verified.
 
@@ -21,7 +21,7 @@ Status meanings:
 | Cash settlement reviews | Use reconciliation_status, audited_by and audited_at; preserve review notes in audit metadata. | Strict tests check persisted state and notes. | Existing columns. |
 | Payroll | Convert calculation camelCase properties to the actual snake_case payslip columns. | Strict tests run calculated, uploaded and batch payslips. | Existing columns. |
 | Login history | Use existing LOGIN audit records; remove silently failing last_login_at update. | Existing login suite and source review. | Existing audit schema. |
-| Daily schedules | Add eight missing detail/review columns without deleting records; keep supervisor_approval_status synchronized. | Strict target-schema tests and MySQL additive-upgrade integration test. | **Supabase migration 017 must be applied.** MySQL performs the named additive upgrade after copy verification at startup. |
+| Daily schedules | Add eight missing detail/review columns without deleting records; keep supervisor_approval_status synchronized. | Strict target-schema tests and MySQL additive-upgrade integration test. | **Supabase migration 017 applied and its eight columns verified on 4 November 2026.** MySQL performs the named additive upgrade after copy verification at startup. |
 | Dynamic settings/customer/product/rank updates | Reject unsupported column names and ownership/ID changes before database mutation. | schemaPatch regression tests. | Existing columns. |
 
 ## Dynamic operation review
@@ -45,8 +45,10 @@ These remain explicitly dynamic in the generated inventory; a source review or t
 
 ## Deployment limits
 
-The observed schema is a read-only Supabase OpenAPI snapshot. There are four schedule database call sites requiring migration 017; the other identifiable direct contracts match the observation. Target schema mismatches cause `npm run audit:schema` to fail in CI. A fresh snapshot is needed after database changes; CI intentionally does not contact production or store service keys.
+The observed schema is a read-only Supabase OpenAPI snapshot. Migration 017 is now installed. All 685 identifiable direct contracts match the observed tables/columns and RPC argument names; 22 calls remain explicitly dynamic. Normalized leave-review migration 016 is also installed and its function body verified. Target schema mismatches cause `npm run audit:schema` to fail in CI. A fresh snapshot is needed after database changes; CI intentionally does not contact production or store service keys.
 
-The browser-control runtime fails before opening any tab (`failed to write kernel assets`). Consequently this audit cannot apply Supabase SQL, submit a Hostinger upload, or verify the Hostinger browser interface. A GitHub merge or Vercel release does not update the separate manually uploaded Hostinger installation. Do not label those pending steps complete.
+Browser control recovered on 4 November 2026. The signed-in owner SQL editor installed migrations 016 and 017; a verification query returned eight schedule columns and normalized_leave_review=true. Live Vercel administrator sign-in, SOS lists and notifications passed, and all six repaired physical table contracts plus the schedule columns were confirmed through read-only API checks.
+
+Hostinger currently runs an older package. The latest archive was selected successfully (1.29 MB), but Hostinger returned **Failed to prepare service. Please try again later.** Its file-manager launch also did not complete. Existing environment settings and the live deployment were preserved. No additional account permission is required for this failure; the Hostinger upload service must recover before that separate deployment can be completed.
 
 Real emergency broadcasts and real report emails were not generated as test traffic. No production staff, historical incidents, inventory or passwords were removed or reset.

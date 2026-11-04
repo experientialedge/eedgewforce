@@ -1,5 +1,5 @@
 {
-  "observedAt": "2026-11-03T23:50:55.078Z",
+  "observedAt": "2026-11-04T09:07:33.841Z",
   "source": "Supabase public OpenAPI (read-only inspection)",
   "definitions": {
     "workforce_activity_notices": {
@@ -2674,6 +2674,40 @@
         "updated_at": {
           "default": "now()",
           "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "employee_name": {
+          "format": "text",
+          "type": "string"
+        },
+        "employee_code": {
+          "format": "text",
+          "type": "string"
+        },
+        "department": {
+          "format": "text",
+          "type": "string"
+        },
+        "position": {
+          "format": "text",
+          "type": "string"
+        },
+        "title": {
+          "format": "text",
+          "type": "string"
+        },
+        "submitted_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "supervisor_status": {
+          "default": "PENDING",
+          "format": "text",
+          "type": "string"
+        },
+        "hr_status": {
+          "default": "PENDING",
+          "format": "text",
           "type": "string"
         }
       },
