@@ -6,6 +6,7 @@ import {supervisorScope,supervisorEmployee,supervisorRecord} from '../utils/supe
 import { fieldService } from '../services/fieldService.js';
 import { isManagementUser } from '../middleware/rbac.js';
 import {db} from '../config/database.js';
+import { operationalReportService } from '../services/operationalReportService.js';
 
 export const fieldController = {
   async getRouteManifest(req, res) {
@@ -419,6 +420,17 @@ export const fieldController = {
         employeeId=req.user.employee?.id;
         if(!employeeId)throw Object.assign(new Error('A linked staff profile is required.'),{status:403});
         scope={companyId:Number(req.user.company_id),supervisorId:null};
+      }
+      if(req.query.reportType==='overview'){
+        if(!isManagementUser(req.user))throw Object.assign(new Error('Management report access is required.'),{status:403});
+        const bundle=await operationalReportService.overview({companyId:scope.companyId,supervisorId:scope.supervisorId,employeeId,dateFrom:req.query.dateFrom,dateTo:req.query.dateTo});
+        res.set('Cache-Control','private, no-store');
+        if(req.query.format==='xlsx'){
+          const reportId=String(req.query.selected||'daily_ops');
+          const bytes=await operationalReportService.workbook(bundle,reportId);
+          return res.set('Content-Type','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet').set('Content-Disposition',`attachment; filename="EdgeWForce-${reportId}-${bundle.date_from}-${bundle.date_to}.xlsx"`).send(bytes);
+        }
+        return res.json({success:true,data:bundle});
       }
       const reports = await fieldService.getReports({...req.query,companyId:scope.companyId,supervisorId:scope.supervisorId,employeeId});
       res.json({ success: true, data: reports, reports });

@@ -1,6 +1,6 @@
 # EdgeWForce complete application function and schema inventory
 
-{"files":204,"functions":3329,"routes":241,"databaseOperations":707,"pendingMigrations":0,"mismatches":0,"dynamic":22}
+{"files":205,"functions":3378,"routes":241,"databaseOperations":717,"pendingMigrations":0,"mismatches":0,"dynamic":22}
 
 Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify referenced tables and literal fields against the observed Supabase schema. MIGRATION REQUIRED means referenced columns exist only in the committed target, so the observed database still needs an upgrade. They do not prove end-to-end behavior. Dynamic payloads require runtime verification. The no-direct-DAL category includes UI functions, delegates and SQL adapters; it does not assert that a function has no database effects. Tests and generated code are excluded.
 
@@ -154,40 +154,40 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 | server/src/controllers/employeeController.js:151 | logIdleEvent | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/employeeController.js:161 | getAnnouncements | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/employeeController.js:170 | getUpcomingBirthdays | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:11 | getRouteManifest | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:21 | toggleShift | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:32 | getShiftWindowStatus | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:44 | getGeoLocationReport | SCHEMA MATCH (STATIC) | find:employees |
-| server/src/controllers/fieldController.js:53 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:53 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:66 | getCurrentShift | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:76 | getPersonalAlerts | SCHEMA MATCH (STATIC) | find:location_alerts |
-| server/src/controllers/fieldController.js:85 | checkIn | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:107 | checkOut | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:126 | recordLocationPing | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:146 | getLocationHistory | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:168 | getStores | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:177 | submitStoreRequest | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:187 | getStoreRequests | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:196 | approveStoreRequest | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:207 | rejectStoreRequest | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:219 | startStoreVisit | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:238 | logFieldActivity | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:249 | logSalesActivity | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:260 | checkInVisit | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:271 | completeVisit | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:282 | triggerSOS | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:294 | getSOS | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:300 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:309 | getSupervisorDashboardMetrics | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:320 | getSupervisorTeamTable | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:331 | getSupervisorEmployeeProfile | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:343 | getEmployeeTimeline | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:355 | getSupervisorAlerts | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:366 | resolveSupervisorAlert | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:380 | overrideAttendance | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:400 | generateDailyTeamSummary | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/fieldController.js:411 | getReports | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:12 | getRouteManifest | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:22 | toggleShift | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:33 | getShiftWindowStatus | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:45 | getGeoLocationReport | SCHEMA MATCH (STATIC) | find:employees |
+| server/src/controllers/fieldController.js:54 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:54 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:67 | getCurrentShift | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:77 | getPersonalAlerts | SCHEMA MATCH (STATIC) | find:location_alerts |
+| server/src/controllers/fieldController.js:86 | checkIn | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:108 | checkOut | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:127 | recordLocationPing | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:147 | getLocationHistory | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:169 | getStores | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:178 | submitStoreRequest | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:188 | getStoreRequests | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:197 | approveStoreRequest | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:208 | rejectStoreRequest | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:220 | startStoreVisit | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:239 | logFieldActivity | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:250 | logSalesActivity | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:261 | checkInVisit | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:272 | completeVisit | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:283 | triggerSOS | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:295 | getSOS | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:301 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:310 | getSupervisorDashboardMetrics | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:321 | getSupervisorTeamTable | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:332 | getSupervisorEmployeeProfile | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:344 | getEmployeeTimeline | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:356 | getSupervisorAlerts | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:367 | resolveSupervisorAlert | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:381 | overrideAttendance | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:401 | generateDailyTeamSummary | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/fieldController.js:412 | getReports | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/hrController.js:10 | getDashboard | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/hrController.js:19 | getEmployees | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/hrController.js:28 | registerStaff | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
@@ -1036,6 +1036,55 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 | server/src/services/notificationService.js:45 | markRead | SCHEMA MATCH (STATIC) | find:notifications, update:notifications, find:collaboration_notices, findById:notifications, update:notifications |
 | server/src/services/notificationService.js:64 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/notificationService.js:77 | subscribePush | SCHEMA MATCH (STATIC) | findOne:push_subscriptions, update:push_subscriptions, insert:push_subscriptions |
+| server/src/services/operationalReportService.js:5 | fail | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:6 | day | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:7 | number | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:8 | table | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:9 | employeeName | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:10 | date | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:16 | overview | SCHEMA MATCH (STATIC) | find:employees, find:attendance, find:orders, find:visits, find:customers, find:collections, find:products, find:deliveries, find:location_alerts, find:location_logs |
+| server/src/services/operationalReportService.js:25 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:26 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:27 | visible | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:28 | during | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:29 | staff | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:29 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:30 | customer | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:30 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:31 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:32 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:33 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:34 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:35 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:36 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:37 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:38 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:39 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:40 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:41 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:42 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:43 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:45 | callback:reduce | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:45 | callback:reduce | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:46 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:47 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:47 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:47 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:47 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:47 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:47 | callback:reduce | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:48 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:50 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:51 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:52 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:53 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:53 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:54 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:55 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:59 | workbook | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:66 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:67 | callback:eachCell | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/operationalReportService.js:69 | callback:forEach | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/reminderService.js:14 | scheduleReminder | SCHEMA MATCH (STATIC) | findOne:task_reminders, insert:task_reminders |
 | server/src/services/reminderService.js:52 | getDueReminders | SCHEMA MATCH (STATIC) | find:task_reminders |
 | server/src/services/reminderService.js:55 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
@@ -2926,25 +2975,25 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 | client/src/dashboards/ProjectsDashboard.jsx:1387 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/dashboards/ProjectsDashboard.jsx:1389 | callback:some | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/dashboards/ProjectsDashboard.jsx:1392 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:12 | lagosDay | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:13 | display | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/dashboards/ReportsCenterDashboard.jsx:21 | ReportsCenterDashboard | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:56 | fetchReport | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:72 | callback:useEffect | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:76 | handleExportCSV | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:82 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:94 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:105 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:117 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:117 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:128 | handlePrint | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:132 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:175 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:178 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:189 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:199 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:242 | callback:reduce | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:271 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:303 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/ReportsCenterDashboard.jsx:334 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:23 | callback:useState | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:29 | query | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:30 | fetchReport | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:42 | callback:useEffect | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:42 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:43 | exportExcel | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:49 | callback:setTimeout | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:58 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:61 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:61 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:62 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:63 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:67 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:69 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:69 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/ReportsCenterDashboard.jsx:69 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/dashboards/SalesDashboard.jsx:49 | SalesDashboard | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/dashboards/SalesDashboard.jsx:116 | loadData | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/dashboards/SalesDashboard.jsx:129 | callback:useEffect | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
@@ -3588,8 +3637,8 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 
 | File:line | Operation | Table/RPC | Fields | Missing | Status |
 |---|---|---|---|---|---|
-| server/src/controllers/fieldController.js:52 | find | employees | company_id |  | SCHEMA MATCH |
-| server/src/controllers/fieldController.js:80 | find | location_alerts | company_id, employee_id, created_at |  | SCHEMA MATCH |
+| server/src/controllers/fieldController.js:53 | find | employees | company_id |  | SCHEMA MATCH |
+| server/src/controllers/fieldController.js:81 | find | location_alerts | company_id, employee_id, created_at |  | SCHEMA MATCH |
 | server/src/controllers/hrController.js:81 | findAll | attendance | company_id, id |  | SCHEMA MATCH |
 | server/src/controllers/hrController.js:82 | findAll | employees | company_id |  | SCHEMA MATCH |
 | server/src/controllers/hrController.js:95 | find | idle_alerts | company_id, created_at |  | SCHEMA MATCH |
@@ -4135,6 +4184,16 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 | server/src/services/notificationService.js:78 | findOne | push_subscriptions | employee_id |  | SCHEMA MATCH |
 | server/src/services/notificationService.js:80 | update | push_subscriptions | endpoint, subscription_json |  | SCHEMA MATCH |
 | server/src/services/notificationService.js:86 | insert | push_subscriptions | employee_id, endpoint, subscription_json |  | SCHEMA MATCH |
+| server/src/services/operationalReportService.js:22 | find | employees | company_id |  | SCHEMA MATCH |
+| server/src/services/operationalReportService.js:22 | find | attendance | company_id |  | SCHEMA MATCH |
+| server/src/services/operationalReportService.js:22 | find | orders | company_id |  | SCHEMA MATCH |
+| server/src/services/operationalReportService.js:22 | find | visits | company_id |  | SCHEMA MATCH |
+| server/src/services/operationalReportService.js:22 | find | customers | company_id |  | SCHEMA MATCH |
+| server/src/services/operationalReportService.js:23 | find | collections | company_id |  | SCHEMA MATCH |
+| server/src/services/operationalReportService.js:23 | find | products | company_id |  | SCHEMA MATCH |
+| server/src/services/operationalReportService.js:23 | find | deliveries | company_id |  | SCHEMA MATCH |
+| server/src/services/operationalReportService.js:23 | find | location_alerts | company_id |  | SCHEMA MATCH |
+| server/src/services/operationalReportService.js:23 | find | location_logs | company_id |  | SCHEMA MATCH |
 | server/src/services/reminderService.js:28 | findOne | task_reminders | idempotency_key |  | SCHEMA MATCH |
 | server/src/services/reminderService.js:31 | insert | task_reminders | company_id, task_id, user_id, employee_id, reminder_at, reminder_level, channels, status, attempts, idempotency_key, created_at |  | SCHEMA MATCH |
 | server/src/services/reminderService.js:53 | find | task_reminders | status |  | SCHEMA MATCH |
