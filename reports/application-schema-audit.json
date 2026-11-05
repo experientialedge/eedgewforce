@@ -1,9 +1,9 @@
 {
   "summary": {
     "files": 203,
-    "functions": 3334,
+    "functions": 3328,
     "routes": 241,
-    "databaseOperations": 710,
+    "databaseOperations": 707,
     "pendingMigrations": 0,
     "mismatches": 0,
     "dynamic": 22
@@ -14682,11 +14682,23 @@
         {
           "file": "server/src/services/reminderWorker.js",
           "line": 232,
+          "method": "find",
+          "table": "reminder_delivery_logs",
+          "fields": [
+            "reminder_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/reminderWorker.js",
+          "line": 234,
           "method": "update",
           "table": "task_reminders",
           "fields": [
             "status",
-            "sent_at"
+            "sent_at",
+            "error_message"
           ],
           "missing": [],
           "status": "SCHEMA MATCH"
@@ -14696,12 +14708,19 @@
     },
     {
       "file": "server/src/services/reminderWorker.js",
-      "line": 241,
+      "line": 233,
+      "name": "callback:some",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/reminderWorker.js",
+      "line": 244,
       "name": "triggerSupervisorEscalation",
       "operations": [
         {
           "file": "server/src/services/reminderWorker.js",
-          "line": 244,
+          "line": 247,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -14710,7 +14729,7 @@
         },
         {
           "file": "server/src/services/reminderWorker.js",
-          "line": 245,
+          "line": 248,
           "method": "findById",
           "table": "users",
           "fields": [],
@@ -14719,7 +14738,7 @@
         },
         {
           "file": "server/src/services/reminderWorker.js",
-          "line": 263,
+          "line": 266,
           "method": "find",
           "table": "users",
           "fields": [
@@ -14730,7 +14749,7 @@
         },
         {
           "file": "server/src/services/reminderWorker.js",
-          "line": 265,
+          "line": 268,
           "method": "findOne",
           "table": "employees",
           "fields": [
@@ -15735,61 +15754,8 @@
       "file": "server/src/services/salesService.js",
       "line": 569,
       "name": "processPaystackCollection",
-      "operations": [
-        {
-          "file": "server/src/services/salesService.js",
-          "line": 571,
-          "method": "findById",
-          "table": "customers",
-          "fields": [],
-          "missing": [],
-          "status": "SCHEMA MATCH"
-        },
-        {
-          "file": "server/src/services/salesService.js",
-          "line": 577,
-          "method": "insert",
-          "table": "collections",
-          "fields": [
-            "company_id",
-            "customer_id",
-            "agent_id",
-            "order_id",
-            "amount",
-            "payment_method",
-            "reference_number",
-            "paystack_reference",
-            "status",
-            "payment_date"
-          ],
-          "missing": [],
-          "status": "SCHEMA MATCH"
-        },
-        {
-          "file": "server/src/services/salesService.js",
-          "line": 592,
-          "method": "update",
-          "table": "customers",
-          "fields": [
-            "balance"
-          ],
-          "missing": [],
-          "status": "SCHEMA MATCH"
-        },
-        {
-          "file": "server/src/services/salesService.js",
-          "line": 596,
-          "method": "update",
-          "table": "orders",
-          "fields": [
-            "payment_status",
-            "payment_method"
-          ],
-          "missing": [],
-          "status": "SCHEMA MATCH"
-        }
-      ],
-      "status": "SCHEMA MATCH (STATIC)"
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/scheduleService.js",
@@ -19619,57 +19585,8 @@
     },
     {
       "file": "client/src/components/employee/FaceVerificationModal.jsx",
-      "line": 6,
+      "line": 5,
       "name": "FaceVerificationModal",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/components/employee/FaceVerificationModal.jsx",
-      "line": 16,
-      "name": "callback:useEffect",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/components/employee/FaceVerificationModal.jsx",
-      "line": 22,
-      "name": "anonymous",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/components/employee/FaceVerificationModal.jsx",
-      "line": 25,
-      "name": "startCamera",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/components/employee/FaceVerificationModal.jsx",
-      "line": 47,
-      "name": "stopCamera",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/components/employee/FaceVerificationModal.jsx",
-      "line": 49,
-      "name": "callback:forEach",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/components/employee/FaceVerificationModal.jsx",
-      "line": 55,
-      "name": "handleVerify",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/components/employee/FaceVerificationModal.jsx",
-      "line": 67,
-      "name": "callback:setTimeout",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
@@ -39586,18 +39503,30 @@
     {
       "file": "server/src/services/reminderWorker.js",
       "line": 232,
-      "method": "update",
-      "table": "task_reminders",
+      "method": "find",
+      "table": "reminder_delivery_logs",
       "fields": [
-        "status",
-        "sent_at"
+        "reminder_id"
       ],
       "missing": [],
       "status": "SCHEMA MATCH"
     },
     {
       "file": "server/src/services/reminderWorker.js",
-      "line": 244,
+      "line": 234,
+      "method": "update",
+      "table": "task_reminders",
+      "fields": [
+        "status",
+        "sent_at",
+        "error_message"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/reminderWorker.js",
+      "line": 247,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -39606,7 +39535,7 @@
     },
     {
       "file": "server/src/services/reminderWorker.js",
-      "line": 245,
+      "line": 248,
       "method": "findById",
       "table": "users",
       "fields": [],
@@ -39615,7 +39544,7 @@
     },
     {
       "file": "server/src/services/reminderWorker.js",
-      "line": 263,
+      "line": 266,
       "method": "find",
       "table": "users",
       "fields": [
@@ -39626,7 +39555,7 @@
     },
     {
       "file": "server/src/services/reminderWorker.js",
-      "line": 265,
+      "line": 268,
       "method": "findOne",
       "table": "employees",
       "fields": [
@@ -40223,58 +40152,6 @@
       "table": "collections",
       "fields": [
         "company_id"
-      ],
-      "missing": [],
-      "status": "SCHEMA MATCH"
-    },
-    {
-      "file": "server/src/services/salesService.js",
-      "line": 571,
-      "method": "findById",
-      "table": "customers",
-      "fields": [],
-      "missing": [],
-      "status": "SCHEMA MATCH"
-    },
-    {
-      "file": "server/src/services/salesService.js",
-      "line": 577,
-      "method": "insert",
-      "table": "collections",
-      "fields": [
-        "company_id",
-        "customer_id",
-        "agent_id",
-        "order_id",
-        "amount",
-        "payment_method",
-        "reference_number",
-        "paystack_reference",
-        "status",
-        "payment_date"
-      ],
-      "missing": [],
-      "status": "SCHEMA MATCH"
-    },
-    {
-      "file": "server/src/services/salesService.js",
-      "line": 592,
-      "method": "update",
-      "table": "customers",
-      "fields": [
-        "balance"
-      ],
-      "missing": [],
-      "status": "SCHEMA MATCH"
-    },
-    {
-      "file": "server/src/services/salesService.js",
-      "line": 596,
-      "method": "update",
-      "table": "orders",
-      "fields": [
-        "payment_status",
-        "payment_method"
       ],
       "missing": [],
       "status": "SCHEMA MATCH"

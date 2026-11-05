@@ -564,42 +564,12 @@ export const salesService = {
   },
 
   /**
-   * Process Paystack simulated or live collection
+   * Online reconciliation must never trust a browser-supplied payment result.
    */
   async processPaystackCollection(paymentData, user) {
-    const { customer_id, order_id, amount, paystack_reference } = paymentData;
-    const customer = await db.findById('customers', customer_id);
-    if (!customer) throw new Error('Customer not found');
-
-    const compId = customer.company_id;
-    const recAmount = Number(amount);
-
-    const collection = await db.insert('collections', {
-      company_id: compId,
-      customer_id: Number(customer_id),
-      agent_id: user?.employee?.id || user?.id || 1,
-      order_id: order_id ? Number(order_id) : null,
-      amount: recAmount,
-      payment_method: 'Paystack',
-      reference_number: `PAYSTACK-${paystack_reference || Date.now()}`,
-      paystack_reference: paystack_reference || `PSTK_REF_${Date.now()}`,
-      status: 'PAID',
-      payment_date: new Date().toISOString()
-    });
-
-    // Update customer balance
-    const newBal = Math.max(0, Number(customer.balance || 0) - recAmount);
-    await db.update('customers', customer_id, { balance: newBal });
-
-    // If linked to order, mark order as paid
-    if (order_id) {
-      await db.update('orders', order_id, {
-        payment_status: 'PAID',
-        payment_method: 'Paystack'
-      });
-    }
-
-    return collection;
+    // A configured key alone cannot supply order binding, verified webhooks or
+    // atomic replay protection. Keep this endpoint closed until those exist.
+    throw Object.assign(new Error('Online Paystack reconciliation is not configured. No payment has been recorded. Use the reviewed collections workflow for bank or cash receipts.'), { status: 503 });
   }
 };
 

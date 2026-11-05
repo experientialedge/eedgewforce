@@ -1,6 +1,6 @@
 # EdgeWForce complete application function and schema inventory
 
-{"files":203,"functions":3334,"routes":241,"databaseOperations":710,"pendingMigrations":0,"mismatches":0,"dynamic":22}
+{"files":203,"functions":3328,"routes":241,"databaseOperations":707,"pendingMigrations":0,"mismatches":0,"dynamic":22}
 
 Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify referenced tables and literal fields against the observed Supabase schema. MIGRATION REQUIRED means referenced columns exist only in the committed target, so the observed database still needs an upgrade. They do not prove end-to-end behavior. Dynamic payloads require runtime verification. The no-direct-DAL category includes UI functions, delegates and SQL adapters; it does not assert that a function has no database effects. Tests and generated code are excluded.
 
@@ -1062,8 +1062,9 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 | server/src/services/reminderWorker.js:30 | callback:catch | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/reminderWorker.js:37 | stop | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/reminderWorker.js:48 | processDueReminders | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/reminderWorker.js:76 | processSingleReminder | SCHEMA MATCH (STATIC) | update:task_reminders, findById:tasks, update:task_reminders, update:task_reminders, findById:employees, findById:users, findById:users, update:tasks, update:task_reminders |
-| server/src/services/reminderWorker.js:241 | triggerSupervisorEscalation | SCHEMA MATCH (STATIC) | findById:employees, findById:users, find:users, findOne:employees |
+| server/src/services/reminderWorker.js:76 | processSingleReminder | SCHEMA MATCH (STATIC) | update:task_reminders, findById:tasks, update:task_reminders, update:task_reminders, findById:employees, findById:users, findById:users, update:tasks, find:reminder_delivery_logs, update:task_reminders |
+| server/src/services/reminderWorker.js:233 | callback:some | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/reminderWorker.js:244 | triggerSupervisorEscalation | SCHEMA MATCH (STATIC) | findById:employees, findById:users, find:users, findOne:employees |
 | server/src/services/salesService.js:12 | presentSettlement | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/salesService.js:20 | getSettlements | SCHEMA MATCH (STATIC) | find:settlements, find:audit_logs |
 | server/src/services/salesService.js:29 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
@@ -1118,7 +1119,7 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 | server/src/services/salesService.js:546 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/salesService.js:547 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/salesService.js:548 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/salesService.js:569 | processPaystackCollection | SCHEMA MATCH (STATIC) | findById:customers, insert:collections, update:customers, update:orders |
+| server/src/services/salesService.js:569 | processPaystackCollection | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/scheduleService.js:12 | companyFilter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/scheduleService.js:21 | calculateHours | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/scheduleService.js:38 | getEmployeeSchedules | SCHEMA MATCH (STATIC) | find:schedules |
@@ -1503,14 +1504,7 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 | client/src/components/employee/EmployeeProfileView.jsx:282 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/components/employee/EmployeeProfileView.jsx:292 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/components/employee/EmployeeProfileView.jsx:301 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/employee/FaceVerificationModal.jsx:6 | FaceVerificationModal | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/employee/FaceVerificationModal.jsx:16 | callback:useEffect | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/employee/FaceVerificationModal.jsx:22 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/employee/FaceVerificationModal.jsx:25 | startCamera | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/employee/FaceVerificationModal.jsx:47 | stopCamera | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/employee/FaceVerificationModal.jsx:49 | callback:forEach | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/employee/FaceVerificationModal.jsx:55 | handleVerify | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/employee/FaceVerificationModal.jsx:67 | callback:setTimeout | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/employee/FaceVerificationModal.jsx:5 | FaceVerificationModal | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/components/employee/FirstLoginPasswordModal.jsx:5 | FirstLoginPasswordModal | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/components/employee/FirstLoginPasswordModal.jsx:19 | handleSubmit | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/components/employee/FirstLoginPasswordModal.jsx:91 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
@@ -4160,11 +4154,12 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 | server/src/services/reminderWorker.js:103 | findById | users |  |  | SCHEMA MATCH |
 | server/src/services/reminderWorker.js:103 | findById | users |  |  | SCHEMA MATCH |
 | server/src/services/reminderWorker.js:113 | update | tasks | status |  | SCHEMA MATCH |
-| server/src/services/reminderWorker.js:232 | update | task_reminders | status, sent_at |  | SCHEMA MATCH |
-| server/src/services/reminderWorker.js:244 | findById | employees |  |  | SCHEMA MATCH |
-| server/src/services/reminderWorker.js:245 | findById | users |  |  | SCHEMA MATCH |
-| server/src/services/reminderWorker.js:263 | find | users | role_code |  | SCHEMA MATCH |
-| server/src/services/reminderWorker.js:265 | findOne | employees | user_id |  | SCHEMA MATCH |
+| server/src/services/reminderWorker.js:232 | find | reminder_delivery_logs | reminder_id |  | SCHEMA MATCH |
+| server/src/services/reminderWorker.js:234 | update | task_reminders | status, sent_at, error_message |  | SCHEMA MATCH |
+| server/src/services/reminderWorker.js:247 | findById | employees |  |  | SCHEMA MATCH |
+| server/src/services/reminderWorker.js:248 | findById | users |  |  | SCHEMA MATCH |
+| server/src/services/reminderWorker.js:266 | find | users | role_code |  | SCHEMA MATCH |
+| server/src/services/reminderWorker.js:268 | findOne | employees | user_id |  | SCHEMA MATCH |
 | server/src/services/salesService.js:27 | find | settlements | company_id, created_at |  | SCHEMA MATCH |
 | server/src/services/salesService.js:28 | find | audit_logs | company_id, entity, action |  | SCHEMA MATCH |
 | server/src/services/salesService.js:33 | findById | employees |  |  | SCHEMA MATCH |
@@ -4214,10 +4209,6 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 | server/src/services/salesService.js:538 | find | visits | company_id |  | SCHEMA MATCH |
 | server/src/services/salesService.js:539 | find | orders | company_id |  | SCHEMA MATCH |
 | server/src/services/salesService.js:540 | find | collections | company_id |  | SCHEMA MATCH |
-| server/src/services/salesService.js:571 | findById | customers |  |  | SCHEMA MATCH |
-| server/src/services/salesService.js:577 | insert | collections | company_id, customer_id, agent_id, order_id, amount, payment_method, reference_number, paystack_reference, status, payment_date |  | SCHEMA MATCH |
-| server/src/services/salesService.js:592 | update | customers | balance |  | SCHEMA MATCH |
-| server/src/services/salesService.js:596 | update | orders | payment_status, payment_method |  | SCHEMA MATCH |
 | server/src/services/scheduleService.js:39 | find | schedules | company_id, employee_id, date |  | SCHEMA MATCH |
 | server/src/services/scheduleService.js:59 | find | schedules | company_id, employee_id |  | SCHEMA MATCH |
 | server/src/services/scheduleService.js:68 | findById | employees |  |  | SCHEMA MATCH |
