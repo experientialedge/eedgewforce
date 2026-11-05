@@ -106,8 +106,8 @@ export async function requireAuth(req, res, next) {
       });
     }
 
-    const employee = await db.findOne('employees', { user_id: user.id }) ||
-                     (user.auth_user_id ? await db.findOne('employees', { auth_user_id: user.auth_user_id }) : null);
+    const employee = await db.findOne('employees', { user_id: user.id, company_id: user.company_id }) ||
+                     (user.auth_user_id ? await db.findOne('employees', { auth_user_id: user.auth_user_id, company_id: user.company_id }) : null);
     const issuedAt = jwt.decode(token)?.iat;
     if (user.session_invalid_before && (!Number.isFinite(issuedAt) || issuedAt < Math.floor(Date.parse(user.session_invalid_before) / 1000))) return res.status(401).json({success:false,error:{code:'TOKEN_EXPIRED',message:'Your password changed. Sign in again.'}});
     await workplaceAccessService.validate(user, employee, workplaceSessionId, ['/api/workplace-access/ping','/api/auth/logout'].includes(req.originalUrl?.split('?')[0]));

@@ -4,12 +4,10 @@
 // ==============================================================================
 
 import { scheduleService } from '../services/scheduleService.js';
-import { db } from '../config/database.js';
+import { activeEmployeeId } from '../utils/staffIdentity.js';
 
 async function resolveEmployeeId(req) {
-  const emp = await db.findOne('employees', { user_id: req.user.id, company_id: req.user.company_id });
-  if (!emp || String(emp.status).toLowerCase() !== 'active') throw new Error('An active linked employee profile is required.');
-  return emp.id;
+  return activeEmployeeId(req.user);
 }
 
 async function resolveReviewerId(req) {
