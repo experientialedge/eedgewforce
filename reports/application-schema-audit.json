@@ -1,9 +1,9 @@
 {
   "summary": {
-    "files": 204,
-    "functions": 3329,
+    "files": 205,
+    "functions": 3378,
     "routes": 241,
-    "databaseOperations": 707,
+    "databaseOperations": 717,
     "pendingMigrations": 0,
     "mismatches": 0,
     "dynamic": 22
@@ -1033,33 +1033,33 @@
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 11,
+      "line": 12,
       "name": "getRouteManifest",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 21,
+      "line": 22,
       "name": "toggleShift",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 32,
+      "line": 33,
       "name": "getShiftWindowStatus",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 44,
+      "line": 45,
       "name": "getGeoLocationReport",
       "operations": [
         {
           "file": "server/src/controllers/fieldController.js",
-          "line": 52,
+          "line": 53,
           "method": "find",
           "table": "employees",
           "fields": [
@@ -1073,33 +1073,33 @@
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 53,
+      "line": 54,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 53,
+      "line": 54,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 66,
+      "line": 67,
       "name": "getCurrentShift",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 76,
+      "line": 77,
       "name": "getPersonalAlerts",
       "operations": [
         {
           "file": "server/src/controllers/fieldController.js",
-          "line": 80,
+          "line": 81,
           "method": "find",
           "table": "location_alerts",
           "fields": [
@@ -1115,182 +1115,182 @@
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 85,
+      "line": 86,
       "name": "checkIn",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 107,
+      "line": 108,
       "name": "checkOut",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 126,
+      "line": 127,
       "name": "recordLocationPing",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 146,
+      "line": 147,
       "name": "getLocationHistory",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 168,
+      "line": 169,
       "name": "getStores",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 177,
+      "line": 178,
       "name": "submitStoreRequest",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 187,
+      "line": 188,
       "name": "getStoreRequests",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 196,
+      "line": 197,
       "name": "approveStoreRequest",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 207,
+      "line": 208,
       "name": "rejectStoreRequest",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 219,
+      "line": 220,
       "name": "startStoreVisit",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 238,
+      "line": 239,
       "name": "logFieldActivity",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 249,
+      "line": 250,
       "name": "logSalesActivity",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 260,
+      "line": 261,
       "name": "checkInVisit",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 271,
+      "line": 272,
       "name": "completeVisit",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 282,
+      "line": 283,
       "name": "triggerSOS",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 294,
+      "line": 295,
       "name": "getSOS",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 300,
+      "line": 301,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 309,
+      "line": 310,
       "name": "getSupervisorDashboardMetrics",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 320,
+      "line": 321,
       "name": "getSupervisorTeamTable",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 331,
+      "line": 332,
       "name": "getSupervisorEmployeeProfile",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 343,
+      "line": 344,
       "name": "getEmployeeTimeline",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 355,
+      "line": 356,
       "name": "getSupervisorAlerts",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 366,
+      "line": 367,
       "name": "resolveSupervisorAlert",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 380,
+      "line": 381,
       "name": "overrideAttendance",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 400,
+      "line": 401,
       "name": "generateDailyTeamSummary",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 411,
+      "line": 412,
       "name": "getReports",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -14257,6 +14257,460 @@
         }
       ],
       "status": "SCHEMA MATCH (STATIC)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 5,
+      "name": "fail",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 6,
+      "name": "day",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 7,
+      "name": "number",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 8,
+      "name": "table",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 9,
+      "name": "employeeName",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 10,
+      "name": "date",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 16,
+      "name": "overview",
+      "operations": [
+        {
+          "file": "server/src/services/operationalReportService.js",
+          "line": 22,
+          "method": "find",
+          "table": "employees",
+          "fields": [
+            "company_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/operationalReportService.js",
+          "line": 22,
+          "method": "find",
+          "table": "attendance",
+          "fields": [
+            "company_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/operationalReportService.js",
+          "line": 22,
+          "method": "find",
+          "table": "orders",
+          "fields": [
+            "company_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/operationalReportService.js",
+          "line": 22,
+          "method": "find",
+          "table": "visits",
+          "fields": [
+            "company_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/operationalReportService.js",
+          "line": 22,
+          "method": "find",
+          "table": "customers",
+          "fields": [
+            "company_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/operationalReportService.js",
+          "line": 23,
+          "method": "find",
+          "table": "collections",
+          "fields": [
+            "company_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/operationalReportService.js",
+          "line": 23,
+          "method": "find",
+          "table": "products",
+          "fields": [
+            "company_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/operationalReportService.js",
+          "line": 23,
+          "method": "find",
+          "table": "deliveries",
+          "fields": [
+            "company_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/operationalReportService.js",
+          "line": 23,
+          "method": "find",
+          "table": "location_alerts",
+          "fields": [
+            "company_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/operationalReportService.js",
+          "line": 23,
+          "method": "find",
+          "table": "location_logs",
+          "fields": [
+            "company_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        }
+      ],
+      "status": "SCHEMA MATCH (STATIC)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 25,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 26,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 27,
+      "name": "visible",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 28,
+      "name": "during",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 29,
+      "name": "staff",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 29,
+      "name": "callback:find",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 30,
+      "name": "customer",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 30,
+      "name": "callback:find",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 31,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 32,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 33,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 34,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 35,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 36,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 37,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 38,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 39,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 40,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 41,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 42,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 43,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 45,
+      "name": "callback:reduce",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 45,
+      "name": "callback:reduce",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 46,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 47,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 47,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 47,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 47,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 47,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 47,
+      "name": "callback:reduce",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 48,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 50,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 51,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 52,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 53,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 53,
+      "name": "callback:find",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 54,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 55,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 59,
+      "name": "workbook",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 66,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 67,
+      "name": "callback:eachCell",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 69,
+      "name": "callback:forEach",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/reminderService.js",
@@ -29541,6 +29995,20 @@
     },
     {
       "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
+      "line": 12,
+      "name": "lagosDay",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
+      "line": 13,
+      "name": "display",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
       "line": 21,
       "name": "ReportsCenterDashboard",
       "operations": [],
@@ -29548,126 +30016,112 @@
     },
     {
       "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 56,
+      "line": 23,
+      "name": "callback:useState",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
+      "line": 29,
+      "name": "query",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
+      "line": 30,
       "name": "fetchReport",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 72,
+      "line": 42,
       "name": "callback:useEffect",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 76,
-      "name": "handleExportCSV",
+      "line": 42,
+      "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 82,
+      "line": 43,
+      "name": "exportExcel",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
+      "line": 49,
+      "name": "callback:setTimeout",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
+      "line": 58,
+      "name": "anonymous",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
+      "line": 61,
+      "name": "anonymous",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
+      "line": 61,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 94,
-      "name": "callback:map",
+      "line": 62,
+      "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 105,
-      "name": "callback:map",
+      "line": 63,
+      "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 117,
-      "name": "callback:map",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 117,
-      "name": "callback:map",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 128,
-      "name": "handlePrint",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 132,
+      "line": 67,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 175,
-      "name": "anonymous",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 178,
+      "line": 69,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 189,
-      "name": "anonymous",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 199,
-      "name": "anonymous",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 242,
-      "name": "callback:reduce",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 271,
+      "line": 69,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 303,
-      "name": "callback:map",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/dashboards/ReportsCenterDashboard.jsx",
-      "line": 334,
+      "line": 69,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -32420,7 +32874,7 @@
   "operations": [
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 52,
+      "line": 53,
       "method": "find",
       "table": "employees",
       "fields": [
@@ -32431,7 +32885,7 @@
     },
     {
       "file": "server/src/controllers/fieldController.js",
-      "line": 80,
+      "line": 81,
       "method": "find",
       "table": "location_alerts",
       "fields": [
@@ -39278,6 +39732,116 @@
         "employee_id",
         "endpoint",
         "subscription_json"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 22,
+      "method": "find",
+      "table": "employees",
+      "fields": [
+        "company_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 22,
+      "method": "find",
+      "table": "attendance",
+      "fields": [
+        "company_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 22,
+      "method": "find",
+      "table": "orders",
+      "fields": [
+        "company_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 22,
+      "method": "find",
+      "table": "visits",
+      "fields": [
+        "company_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 22,
+      "method": "find",
+      "table": "customers",
+      "fields": [
+        "company_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 23,
+      "method": "find",
+      "table": "collections",
+      "fields": [
+        "company_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 23,
+      "method": "find",
+      "table": "products",
+      "fields": [
+        "company_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 23,
+      "method": "find",
+      "table": "deliveries",
+      "fields": [
+        "company_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 23,
+      "method": "find",
+      "table": "location_alerts",
+      "fields": [
+        "company_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/operationalReportService.js",
+      "line": 23,
+      "method": "find",
+      "table": "location_logs",
+      "fields": [
+        "company_id"
       ],
       "missing": [],
       "status": "SCHEMA MATCH"

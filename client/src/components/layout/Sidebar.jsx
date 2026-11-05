@@ -50,7 +50,7 @@ export default function Sidebar({ user, currentTab, onSelectTab, onLogout, isMob
       { id: 'people', label: 'Staff Directory', icon: Users },
       { id: 'hr_schedules', label: 'Daily Schedules Roster', icon: CalendarCheck },
       { id: 'alerts', label: 'Alerts & Red Flag Center', icon: AlertTriangle },
-      { id: 'reports', label: '15 Operational Reports', icon: FileText },
+      { id: 'reports', label: 'Operational Reports', icon: FileText },
       { id: 'safety', label: 'Emergency SOS Queue', icon: ShieldAlert }
     ];
 
