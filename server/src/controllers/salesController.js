@@ -201,7 +201,7 @@ export const salesController = {
       const collection = await salesService.processPaystackCollection(req.body, req.user);
       res.status(201).json({ success: true, data: collection, message: 'Paystack payment verified and reconciled.' });
     } catch (err) {
-      res.status(400).json({ success: false, error: { message: err.message } });
+      res.status(err.status || 400).json({ success: false, error: { message: err.message } });
     }
   }
 };

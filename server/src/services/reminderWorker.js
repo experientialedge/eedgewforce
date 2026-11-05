@@ -166,9 +166,9 @@ export const reminderWorker = {
           user_id: user?.id,
           company_id: rem.company_id,
           channel: 'email',
-          status: emailResult.delivered ? 'sent' : (emailResult.simulated ? 'sent' : 'failed'),
+          status: emailResult.delivered ? 'sent' : (emailResult.simulated ? 'not_configured' : 'failed'),
           provider_message_id: emailResult.messageId,
-          error_message: emailResult.error
+          error_message: emailResult.error || (emailResult.simulated ? 'An email sender is not configured. No email was sent.' : null)
         });
       } catch (err) {
         await reminderService.logDelivery({
@@ -229,9 +229,12 @@ export const reminderWorker = {
       await this.triggerSupervisorEscalation(task, employee, recipientName);
     }
 
+    const deliveryLogs = await db.find('reminder_delivery_logs', { reminder_id: rem.id });
+    const delivered = deliveryLogs.some(log => log.status === 'sent');
     await db.update('task_reminders', rem.id, {
-      status: 'sent',
-      sent_at: new Date().toISOString()
+      status: delivered ? 'sent' : 'failed',
+      sent_at: delivered ? new Date().toISOString() : null,
+      error_message: delivered ? null : 'No configured channel accepted this reminder. Check delivery logs.'
     });
   },
 
