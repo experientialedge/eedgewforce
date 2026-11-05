@@ -1,7 +1,7 @@
 {
   "summary": {
-    "files": 203,
-    "functions": 3328,
+    "files": 204,
+    "functions": 3329,
     "routes": 241,
     "databaseOperations": 707,
     "pendingMigrations": 0,
@@ -914,119 +914,119 @@
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 8,
+      "line": 9,
       "name": "getDashboard",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 18,
+      "line": 19,
       "name": "getProfile",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 27,
+      "line": 28,
       "name": "getAttendance",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 37,
+      "line": 38,
       "name": "clockAttendance",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 48,
+      "line": 49,
       "name": "verifyFaceBiometric",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 58,
+      "line": 59,
       "name": "getLeaveBalances",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 68,
+      "line": 69,
       "name": "applyLeave",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 78,
+      "line": 79,
       "name": "getLeaveRequests",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 88,
+      "line": 89,
       "name": "getLatestPayslip",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 98,
+      "line": 99,
       "name": "getPayslips",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 108,
+      "line": 109,
       "name": "getOKRs",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 118,
+      "line": 119,
       "name": "updateOKR",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 129,
+      "line": 130,
       "name": "getTasks",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 139,
+      "line": 140,
       "name": "updateTask",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 150,
+      "line": 151,
       "name": "logIdleEvent",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 160,
+      "line": 161,
       "name": "getAnnouncements",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/employeeController.js",
-      "line": 169,
+      "line": 170,
       "name": "getUpcomingBirthdays",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -1927,88 +1927,75 @@
       "file": "server/src/controllers/scheduleController.js",
       "line": 9,
       "name": "resolveEmployeeId",
-      "operations": [
-        {
-          "file": "server/src/controllers/scheduleController.js",
-          "line": 10,
-          "method": "findOne",
-          "table": "employees",
-          "fields": [
-            "user_id",
-            "company_id"
-          ],
-          "missing": [],
-          "status": "SCHEMA MATCH"
-        }
-      ],
-      "status": "SCHEMA MATCH (STATIC)"
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 15,
+      "line": 13,
       "name": "resolveReviewerId",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 23,
+      "line": 21,
       "name": "getMySchedules",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 36,
+      "line": 34,
       "name": "getTodaySchedule",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 49,
+      "line": 47,
       "name": "submitSchedule",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 66,
+      "line": 64,
       "name": "updateTaskStatus",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 79,
+      "line": 77,
       "name": "deleteSchedule",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 92,
+      "line": 90,
       "name": "getSupervisorSchedules",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 105,
+      "line": 103,
       "name": "reviewSupervisorSchedule",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 122,
+      "line": 120,
       "name": "getHRSchedules",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/scheduleController.js",
-      "line": 134,
+      "line": 132,
       "name": "reviewHRSchedule",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -2389,7 +2376,8 @@
           "method": "findOne",
           "table": "employees",
           "fields": [
-            "user_id"
+            "user_id",
+            "company_id"
           ],
           "missing": [],
           "status": "SCHEMA MATCH"
@@ -2400,7 +2388,8 @@
           "method": "findOne",
           "table": "employees",
           "fields": [
-            "auth_user_id"
+            "auth_user_id",
+            "company_id"
           ],
           "missing": [],
           "status": "SCHEMA MATCH"
@@ -18133,6 +18122,26 @@
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
+      "file": "server/src/utils/staffIdentity.js",
+      "line": 3,
+      "name": "activeEmployeeId",
+      "operations": [
+        {
+          "file": "server/src/utils/staffIdentity.js",
+          "line": 5,
+          "method": "findOne",
+          "table": "employees",
+          "fields": [
+            "user_id",
+            "company_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        }
+      ],
+      "status": "SCHEMA MATCH (STATIC)"
+    },
+    {
       "file": "server/src/utils/supervisorAccess.js",
       "line": 2,
       "name": "fail",
@@ -32526,18 +32535,6 @@
       "status": "SCHEMA MATCH"
     },
     {
-      "file": "server/src/controllers/scheduleController.js",
-      "line": 10,
-      "method": "findOne",
-      "table": "employees",
-      "fields": [
-        "user_id",
-        "company_id"
-      ],
-      "missing": [],
-      "status": "SCHEMA MATCH"
-    },
-    {
       "file": "server/src/index.js",
       "line": 140,
       "method": "rpc",
@@ -32682,7 +32679,8 @@
       "method": "findOne",
       "table": "employees",
       "fields": [
-        "user_id"
+        "user_id",
+        "company_id"
       ],
       "missing": [],
       "status": "SCHEMA MATCH"
@@ -32693,7 +32691,8 @@
       "method": "findOne",
       "table": "employees",
       "fields": [
-        "auth_user_id"
+        "auth_user_id",
+        "company_id"
       ],
       "missing": [],
       "status": "SCHEMA MATCH"
@@ -41230,6 +41229,18 @@
         "state",
         "revoked_at",
         "revoke_reason"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/utils/staffIdentity.js",
+      "line": 5,
+      "method": "findOne",
+      "table": "employees",
+      "fields": [
+        "user_id",
+        "company_id"
       ],
       "missing": [],
       "status": "SCHEMA MATCH"

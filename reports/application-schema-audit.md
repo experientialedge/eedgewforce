@@ -1,6 +1,6 @@
 # EdgeWForce complete application function and schema inventory
 
-{"files":203,"functions":3328,"routes":241,"databaseOperations":707,"pendingMigrations":0,"mismatches":0,"dynamic":22}
+{"files":204,"functions":3329,"routes":241,"databaseOperations":707,"pendingMigrations":0,"mismatches":0,"dynamic":22}
 
 Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify referenced tables and literal fields against the observed Supabase schema. MIGRATION REQUIRED means referenced columns exist only in the committed target, so the observed database still needs an upgrade. They do not prove end-to-end behavior. Dynamic payloads require runtime verification. The no-direct-DAL category includes UI functions, delegates and SQL adapters; it does not assert that a function has no database effects. Tests and generated code are excluded.
 
@@ -137,23 +137,23 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 | server/src/controllers/deliveryController.js:40 | confirmProofOfDelivery | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/deliveryController.js:54 | failDelivery | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/deliveryController.js:63 | getDeliveryMetrics | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:8 | getDashboard | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:18 | getProfile | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:27 | getAttendance | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:37 | clockAttendance | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:48 | verifyFaceBiometric | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:58 | getLeaveBalances | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:68 | applyLeave | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:78 | getLeaveRequests | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:88 | getLatestPayslip | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:98 | getPayslips | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:108 | getOKRs | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:118 | updateOKR | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:129 | getTasks | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:139 | updateTask | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:150 | logIdleEvent | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:160 | getAnnouncements | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/employeeController.js:169 | getUpcomingBirthdays | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:9 | getDashboard | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:19 | getProfile | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:28 | getAttendance | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:38 | clockAttendance | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:49 | verifyFaceBiometric | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:59 | getLeaveBalances | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:69 | applyLeave | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:79 | getLeaveRequests | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:89 | getLatestPayslip | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:99 | getPayslips | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:109 | getOKRs | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:119 | updateOKR | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:130 | getTasks | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:140 | updateTask | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:151 | logIdleEvent | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:161 | getAnnouncements | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/employeeController.js:170 | getUpcomingBirthdays | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/fieldController.js:11 | getRouteManifest | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/fieldController.js:21 | toggleShift | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/fieldController.js:32 | getShiftWindowStatus | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
@@ -264,17 +264,17 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 | server/src/controllers/salesController.js:177 | getSalesFunnel | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/salesController.js:187 | getSettlements | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/salesController.js:199 | processPaystackPayment | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/scheduleController.js:9 | resolveEmployeeId | SCHEMA MATCH (STATIC) | findOne:employees |
-| server/src/controllers/scheduleController.js:15 | resolveReviewerId | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/scheduleController.js:23 | getMySchedules | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/scheduleController.js:36 | getTodaySchedule | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/scheduleController.js:49 | submitSchedule | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/scheduleController.js:66 | updateTaskStatus | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/scheduleController.js:79 | deleteSchedule | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/scheduleController.js:92 | getSupervisorSchedules | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/scheduleController.js:105 | reviewSupervisorSchedule | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/scheduleController.js:122 | getHRSchedules | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/scheduleController.js:134 | reviewHRSchedule | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/scheduleController.js:9 | resolveEmployeeId | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/scheduleController.js:13 | resolveReviewerId | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/scheduleController.js:21 | getMySchedules | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/scheduleController.js:34 | getTodaySchedule | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/scheduleController.js:47 | submitSchedule | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/scheduleController.js:64 | updateTaskStatus | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/scheduleController.js:77 | deleteSchedule | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/scheduleController.js:90 | getSupervisorSchedules | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/scheduleController.js:103 | reviewSupervisorSchedule | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/scheduleController.js:120 | getHRSchedules | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/scheduleController.js:132 | reviewHRSchedule | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/staffImportController.js:5 | staffImportUpload | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/staffImportController.js:6 | callback:uploadFile | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/staffImportController.js:9 | template | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
@@ -1301,6 +1301,7 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 | server/src/utils/schemaPatch.js:4 | schemaPatch | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/utils/schemaPatch.js:9 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/utils/smtpConfiguration.js:1 | smtpConfiguration | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/utils/staffIdentity.js:3 | activeEmployeeId | SCHEMA MATCH (STATIC) | findOne:employees |
 | server/src/utils/supervisorAccess.js:2 | fail | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/utils/supervisorAccess.js:3 | identifier | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/utils/supervisorAccess.js:5 | supervisorScope | SCHEMA MATCH (STATIC) | findById:employees |
@@ -3597,7 +3598,6 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 | server/src/controllers/hrController.js:110 | findAll | employees | company_id |  | SCHEMA MATCH |
 | server/src/controllers/hrController.js:141 | findAll | tasks | company_id, id |  | SCHEMA MATCH |
 | server/src/controllers/hrController.js:142 | findAll | employees | company_id |  | SCHEMA MATCH |
-| server/src/controllers/scheduleController.js:10 | findOne | employees | user_id, company_id |  | SCHEMA MATCH |
 | server/src/index.js:140 | rpc | application_release_readiness |  |  | SCHEMA MATCH |
 | server/src/index.js:145 | rpc | hr_reporting_readiness |  |  | SCHEMA MATCH |
 | server/src/index.js:146 | find | users |  |  | SCHEMA MATCH |
@@ -3611,8 +3611,8 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 | server/src/middleware/auth.js:85 | find | employees |  |  | SCHEMA MATCH |
 | server/src/middleware/auth.js:92 | findById | users |  |  | SCHEMA MATCH |
 | server/src/middleware/auth.js:94 | update | users | auth_user_id |  | SCHEMA MATCH |
-| server/src/middleware/auth.js:109 | findOne | employees | user_id |  | SCHEMA MATCH |
-| server/src/middleware/auth.js:110 | findOne | employees | auth_user_id |  | SCHEMA MATCH |
+| server/src/middleware/auth.js:109 | findOne | employees | user_id, company_id |  | SCHEMA MATCH |
+| server/src/middleware/auth.js:110 | findOne | employees | auth_user_id, company_id |  | SCHEMA MATCH |
 | server/src/middleware/auth.js:116 | findOne | ranks | code |  | SCHEMA MATCH |
 | server/src/middleware/auth.js:117 | findById | departments |  |  | SCHEMA MATCH |
 | server/src/middleware/rbac.js:168 | findById | (dynamic) |  |  | DYNAMIC |
@@ -4290,6 +4290,7 @@ Observed schema captured at 2026-11-04T09:07:33.841Z. Static matches verify refe
 | server/src/services/workplaceAccessService.js:88 | rpc | workforce_access_commit | p_session_id, p_user_id, p_company_id, p_action, p_data |  | SCHEMA MATCH |
 | server/src/services/workplaceAccessService.js:89 | findById | workforce_access_sessions |  |  | SCHEMA MATCH |
 | server/src/services/workplaceAccessService.js:89 | update | workforce_access_sessions | state, revoked_at, revoke_reason |  | SCHEMA MATCH |
+| server/src/utils/staffIdentity.js:5 | findOne | employees | user_id, company_id |  | SCHEMA MATCH |
 | server/src/utils/supervisorAccess.js:11 | findById | employees |  |  | SCHEMA MATCH |
 | server/src/utils/supervisorAccess.js:15 | findById | employees |  |  | SCHEMA MATCH |
 | server/src/utils/supervisorAccess.js:21 | findById | (dynamic) |  |  | DYNAMIC |
