@@ -2349,6 +2349,36 @@
         "format": "integer",
         "type": "integer",
         "required": false
+      },
+      "numbering_department_code": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "deletion_reason": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "numbering_hire_year": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "deleted_by": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "employee_number_assigned_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "deleted_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
       }
     }
   },
@@ -6880,6 +6910,86 @@
       "read_at": {
         "format": "timestamp with time zone",
         "type": "string",
+        "required": false
+      }
+    }
+  },
+  "employee_number_counters": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "department_code": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "hiring_year": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      },
+      "last_value": {
+        "format": "integer",
+        "type": "integer",
+        "required": true
+      }
+    }
+  },
+  "employee_number_registry": {
+    "primaryKey": "id",
+    "columns": {
+      "id": {
+        "format": "text",
+        "type": "string",
+        "required": true
+      },
+      "company_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "employee_id": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "department_code": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "hiring_year": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "sequence": {
+        "format": "integer",
+        "type": "integer",
+        "required": false
+      },
+      "legacy_employee_code": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "legacy_staff_id": {
+        "format": "text",
+        "type": "string",
+        "required": false
+      },
+      "issued_at": {
+        "format": "timestamp with time zone",
+        "type": "string",
+        "required": false
+      },
+      "issued_by": {
+        "format": "integer",
+        "type": "integer",
         "required": false
       }
     }

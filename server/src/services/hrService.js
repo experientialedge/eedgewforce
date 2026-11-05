@@ -1,3 +1,5 @@
+import {employeeNumberingService} from './employeeNumberingService.js';
+import {departmentCode,hiringYear} from '../utils/employeeNumber.js';
 import { schemaPatch } from '../utils/schemaPatch.js';
 import { sosService } from './sosService.js';
 import { getLagosTime } from '../utils/nigeriaTime.js';
@@ -76,7 +78,7 @@ export const hrService = {
    * Retrieves employee directory with rank and department relational data.
    * Redacts sensitive personal and financial data for any non-HR / non-Admin users.
    */
-  async getEmployees(actor = null) {
+  async getEmployees(actor = null, {includeDeleted=false} = {}) {
     const isHrOrAdmin = actor && (
       actor.role_code === 'HR' ||
       actor.role_code === 'HR_MANAGER' ||
@@ -91,7 +93,7 @@ export const hrService = {
       actor.rank?.code === 'IT_ADMIN'
     );
 
-    const employees = await db.find('employees', { company_id: actor?.company_id || 1 });
+    const employees = (await db.find('employees', { company_id: actor?.company_id || 1 })).filter(e=>!e.deleted_at||(includeDeleted&&isHrOrAdmin));
     const ranks = await db.find('ranks');
     const departments = await db.find('departments');
     const users = await db.find('users');
@@ -131,7 +133,7 @@ export const hrService = {
       const email = sanitizedEmp.work_email || sanitizedEmp.email || user?.email || sanitizedEmp.personal_email || '';
       const work_email = sanitizedEmp.work_email || email;
       const phone = sanitizedEmp.phone || user?.phone || '';
-      const employee_code = sanitizedEmp.employee_code || (sanitizedEmp.staff_id ? `EMP-${sanitizedEmp.staff_id}` : `EMP-${sanitizedEmp.id + 1000}`);
+      const employee_code = sanitizedEmp.employee_code || sanitizedEmp.staff_id || '';
       const staff_id = sanitizedEmp.staff_id || employee_code;
       const work_location = sanitizedEmp.work_location || 'Not assigned';
       const department_name = sanitizedEmp.department || department?.name || 'Operations';
@@ -167,6 +169,8 @@ export const hrService = {
   async updateEmployee(employeeId, data, actor = null, req = null) {
     const employee = await db.findById('employees', employeeId);
     if (!employee || Number(employee.company_id || 1) !== Number(actor?.company_id || 1)) throw new Error('Employee not found');
+    if(employee.deleted_at)throw new Error('Restore this staff record before editing it.');
+    if(employee.employee_number_assigned_at&&data.staff_id!==undefined&&String(data.staff_id)!==String(employee.staff_id))throw new Error('Issued employee numbers are permanent and cannot be edited.');
 
     const payload = {
       first_name: data.first_name !== undefined ? data.first_name : employee.first_name,
@@ -184,7 +188,7 @@ export const hrService = {
       state_of_origin: data.state_of_origin !== undefined ? data.state_of_origin : employee.state_of_origin,
       state_of_residence: data.state_of_residence !== undefined ? data.state_of_residence : employee.state_of_residence,
       landmark: data.landmark !== undefined ? data.landmark : employee.landmark,
-      staff_id: data.staff_id !== undefined ? String(data.staff_id) : employee.staff_id,
+      staff_id: employee.staff_id,
       department: data.department !== undefined ? data.department : employee.department,
       department_id: data.department_id !== undefined ? Number(data.department_id) : employee.department_id,
       position: data.position !== undefined ? data.position : (data.job_title !== undefined ? data.job_title : employee.position),
@@ -242,6 +246,7 @@ export const hrService = {
     if (!['active', 'suspended', 'inactive'].includes(status)) throw new Error('Invalid staff account status.');
     const employee = await db.findById('employees', employeeId);
     if (!employee || (actor && Number(employee.company_id) !== Number(actor.company_id))) throw new Error('Employee not found');
+    if(employee.deleted_at)throw new Error('Restore this staff record before changing its account status.');
 
     const updatedEmp = await db.update('employees', employee.id, {
       status,
@@ -513,9 +518,11 @@ export const hrService = {
     if (!email && !phone) throw new Error('Provide an email address or phone number.');
     if (email && await db.findOne('users', { email })) throw new Error('Email already registered.');
     if (phone && (await db.findOne('users', { phone }) || await db.findOne('employees', { phone }))) throw new Error('Phone number already registered.');
-    if (staffData.staff_id && await db.findOne('employees', { company_id: companyId, staff_id: String(staffData.staff_id) })) throw new Error('Staff ID already registered.');
     const rank_code = staffData.rank_code || 'STAFF';
     const department = staffData.department || 'Operations';
+    const numbering_department_code=departmentCode(department,staffData.numbering_department_code);
+    const hire_date=staffData.date_of_joining||staffData.hire_date||getLagosTime().dateStr;
+    hiringYear({hire_date});
     const role_code = staffData.role_code || (rank_code === 'CEO' ? 'CEO' : rank_code === 'CTO' ? 'CTO' : rank_code === 'IT_ADMIN' ? 'IT_ADMIN' : rank_code === 'HR' ? 'HR_MANAGER' : ['ACCOUNTANT', 'SENIOR_ACCOUNTANT'].includes(rank_code) ? 'ACCOUNTANT' : department.toLowerCase().includes('sales') ? 'SALES_AGENT' : department.toLowerCase().includes('field') ? 'FIELD_AGENT' : 'STAFF_MEMBER');
     const password = staffData.password?.trim() || randomBytes(18).toString('base64url');
     if (password.length < 12) throw new Error('Initial passwords must have at least 12 characters.');
@@ -537,28 +544,27 @@ export const hrService = {
           email, phone, password_hash: bcrypt.hashSync(password, 10), role_code,
           status: 'active', requires_password_change: true
         });
-        const employee_code = staffData.employee_code || (staffData.staff_id ? 'EMP-' + (companyId === 1 ? '' : companyId + '-') + staffData.staff_id : 'EMP-' + randomBytes(8).toString('hex').toUpperCase());
         const financials = {};
         for (const key of ['base_salary', 'housing_allowance', 'transport_allowance', 'other_allowance']) {
           const value = Number(staffData[key] || 0);
           if (!Number.isFinite(value) || value < 0) throw new Error('Salary and allowance values must be nonnegative numbers.');
           financials[key] = value;
         }
-        createdEmployee = await db.insert('employees', {
+        createdEmployee = await employeeNumberingService.create({
           company_id: companyId, user_id: createdUser.id, auth_user_id: authUserId,
-          employee_code, staff_id: staffData.staff_id ? String(staffData.staff_id) : null,
+          employee_code: null, staff_id: staffData.staff_id ? String(staffData.staff_id) : null, numbering_department_code,
           first_name, last_name, full_name: first_name + ' ' + last_name, email, work_email: email, phone,
           department_id: staffData.department_id ? Number(staffData.department_id) : null, department,
           position: staffData.position || 'Staff Member', territory: staffData.territory || '',
           work_location: '', state: staffData.state || '', lga: staffData.lga || '', city: staffData.city || '',
           rank_code, ...financials, date_of_birth: staffData.date_of_birth || null,
-          hire_date: staffData.hire_date || new Date().toISOString().slice(0, 10), address: staffData.address || '',
+          hire_date, date_of_joining: hire_date, address: staffData.address || '',
           status: 'active', onboarding_status: 'Account Created'
         });
         await ensureLeaveBalances(createdEmployee.id,companyId,Number(getLagosTime().dateStr.slice(0,4)));
         let locationAssignment = null;
         if (locationId) locationAssignment = await locationService.assignEmployeeLocation({ company_id: companyId, employee_id: createdEmployee.id, location_id: locationId, assignment_type: 'primary', reason: 'Initial staff registration' }, actor, req);
-        await recordAudit(actor, 'STAFF_REGISTERED', 'employees', createdEmployee.id, { employee_code, role_code, assigned_location: locationAssignment?.location?.name || null }, req);
+        await recordAudit(actor, 'STAFF_REGISTERED', 'employees', createdEmployee.id, { employee_code: createdEmployee.employee_code, role_code, assigned_location: locationAssignment?.location?.name || null }, req);
         const { password_hash, ...user } = createdUser;
         return { user, employee: locationAssignment ? await db.findById('employees', createdEmployee.id) : createdEmployee, location_assignment: locationAssignment, temporary_password: password };
       });

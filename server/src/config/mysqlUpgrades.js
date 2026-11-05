@@ -1,6 +1,18 @@
 import { operationalIndexes } from './operationalIndexes.js';
 import { columnDefinition, sqlIdentifier } from './mysqlSchema.js';
 
+export async function upgradeMysqlStaffNumbering(pool,database){
+ const connection=await pool.getConnection(),lock=`edgewforce:numbering-upgrade:${database}`.slice(0,64);let locked=false;
+ try{
+  const [r]=await connection.execute('SELECT GET_LOCK(?, 30) AS acquired',[lock]);if(Number(r[0]?.acquired)!==1)throw new Error('Employee numbering schema upgrade is busy.');locked=true;
+  const [tables]=await connection.execute('SELECT table_name FROM information_schema.tables WHERE table_schema = ? AND table_name = ?',[database,'employees']);if(!tables.length)return;
+  const [columns]=await connection.execute('SELECT column_name FROM information_schema.columns WHERE table_schema = ? AND table_name = ?',[database,'employees']);const present=new Set(columns.map(c=>c.COLUMN_NAME||c.column_name));
+  for(const [name,type] of Object.entries({numbering_department_code:'VARCHAR(3) NULL',numbering_hire_year:'INT NULL',employee_number_assigned_at:'DATETIME(6) NULL',deleted_at:'DATETIME(6) NULL',deleted_by:'INT NULL',deletion_reason:'TEXT NULL'}))if(!present.has(name))await connection.query(`ALTER TABLE employees ADD COLUMN ${sqlIdentifier(name)} ${type}`);
+  await connection.query("CREATE TABLE IF NOT EXISTS employee_number_counters(id VARCHAR(32) PRIMARY KEY,department_code VARCHAR(3) NOT NULL,hiring_year INT NOT NULL,last_value INT NOT NULL,UNIQUE KEY employee_counter_department_year(department_code,hiring_year),CHECK(last_value BETWEEN 0 AND 9999))");
+  await connection.query("CREATE TABLE IF NOT EXISTS employee_number_registry(id VARCHAR(11) PRIMARY KEY,company_id INT NOT NULL,employee_id INT NULL UNIQUE,department_code VARCHAR(3) NOT NULL,hiring_year INT NOT NULL,sequence INT NOT NULL,legacy_employee_code TEXT NULL,legacy_staff_id TEXT NULL,issued_at DATETIME(6) NOT NULL,issued_by INT NULL,UNIQUE KEY employee_number_department_year_sequence(department_code,hiring_year,sequence),CHECK(sequence BETWEEN 1 AND 9999))");
+ }finally{try{if(locked)await connection.execute('SELECT RELEASE_LOCK(?)',[lock]);}finally{connection.release();}}
+}
+
 // The verified source copy remains intact. Apply only named application upgrades.
 export async function upgradeMysqlSchedules(pool, database) {
   const connection = await pool.getConnection();

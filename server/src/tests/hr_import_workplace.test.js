@@ -52,10 +52,12 @@ test('HR file import and actual workplace assignment', async t => {
     assert.equal(result.created, 2); assert.deepEqual(result.errors, []);
     assert.notEqual(result.accounts[0].temporary_password, result.accounts[1].temporary_password);
     assert.ok(result.accounts.every(a => a.temporary_password.length >= 12));
-    employee = await db.findOne('employees', { staff_id: '019' });
+    employee = await db.findOne('employees', { work_email: 'ada@example.test' });
+    assert.match(employee.staff_id,/^OPS2026[0-9]{4}$/);
+    assert.equal((await db.findOne('employee_number_registry',{employee_id:employee.id})).legacy_staff_id,'019');
     assert.equal(employee.work_location, office.name);
     const user = await db.findById('users', employee.user_id); assert.equal(user.requires_password_change, true);
-    assert.equal((await db.findOne('employees', { staff_id: '020' })).work_location, other.name);
+    assert.equal((await db.findOne('employees', { work_email: 'bola@example.test' })).work_location, other.name);
     const repeat = await importStaffFile(file, actor); assert.equal(repeat.created, 0); assert.equal(repeat.skipped, 2);
   });
   await t.test('Primary replacement updates directory, allowed geofences and previous-office history', async () => {

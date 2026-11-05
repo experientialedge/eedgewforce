@@ -1,3 +1,5 @@
+import {employeeNumberingService} from '../services/employeeNumberingService.js';
+import {staffLifecycleService} from '../services/staffLifecycleService.js';
 import { sosService } from '../services/sosService.js';
 // ==============================================================================
 // EDGEWFORCE - HR COMMAND CENTER CONTROLLER
@@ -7,6 +9,12 @@ import { hrService } from '../services/hrService.js';
 import { db } from '../config/database.js';
 
 export const hrController = {
+  async numberingPreview(req,res,next){try{res.json({success:true,data:await employeeNumberingService.preview(req.user)});}catch(e){next(e);}},
+  async assignNumbers(req,res,next){try{res.json({success:true,data:await employeeNumberingService.assignReady(req.user)});}catch(e){next(e);}},
+  async assignNumber(req,res,next){try{res.json({success:true,data:await employeeNumberingService.assign(req.params.id,req.body.department_code,req.user)});}catch(e){e.status=e.status||400;next(e);}},
+  async deleteStaff(req,res,next){try{res.json({success:true,data:await staffLifecycleService.change(req.params.id,{reason:req.body.reason,confirmation:req.body.confirmation},req.user),message:'Staff removed from the directory. Login disabled; history and employee number retained.'});}catch(e){e.status=e.status||400;next(e);}},
+  async restoreStaff(req,res,next){try{res.json({success:true,data:await staffLifecycleService.change(req.params.id,{reason:req.body.reason,confirmation:req.body.confirmation,restore:true},req.user),message:'Staff restored with their original number. Account remains inactive until HR reactivates it.'});}catch(e){e.status=e.status||400;next(e);}},
+
   async getDashboard(req, res) {
     try {
       const stats = await hrService.getDashboardStats(req.user);
@@ -18,7 +26,7 @@ export const hrController = {
 
   async getEmployees(req, res) {
     try {
-      const employees = await hrService.getEmployees(req.user);
+      const employees = await hrService.getEmployees(req.user,{includeDeleted:req.query.include_deleted==='true'});
       res.json({ success: true, data: employees, employees });
     } catch (err) {
       res.status(500).json({ success: false, error: { message: err.message } });

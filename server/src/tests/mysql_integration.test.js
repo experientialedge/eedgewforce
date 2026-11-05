@@ -17,6 +17,7 @@ import {fieldService} from '../services/fieldService.js';
 import {collaborationService} from '../services/collaborationService.js';
 import {hrDailyReportService} from '../services/hrDailyReportService.js';
 import {hrService} from '../services/hrService.js';
+import {staffLifecycleService} from '../services/staffLifecycleService.js';
 import {employeeService} from '../services/employeeService.js';
 import {reviewLeave} from '../services/leaveReviewService.js';
 
@@ -32,6 +33,18 @@ test('Real MySQL: transactions, staff sign-in, workplace attendance, collaborati
     const actor=await db.insert('users',{company_id:1,full_name:'Test administrator',email:'admin@mysql.example',role_code:'SUPER_ADMIN',password_hash:await bcrypt.hash('IsolatedMysqlTest123!',10),requires_password_change:false});
     const staff=await db.insert('users',{company_id:1,full_name:'Test staff',email:'staff@mysql.example',role_code:'STAFF_MEMBER',password_hash:await bcrypt.hash('IsolatedMysqlTest123!',10),requires_password_change:false});
     const employee=await db.insert('employees',{company_id:1,user_id:staff.id,first_name:'Test',last_name:'Staff',employee_code:'MYSQL-TEST-1',status:'active'});
+    await t.test('Permanent numbers, concurrent hires and recoverable staff removal use the internal database',async()=>{
+      const hires=await Promise.all([1,2,3].map(i=>hrService.registerStaff({first_name:'Numbered',last_name:'Staff',email:`numbered${i}@mysql.example`,department:'IT',hire_date:'2026-01-01'},actor)));
+      assert.deepEqual(hires.map(r=>r.employee.employee_code).sort(),['IT20260001','IT20260002','IT20260003']);
+      const target=hires[0].employee,change={reason:'Employee left the organisation.',confirmation:target.employee_code};
+      await staffLifecycleService.change(target.id,change,actor);
+      assert.equal((await db.findById('users',target.user_id)).status,'inactive');
+      assert.ok((await db.findById('employees',target.id)).deleted_at);
+      assert.equal((await db.findOne('employee_number_registry',{employee_id:target.id})).id,target.employee_code);
+      await staffLifecycleService.change(target.id,{...change,restore:true},actor);
+      assert.equal((await db.findById('employees',target.id)).employee_code,target.employee_code);
+      assert.equal((await db.findById('employees',target.id)).status,'inactive');
+    });
     await t.test('Full HR registration initializes normalized balances and leave approval debits once',async()=>{
       const registered=await hrService.registerStaff({first_name:'Registered',last_name:'Staff',email:'registered@mysql.example',phone:'+2348099998811'},actor);
       assert.ok(registered.employee.id);

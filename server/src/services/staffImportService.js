@@ -1,3 +1,4 @@
+import {employeeNumberingService} from './employeeNumberingService.js';
 // ==============================================================================
 // EDGEWFORCE - AUTHORITATIVE STAFF DATASET & IDEMPOTENT IMPORT SERVICE
 // Imports an explicitly supplied staff dataset with deduplication, multi-identifier
@@ -186,8 +187,8 @@ export const staffImportService = {
         const employeePayload = {
           company_id: 1,
           user_id: userId,
-          employee_code: staffId ? `EMP-${staffId}` : `EMP-${1000 + i + 10}`,
-          staff_id: staffId,
+          employee_code: matchedEmployee?.employee_code || null,
+          staff_id: matchedEmployee?.staff_id || staffId,
           first_name,
           last_name,
           full_name: record.name,
@@ -231,7 +232,7 @@ export const staffImportService = {
           results.employees_updated++;
         } else {
           employeePayload.created_at = new Date().toISOString();
-          const newEmp = await db.insert('employees', employeePayload);
+          const newEmp = await employeeNumberingService.create(employeePayload);
           existingEmployees.push(newEmp);
           results.employees_created++;
         }

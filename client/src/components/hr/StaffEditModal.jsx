@@ -1,3 +1,4 @@
+import {AssignEmployeeNumber} from './StaffAdministrationPanel';
 import React, { useState, useEffect } from 'react';
 import { X, Save, AlertCircle, CheckCircle2, ShieldCheck, User, Phone, Mail, Building, Briefcase, CreditCard, HeartPulse } from 'lucide-react';
 import { api } from '../../lib/api';
@@ -277,6 +278,7 @@ export default function StaffEditModal({
               <Briefcase size={14} className="text-orange-500" />
               <span>Employment & Hierarchy</span>
             </div>
+            <AssignEmployeeNumber employee={employee} onAssigned={async updated=>{await onSaved?.(updated);onClose();}}/>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div>
                 <label className="block text-[10px] font-bold uppercase text-zinc-500 mb-1">Official Staff ID</label>
@@ -284,8 +286,8 @@ export default function StaffEditModal({
                   type="text"
                   name="staff_id"
                   value={formData.staff_id}
-                  onChange={handleChange}
-                  placeholder="e.g. 019"
+                  readOnly
+                  placeholder="Assigned automatically"
                   className="w-full px-3 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-xs font-mono font-bold focus:ring-2 focus:ring-orange-500 outline-none"
                 />
               </div>

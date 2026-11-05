@@ -19,6 +19,11 @@ router.post('/employees/import/preview', importAccess, staffImportUpload, staffI
 router.post('/employees/import', importAccess, staffImportUpload, staffImportController.commit);
 
 // 1. Read-Only Staff Directory, Ranks, Announcements & Birthdays (accessible to authenticated staff with field redactions)
+router.get('/employees/numbering/preview',importAccess,hrController.numberingPreview);
+router.post('/employees/numbering/assign',importAccess,hrController.assignNumbers);
+router.post('/employees/:id/number',importAccess,hrController.assignNumber);
+router.delete('/employees/:id',hasRole('HR','HR_MANAGER','CEO','SUPER_ADMIN','ADMIN'),hrController.deleteStaff);
+router.post('/employees/:id/restore',hasRole('HR','HR_MANAGER','CEO','SUPER_ADMIN','ADMIN'),hrController.restoreStaff);
 router.get('/employees', hrController.getEmployees);
 router.get('/ranks', hrController.getRanks);
 router.get('/announcements', hrController.getAnnouncements);
