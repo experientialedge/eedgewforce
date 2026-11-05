@@ -1,3 +1,4 @@
+import StaffAdministrationPanel,{StaffDeletionDialog} from '../components/hr/StaffAdministrationPanel';
 import ExecutiveActivityBrief from '../components/hr/ExecutiveActivityBrief';
 import React, { useState, useEffect } from 'react';
 import {
@@ -85,6 +86,8 @@ export default function HRDashboard({ user, initialTab = 'overview', onSelectTab
   const [staffStatusFilter, setStaffStatusFilter] = useState('ALL'); // ALL, active, suspended, flagged
   const [selectedStaffForView, setSelectedStaffForView] = useState(null);
   const [selectedStaffForEdit, setSelectedStaffForEdit] = useState(null);
+  const [staffToDelete,setStaffToDelete]=useState(null);
+  const canDeleteStaff=['HR','HR_MANAGER','CEO','SUPER_ADMIN','ADMIN'].includes(userRole);
 
   const [importOpen, setImportOpen] = useState(false);
   const [workplaceEmployee, setWorkplaceEmployee] = useState(null);
@@ -108,6 +111,7 @@ export default function HRDashboard({ user, initialTab = 'overview', onSelectTab
     password: '',
     phone: '',
     department: 'Commercial Sales',
+    hire_date: new Date().toLocaleDateString('en-CA',{timeZone:'Africa/Lagos'}),
     department_id: 1,
     position: 'Operations Officer',
     state: 'Lagos',
@@ -633,6 +637,7 @@ export default function HRDashboard({ user, initialTab = 'overview', onSelectTab
       {/* TAB 2: STAFF DIRECTORY & WORKFORCE MANAGEMENT */}
       {tab === 'people' && (
         <div className="space-y-4 animate-in fade-in duration-200">
+          {isHrOrCeo&&<StaffAdministrationPanel onChanged={loadData} canDelete={canDeleteStaff}/>}
           
           {/* Top Summary & Metrics */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
@@ -692,7 +697,7 @@ export default function HRDashboard({ user, initialTab = 'overview', onSelectTab
                 <Search size={14} className="absolute left-3 top-3 text-zinc-400" />
                 <input
                   type="text"
-                  placeholder="Search by Name, Staff ID (e.g. 019), Email, Position, Supervisor..."
+                  placeholder="Search name, employee number (IT20260001), email, position..."
                   value={staffSearch}
                   onChange={(e) => setStaffSearch(e.target.value)}
                   className="w-full pl-9 pr-3 py-2 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-xs outline-none focus:ring-2 focus:ring-orange-500"
@@ -888,6 +893,7 @@ export default function HRDashboard({ user, initialTab = 'overview', onSelectTab
                             >
                               View Profile
                             </button>
+                            {canDeleteStaff&&Number(emp.user_id)!==Number(user?.id)&&<button type="button" onClick={()=>setStaffToDelete(emp)} className="px-2 py-1.5 text-[11px] font-bold text-rose-600 hover:bg-rose-500/10 rounded-lg">Delete staff</button>}
                             {isHrOrCeo && <button type="button" onClick={() => setWorkplaceEmployee(emp)} className="px-2 py-1.5 text-[11px] font-bold text-orange-600 hover:bg-orange-500/10 rounded-lg">Assign workplace</button>}
                             <button
                               onClick={() => setSelectedStaffForEdit(emp)}
@@ -1466,9 +1472,11 @@ export default function HRDashboard({ user, initialTab = 'overview', onSelectTab
                 <option value="Finance & Accounts">Finance & Accounts</option>
                 <option value="Technology & IT">Technology & IT</option>
                 <option value="Corporate Operations">Corporate Operations</option>
+                {['Strategy','Creative','Compliance','Procurement','Executive'].map(d=><option key={d} value={d}>{d}</option>)}
               </select>
             </div>
 
+            <div><label className="block text-xs font-bold mb-1">Hiring date *</label><input type="date" required className="form-input" value={registerForm.hire_date||''} onChange={e=>setRegisterForm({...registerForm,hire_date:e.target.value})}/><p className="text-xs text-zinc-500 mt-1">The employee number uses this hiring year and is assigned automatically.</p></div>
             <div>
               <label className="block text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1">
                 Designation / Position *
@@ -1884,6 +1892,7 @@ export default function HRDashboard({ user, initialTab = 'overview', onSelectTab
         <StaffImportModal isOpen={importOpen} onClose={() => setImportOpen(false)} onImported={loadData} locations={availableLocations} />
         <EmployeeLocationAssignModal isOpen={Boolean(workplaceEmployee)} employee={workplaceEmployee} onClose={() => setWorkplaceEmployee(null)} onAssignmentComplete={loadData} />
       </>}
+      {staffToDelete&&<StaffDeletionDialog employee={staffToDelete} onClose={()=>setStaffToDelete(null)} onDone={loadData}/>}
       {/* Staff Edit Modal */}
       <StaffEditModal
         employee={selectedStaffForEdit}

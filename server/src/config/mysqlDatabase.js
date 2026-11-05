@@ -1,4 +1,4 @@
-import { upgradeMysqlSchedules, upgradeMysqlOperationalIndexes } from './mysqlUpgrades.js';
+import { upgradeMysqlStaffNumbering, upgradeMysqlSchedules, upgradeMysqlOperationalIndexes } from './mysqlUpgrades.js';
 import {AsyncLocalStorage} from 'node:async_hooks';
 import {createHash} from 'node:crypto';
 import mysql from 'mysql2/promise';
@@ -23,6 +23,7 @@ export function createMysqlDatabase(config,{pool=mysql.createPool(config)}={}){
   const db={
     backend:'mysql',isCloud:false,
     async ready(){
+      await upgradeMysqlStaffNumbering(pool,config.database);
       const rows=await query('SELECT table_name FROM information_schema.tables WHERE table_schema = ?',[config.database]);
       const present=new Set(rows.map(r=>r.TABLE_NAME||r.table_name));
       if(Object.keys(mysqlSchema).some(name=>!present.has(name))||!present.has('edgewforce_files'))throw new Error('The MySQL schema and copy verification must be installed before activation.');

@@ -1,3 +1,4 @@
+import {EMPLOYEE_NUMBER_PATTERN} from '../utils/employeeNumber.js';
 // ==============================================================================
 // EDGEWFORCE - SUPABASE AUTHORITATIVE AUTHENTICATION SERVICE
 // Single Source of Truth for Identity, Session Validation & Password Lifecycle
@@ -63,21 +64,11 @@ export async function findUserByIdentifier(identifier) {
     const numOnly = /^(?:EMP[- ]?)?\d{1,10}$/.test(cleanInput) ? cleanInput.replace(/[^0-9]/g, '') : '';
     const matches = employees.filter(e => {
       const exact = [e.employee_code, e.staff_id].some(v => String(v || '').toUpperCase() === cleanInput);
-      const numeric = numOnly && [e.employee_code, e.staff_id].some(v => String(v || '').replace(/[^0-9]/g, '') === numOnly);
+      const numeric = numOnly && !EMPLOYEE_NUMBER_PATTERN.test(e.employee_code||e.staff_id||'') && [e.employee_code, e.staff_id].some(v => String(v || '').replace(/[^0-9]/g, '') === numOnly);
       return exact || numeric;
     });
     if (matches.length > 1) throw new Error('This staff ID is shared. Sign in with your email address or phone number.');
-    const emp = employees.find(e => {
-      const empCode = (e.employee_code || '').toUpperCase();
-      const staffId = String(e.staff_id || '').toUpperCase();
-      const empNum = empCode.replace(/[^0-9]/g, '');
-      return (
-        empCode === cleanInput ||
-        staffId === cleanInput ||
-        (numOnly && empNum === numOnly) ||
-        (numOnly && staffId === numOnly)
-      );
-    });
+    const emp = matches[0];
     if (emp?.user_id) {
       user = await db.findById('users', emp.user_id);
     }

@@ -76,8 +76,8 @@ export async function parseStaffFile(file) {
 export async function previewStaffImport(file, actor, options = {}) {
   const records = await parseStaffFile(file);
   const companyId = Number(actor.company_id || 1);
-  const [employees, users, locations, departments] = await Promise.all([
-    db.find('employees'), db.find('users'), db.find('work_locations', { company_id: companyId, status: 'active' }), db.find('departments')
+  const [employees, users, locations, departments, numberRegister] = await Promise.all([
+    db.find('employees'), db.find('users'), db.find('work_locations', { company_id: companyId, status: 'active' }), db.find('departments'),db.find('employee_number_registry',{company_id:companyId})
   ]);
   const seen = new Set();
   const rows = records.map(record => {
@@ -97,7 +97,9 @@ export async function previewStaffImport(file, actor, options = {}) {
       if (seen.has(identifier)) errors.push('Duplicate staff ID or contact within this file.');
       seen.add(identifier);
     }
+    const legacyMatches=record.staff_id?numberRegister.filter(r=>[r.legacy_employee_code,r.legacy_staff_id].some(v=>clean(v).toLowerCase()===record.staff_id.toLowerCase())).map(r=>r.employee_id):[];
     const matches = employees.filter(e =>
+      legacyMatches.includes(e.id) ||
       (record.staff_id && [e.staff_id, e.employee_code, String(e.employee_code || '').replace(/^EMP-/, '')].some(id => clean(id).toLowerCase() === record.staff_id.toLowerCase())) ||
       (email && [e.email, e.work_email, e.personal_email].some(v => v && normalizeEmail(v) === email)) ||
       (phone && normalizePhone(e.phone) === phone)

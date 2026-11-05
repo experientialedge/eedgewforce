@@ -77,7 +77,7 @@ export function mysqlRecord(table,record,{defaults=false}={}){
 }
 
 // Application invariants that need uniqueness even across separate Node/cron processes.
-export const mysqlUniqueKeys={users:[['email']],employees:[['user_id'],['employee_code']],leave_balances:[['company_id','employee_id','year','leave_type']],attendance:[['employee_id','date']],employee_location_assignments:[],collaboration_members:[['project_id','user_id']],collaboration_messages:[['project_id','user_id','client_nonce']],collaboration_notices:[['user_id','source_key']],workforce_activity_presence:[['user_id','client_id']],workforce_activity_notices:[['user_id','event_id']],workforce_movement_notices:[['user_id','event_id']],workforce_report_notices:[['user_id','report_id']],workforce_executive_reports:[['company_id','report_date']],hr_report_settings:[['company_id']],hr_report_runs:[['company_id','report_date']],hr_report_deliveries:[['run_id','recipient']]};
+export const mysqlUniqueKeys={employee_number_counters:[['department_code','hiring_year']],employee_number_registry:[['employee_id'],['department_code','hiring_year','sequence']],users:[['email']],employees:[['user_id'],['employee_code']],leave_balances:[['company_id','employee_id','year','leave_type']],attendance:[['employee_id','date']],employee_location_assignments:[],collaboration_members:[['project_id','user_id']],collaboration_messages:[['project_id','user_id','client_nonce']],collaboration_notices:[['user_id','source_key']],workforce_activity_presence:[['user_id','client_id']],workforce_activity_notices:[['user_id','event_id']],workforce_movement_notices:[['user_id','event_id']],workforce_report_notices:[['user_id','report_id']],workforce_executive_reports:[['company_id','report_date']],hr_report_settings:[['company_id']],hr_report_runs:[['company_id','report_date']],hr_report_deliveries:[['run_id','recipient']]};
 export function mysqlForeignKeys(table){
   return Object.entries(tableDefinition(table).columns).filter(([,column])=>column.type==='integer'&&column.references&&mysqlSchema[column.references.table]?.primaryKey===column.references.column);
 }
@@ -86,8 +86,8 @@ export function mysqlCreateTable(table){
   const definition=tableDefinition(table),uniqueKeys=mysqlUniqueKeys[table]||[];
   const indexedText=new Set(uniqueKeys.flat().filter(name=>definition.columns[name]?.type==='string'));
   const fields=Object.entries(definition.columns).map(([name,column])=>{
-    let type=isJson(column)?'JSON':column.type==='integer'?'INT':column.type==='number'?'DECIMAL(38,18)':column.type==='boolean'?'TINYINT(1)':column.format==='timestamp with time zone'?'DATETIME(6)':column.format==='date'?'DATE':column.format==='uuid'?'VARCHAR(36)':indexedText.has(name)?'VARCHAR(255)':'LONGTEXT';
-    return sqlIdentifier(name)+' '+type+(name===definition.primaryKey?' NOT NULL'+(name==='id'?' AUTO_INCREMENT':''):' NULL');
+    let type=name===definition.primaryKey&&column.type==='string'?'VARCHAR(191)':isJson(column)?'JSON':column.type==='integer'?'INT':column.type==='number'?'DECIMAL(38,18)':column.type==='boolean'?'TINYINT(1)':column.format==='timestamp with time zone'?'DATETIME(6)':column.format==='date'?'DATE':column.format==='uuid'?'VARCHAR(36)':indexedText.has(name)?'VARCHAR(255)':'LONGTEXT';
+    return sqlIdentifier(name)+' '+type+(name===definition.primaryKey?' NOT NULL'+(name==='id'&&column.type==='integer'?' AUTO_INCREMENT':''):' NULL');
   });
   fields.push('PRIMARY KEY ('+sqlIdentifier(definition.primaryKey)+')');
   for(const [i,columns] of uniqueKeys.entries())if(columns.every(name=>definition.columns[name]))fields.push('UNIQUE KEY '+sqlIdentifier('uq_'+table.slice(0,35)+'_'+i)+' ('+columns.map(sqlIdentifier).join(',')+')');

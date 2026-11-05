@@ -13,21 +13,20 @@ const staffFixture = ['019', '003'].map((staff_id, i) => ({
 }));
 
 describe('Authoritative Staff Provisioning & Security Tests', () => {
-  it('1. Explicit imports preserve leading zeros in Staff ID', async () => {
+  it('1. Imports issue department/year numbers and retain legacy IDs privately', async () => {
     const importResult = await staffImportService.importAuthoritativeStaff(staffFixture);
     assert.strictEqual(importResult.total_records, staffFixture.length);
 
     const employees = await db.find('employees');
     assert(employees.length >= staffFixture.length);
 
-    // Verify leading zeroes preservation in text staff IDs
-    const emp019 = employees.find(e => e.staff_id === '019');
-    assert(emp019, 'Staff ID 019 must exist and be stored as string with leading zero preserved');
-    assert.strictEqual(emp019.staff_id, '019');
-
-    const emp003 = employees.find(e => e.staff_id === '003');
-    assert(emp003, 'Staff ID 003 must exist with leading zero preserved');
-    assert.strictEqual(emp003.staff_id, '003');
+    for(const [index,legacy] of ['019','003'].entries()){
+      const employee=employees.find(e=>e.work_email===`import${index}@example.test`);
+      assert(employee);assert.match(employee.staff_id,/^IT2026[0-9]{4}$/);
+      assert.equal(employee.staff_id,employee.employee_code);
+      const issued=await db.findOne('employee_number_registry',{employee_id:employee.id});
+      assert.equal(issued.legacy_staff_id,legacy);
+    }
   });
 
   it('2. Verifies import idempotency - running import second time produces 0 new accounts', async () => {

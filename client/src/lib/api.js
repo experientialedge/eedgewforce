@@ -92,7 +92,7 @@ export async function request(path, options = {}) {
 
     if (!res.ok) {
       if (res.status === 401 && !path.includes('/auth/login') && !path.includes('/auth/me')) {
-        if (json.error?.code === 'TOKEN_EXPIRED' || json.error?.code === 'USER_INACTIVE' || json.error?.code === 'WORKPLACE_SESSION_REVOKED' || json.error?.code === 'LOCATION_REQUIRED') {
+        if (json.error?.code === 'TOKEN_EXPIRED' || json.error?.code === 'USER_INACTIVE' || json.error?.code === 'STAFF_REMOVED' || json.error?.code === 'WORKPLACE_SESSION_REVOKED' || json.error?.code === 'LOCATION_REQUIRED') {
           if (['WORKPLACE_SESSION_REVOKED','LOCATION_REQUIRED'].includes(json.error?.code)) localStorage.setItem('ewf_logout_reason',json.error.message);
           localStorage.removeItem('ewf_token');
           window.dispatchEvent(new CustomEvent('ewf_unauthorized'));
