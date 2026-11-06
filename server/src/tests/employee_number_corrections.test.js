@@ -5,6 +5,7 @@ import {db} from '../config/database.js';
 import {employeeNumberingService as numbering} from '../services/employeeNumberingService.js';
 import {employeeNumberCorrectionService as corrections} from '../services/employeeNumberCorrectionService.js';
 import {findUserByIdentifier,authService} from '../services/authService.js';
+import {hrService} from '../services/hrService.js';
 
 const record=(changes={})=>({company_id:1,department:'IT',first_name:'Correction',last_name:'Fixture',hire_date:'2026-01-12',status:'active',...changes});
 test('Super Admin staff ID corrections preserve ownership and identity',async t=>{
@@ -63,5 +64,15 @@ test('Super Admin staff ID corrections preserve ownership and identity',async t=
   await assert.rejects(corrections.correct(pending.id,{...change,employee_number:'STG19930001',confirmation:pending.employee_code},admin),/precedes/);
   await db.update('employees',pending.id,{hire_date:'2020-06-03'});assert.equal((await corrections.correct(pending.id,{...change,employee_number:'STG20200001',confirmation:pending.employee_code},admin)).employee_code,'STG20200001');
   await db.update('employees',pending.id,{deleted_at:new Date().toISOString()});await assert.rejects(corrections.correct(pending.id,{...change,employee_number:'STG20200002',confirmation:'STG20200001'},admin),/Restore/);
+ });
+ await t.test('HR can save a valid hiring-date correction before Super Admin corrects the ID year',async()=>{
+  const target=await numbering.create(record({department:'Operations',date_of_birth:'1994-01-01'}));
+  await assert.rejects(hrService.updateEmployee(target.id,{date_of_joining:'2026-02-31'},admin),/valid hiring/);
+  await assert.rejects(hrService.updateEmployee(target.id,{date_of_joining:'1993-01-01'},admin),/precedes/);
+  await assert.rejects(hrService.updateEmployee(target.id,{date_of_joining:''},admin),/valid hiring/);
+  const saved=await hrService.updateEmployee(target.id,{date_of_joining:'2021-06-03'},admin);
+  assert.equal(saved.date_of_joining,'2021-06-03');assert.equal(saved.employee_code,target.employee_code);
+  const corrected=await corrections.correct(target.id,{employee_number:'OPS20210001',reason:'Correct the imported hiring year after HR review.',confirmation:target.employee_code},admin);
+  assert.equal(corrected.employee_code,'OPS20210001');assert.equal(corrected.id,target.id);
  });
 });
