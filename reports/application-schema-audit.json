@@ -1,9 +1,9 @@
 {
   "summary": {
-    "files": 209,
-    "functions": 3438,
-    "routes": 246,
-    "databaseOperations": 738,
+    "files": 211,
+    "functions": 3469,
+    "routes": 247,
+    "databaseOperations": 751,
     "pendingMigrations": 0,
     "mismatches": 0,
     "dynamic": 24
@@ -1311,96 +1311,103 @@
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 12,
-      "name": "numberingPreview",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/controllers/hrController.js",
       "line": 13,
-      "name": "assignNumbers",
+      "name": "correctNumber",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
       "line": 14,
-      "name": "assignNumber",
+      "name": "numberingPreview",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
       "line": 15,
-      "name": "deleteStaff",
+      "name": "assignNumbers",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
       "line": 16,
-      "name": "restoreStaff",
+      "name": "assignNumber",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/controllers/hrController.js",
+      "line": 17,
+      "name": "deleteStaff",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
       "line": 18,
+      "name": "restoreStaff",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/controllers/hrController.js",
+      "line": 20,
       "name": "getDashboard",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 27,
+      "line": 29,
       "name": "getEmployees",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 36,
+      "line": 38,
       "name": "registerStaff",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 50,
+      "line": 52,
       "name": "updateEmployee",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 59,
+      "line": 61,
       "name": "updateStaffStatus",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 69,
+      "line": 71,
       "name": "resendInvitation",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 78,
+      "line": 80,
       "name": "getAuditLogs",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 87,
+      "line": 89,
       "name": "getAttendance",
       "operations": [
         {
           "file": "server/src/controllers/hrController.js",
-          "line": 89,
+          "line": 91,
           "method": "findAll",
           "table": "attendance",
           "fields": [
@@ -1412,7 +1419,7 @@
         },
         {
           "file": "server/src/controllers/hrController.js",
-          "line": 90,
+          "line": 92,
           "method": "findAll",
           "table": "employees",
           "fields": [
@@ -1426,26 +1433,26 @@
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 91,
+      "line": 93,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 93,
+      "line": 95,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 101,
+      "line": 103,
       "name": "getIdleEvents",
       "operations": [
         {
           "file": "server/src/controllers/hrController.js",
-          "line": 103,
+          "line": 105,
           "method": "find",
           "table": "idle_alerts",
           "fields": [
@@ -1457,7 +1464,7 @@
         },
         {
           "file": "server/src/controllers/hrController.js",
-          "line": 104,
+          "line": 106,
           "method": "find",
           "table": "employees",
           "fields": [
@@ -1471,26 +1478,26 @@
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 105,
+      "line": 107,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 107,
+      "line": 109,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 115,
+      "line": 117,
       "name": "getLeave",
       "operations": [
         {
           "file": "server/src/controllers/hrController.js",
-          "line": 117,
+          "line": 119,
           "method": "findAll",
           "table": "leave_requests",
           "fields": [
@@ -1502,7 +1509,7 @@
         },
         {
           "file": "server/src/controllers/hrController.js",
-          "line": 118,
+          "line": 120,
           "method": "findAll",
           "table": "employees",
           "fields": [
@@ -1516,40 +1523,40 @@
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 119,
+      "line": 121,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 121,
+      "line": 123,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 129,
+      "line": 131,
       "name": "approveLeave",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 138,
+      "line": 140,
       "name": "rejectLeave",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 147,
+      "line": 149,
       "name": "getTasks",
       "operations": [
         {
           "file": "server/src/controllers/hrController.js",
-          "line": 149,
+          "line": 151,
           "method": "findAll",
           "table": "tasks",
           "fields": [
@@ -1561,7 +1568,7 @@
         },
         {
           "file": "server/src/controllers/hrController.js",
-          "line": 150,
+          "line": 152,
           "method": "findAll",
           "table": "employees",
           "fields": [
@@ -1575,133 +1582,133 @@
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 151,
+      "line": 153,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 153,
+      "line": 155,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 161,
+      "line": 163,
       "name": "assignTask",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 170,
+      "line": 172,
       "name": "getSOS",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 179,
+      "line": 181,
       "name": "acknowledgeSOS",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 188,
+      "line": 190,
       "name": "resolveSOS",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 197,
+      "line": 199,
       "name": "getRanks",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 206,
+      "line": 208,
       "name": "createRank",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 215,
+      "line": 217,
       "name": "updateRank",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 224,
+      "line": 226,
       "name": "getOrganization",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 233,
+      "line": 235,
       "name": "reassignOrganizationNode",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 242,
+      "line": 244,
       "name": "deleteOrganizationNode",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 251,
+      "line": 253,
       "name": "getAnnouncements",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 260,
+      "line": 262,
       "name": "createAnnouncement",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 269,
+      "line": 271,
       "name": "updateAnnouncement",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 278,
+      "line": 280,
       "name": "deleteAnnouncement",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 287,
+      "line": 289,
       "name": "getBirthdays",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 296,
+      "line": 298,
       "name": "updateBirthday",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 305,
+      "line": 307,
       "name": "broadcastBirthday",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -6256,6 +6263,204 @@
       "file": "server/src/services/emailService.js",
       "line": 203,
       "name": "dispatchMail",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 4,
+      "name": "fail",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 5,
+      "name": "correctionInput",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 14,
+      "name": "correct",
+      "operations": [
+        {
+          "file": "server/src/services/employeeNumberCorrectionService.js",
+          "line": 18,
+          "method": "rpc",
+          "table": "correct_employee_number",
+          "fields": [
+            "p_employee_id",
+            "p_company_id",
+            "p_actor_id",
+            "p_employee_number",
+            "p_reason",
+            "p_confirmation"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        }
+      ],
+      "status": "SCHEMA MATCH (STATIC)"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 21,
+      "name": "callback:transaction",
+      "operations": [
+        {
+          "file": "server/src/services/employeeNumberCorrectionService.js",
+          "line": 23,
+          "method": "findById",
+          "table": "users",
+          "fields": [],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/employeeNumberCorrectionService.js",
+          "line": 25,
+          "method": "findById",
+          "table": "employees",
+          "fields": [],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/employeeNumberCorrectionService.js",
+          "line": 31,
+          "method": "findById",
+          "table": "employee_number_registry",
+          "fields": [],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/employeeNumberCorrectionService.js",
+          "line": 31,
+          "method": "find",
+          "table": "employees",
+          "fields": [],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/employeeNumberCorrectionService.js",
+          "line": 32,
+          "method": "findOne",
+          "table": "employee_number_registry",
+          "fields": [
+            "employee_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/employeeNumberCorrectionService.js",
+          "line": 33,
+          "method": "update",
+          "table": "employee_number_registry",
+          "fields": [
+            "employee_id"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/employeeNumberCorrectionService.js",
+          "line": 35,
+          "method": "findById",
+          "table": "employee_number_counters",
+          "fields": [],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/employeeNumberCorrectionService.js",
+          "line": 36,
+          "method": "update",
+          "table": "employee_number_counters",
+          "fields": [
+            "last_value"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/employeeNumberCorrectionService.js",
+          "line": 37,
+          "method": "insert",
+          "table": "employee_number_counters",
+          "fields": [
+            "id",
+            "department_code",
+            "hiring_year",
+            "last_value"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/employeeNumberCorrectionService.js",
+          "line": 38,
+          "method": "insert",
+          "table": "employee_number_registry",
+          "fields": [
+            "id",
+            "company_id",
+            "employee_id",
+            "department_code",
+            "hiring_year",
+            "sequence",
+            "legacy_employee_code",
+            "legacy_staff_id",
+            "issued_at",
+            "issued_by"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/employeeNumberCorrectionService.js",
+          "line": 39,
+          "method": "update",
+          "table": "employees",
+          "fields": [
+            "employee_code",
+            "staff_id",
+            "numbering_department_code",
+            "numbering_hire_year",
+            "employee_number_assigned_at"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        },
+        {
+          "file": "server/src/services/employeeNumberCorrectionService.js",
+          "line": 40,
+          "method": "insert",
+          "table": "audit_logs",
+          "fields": [
+            "company_id",
+            "actor_id",
+            "actor_email",
+            "action",
+            "entity",
+            "entity_id",
+            "metadata",
+            "created_at"
+          ],
+          "missing": [],
+          "status": "SCHEMA MATCH"
+        }
+      ],
+      "status": "SCHEMA MATCH (STATIC)"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 31,
+      "name": "callback:some",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
@@ -22848,14 +23053,35 @@
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
       "line": 7,
-      "name": "StaffDeletionDialog",
+      "name": "CorrectEmployeeNumber",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 11,
+      "line": 10,
       "name": "submit",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
+      "line": 12,
+      "name": "anonymous",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
+      "line": 15,
+      "name": "anonymous",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
+      "line": 16,
+      "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
@@ -22868,36 +23094,15 @@
     },
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 21,
-      "name": "anonymous",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 22,
-      "name": "anonymous",
+      "line": 24,
+      "name": "StaffDeletionDialog",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
       "line": 28,
-      "name": "AssignEmployeeNumber",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 33,
-      "name": "anonymous",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 33,
-      "name": "callback:map",
+      "name": "submit",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
@@ -22911,41 +23116,13 @@
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
       "line": 38,
-      "name": "StaffAdministrationPanel",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 40,
-      "name": "open",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 40,
-      "name": "callback:filter",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 41,
-      "name": "callback:useEffect",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 44,
       "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 44,
+      "line": 39,
       "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -22953,69 +23130,139 @@
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
       "line": 45,
+      "name": "AssignEmployeeNumber",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
+      "line": 50,
       "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 49,
+      "line": 50,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 49,
+      "line": 51,
       "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 50,
+      "line": 55,
+      "name": "StaffAdministrationPanel",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
+      "line": 57,
+      "name": "open",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
+      "line": 57,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
+      "line": 58,
+      "name": "callback:useEffect",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
+      "line": 61,
+      "name": "anonymous",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
+      "line": 61,
+      "name": "anonymous",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
+      "line": 62,
+      "name": "anonymous",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
+      "line": 66,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
+      "line": 66,
+      "name": "anonymous",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
+      "line": 67,
       "name": "callback:some",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 50,
+      "line": 67,
       "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 50,
+      "line": 67,
       "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 50,
+      "line": 67,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 50,
+      "line": 67,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 53,
+      "line": 70,
       "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffAdministrationPanel.jsx",
-      "line": 53,
+      "line": 70,
       "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -23029,56 +23276,63 @@
     },
     {
       "file": "client/src/components/hr/StaffEditModal.jsx",
-      "line": 20,
+      "line": 21,
       "name": "callback:useEffect",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffEditModal.jsx",
-      "line": 67,
+      "line": 68,
       "name": "handleChange",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffEditModal.jsx",
-      "line": 69,
+      "line": 70,
       "name": "callback:setFormData",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffEditModal.jsx",
-      "line": 75,
+      "line": 76,
       "name": "handleSave",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffEditModal.jsx",
-      "line": 281,
+      "line": 282,
       "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffEditModal.jsx",
-      "line": 317,
+      "line": 283,
       "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffEditModal.jsx",
-      "line": 484,
+      "line": 319,
       "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/components/hr/StaffEditModal.jsx",
-      "line": 503,
+      "line": 486,
+      "name": "anonymous",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "client/src/components/hr/StaffEditModal.jsx",
+      "line": 505,
       "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -28405,14 +28659,14 @@
     },
     {
       "file": "client/src/dashboards/HRDashboard.jsx",
-      "line": 1902,
+      "line": 1903,
       "name": "anonymous",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "client/src/dashboards/HRDashboard.jsx",
-      "line": 1904,
+      "line": 1905,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -33500,6 +33754,132 @@
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 7,
+      "name": "hash",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 9,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 9,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 11,
+      "name": "isFn",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 12,
+      "name": "key",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 17,
+      "name": "walk",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 23,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 27,
+      "name": "callback:forEach",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 34,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 35,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 37,
+      "name": "esc",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 38,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 38,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 38,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 38,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 39,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 40,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "deploy/replica-inventory.mjs",
+      "line": 40,
+      "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
       "file": "app.cjs",
       "line": 5,
       "name": "callback:catch",
@@ -33534,7 +33914,7 @@
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 89,
+      "line": 91,
       "method": "findAll",
       "table": "attendance",
       "fields": [
@@ -33546,7 +33926,7 @@
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 90,
+      "line": 92,
       "method": "findAll",
       "table": "employees",
       "fields": [
@@ -33557,7 +33937,7 @@
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 103,
+      "line": 105,
       "method": "find",
       "table": "idle_alerts",
       "fields": [
@@ -33569,7 +33949,7 @@
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 104,
+      "line": 106,
       "method": "find",
       "table": "employees",
       "fields": [
@@ -33580,7 +33960,7 @@
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 117,
+      "line": 119,
       "method": "findAll",
       "table": "leave_requests",
       "fields": [
@@ -33592,7 +33972,7 @@
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 118,
+      "line": 120,
       "method": "findAll",
       "table": "employees",
       "fields": [
@@ -33603,7 +33983,7 @@
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 149,
+      "line": 151,
       "method": "findAll",
       "table": "tasks",
       "fields": [
@@ -33615,7 +33995,7 @@
     },
     {
       "file": "server/src/controllers/hrController.js",
-      "line": 150,
+      "line": 152,
       "method": "findAll",
       "table": "employees",
       "fields": [
@@ -36104,6 +36484,167 @@
       "table": "deliveries",
       "fields": [
         "company_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 18,
+      "method": "rpc",
+      "table": "correct_employee_number",
+      "fields": [
+        "p_employee_id",
+        "p_company_id",
+        "p_actor_id",
+        "p_employee_number",
+        "p_reason",
+        "p_confirmation"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 23,
+      "method": "findById",
+      "table": "users",
+      "fields": [],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 25,
+      "method": "findById",
+      "table": "employees",
+      "fields": [],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 31,
+      "method": "findById",
+      "table": "employee_number_registry",
+      "fields": [],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 31,
+      "method": "find",
+      "table": "employees",
+      "fields": [],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 32,
+      "method": "findOne",
+      "table": "employee_number_registry",
+      "fields": [
+        "employee_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 33,
+      "method": "update",
+      "table": "employee_number_registry",
+      "fields": [
+        "employee_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 35,
+      "method": "findById",
+      "table": "employee_number_counters",
+      "fields": [],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 36,
+      "method": "update",
+      "table": "employee_number_counters",
+      "fields": [
+        "last_value"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 37,
+      "method": "insert",
+      "table": "employee_number_counters",
+      "fields": [
+        "id",
+        "department_code",
+        "hiring_year",
+        "last_value"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 38,
+      "method": "insert",
+      "table": "employee_number_registry",
+      "fields": [
+        "id",
+        "company_id",
+        "employee_id",
+        "department_code",
+        "hiring_year",
+        "sequence",
+        "legacy_employee_code",
+        "legacy_staff_id",
+        "issued_at",
+        "issued_by"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 39,
+      "method": "update",
+      "table": "employees",
+      "fields": [
+        "employee_code",
+        "staff_id",
+        "numbering_department_code",
+        "numbering_hire_year",
+        "employee_number_assigned_at"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/employeeNumberCorrectionService.js",
+      "line": 40,
+      "method": "insert",
+      "table": "audit_logs",
+      "fields": [
+        "company_id",
+        "actor_id",
+        "actor_email",
+        "action",
+        "entity",
+        "entity_id",
+        "metadata",
+        "created_at"
       ],
       "missing": [],
       "status": "SCHEMA MATCH"
@@ -43584,244 +44125,251 @@
     {
       "file": "server/src/routes/hrRoutes.js",
       "line": 25,
+      "method": "PUT",
+      "path": "/employees/:id/number",
+      "handler": "CallExpression, hrController.correctNumber"
+    },
+    {
+      "file": "server/src/routes/hrRoutes.js",
+      "line": 26,
       "method": "DELETE",
       "path": "/employees/:id",
       "handler": "CallExpression, hrController.deleteStaff"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 26,
+      "line": 27,
       "method": "POST",
       "path": "/employees/:id/restore",
       "handler": "CallExpression, hrController.restoreStaff"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 27,
+      "line": 28,
       "method": "GET",
       "path": "/employees",
       "handler": "hrController.getEmployees"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 28,
+      "line": 29,
       "method": "GET",
       "path": "/ranks",
       "handler": "hrController.getRanks"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 29,
+      "line": 30,
       "method": "GET",
       "path": "/announcements",
       "handler": "hrController.getAnnouncements"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 30,
+      "line": 31,
       "method": "GET",
       "path": "/birthdays",
       "handler": "hrController.getBirthdays"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 31,
+      "line": 32,
       "method": "GET",
       "path": "/organization",
       "handler": "hrController.getOrganization"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 34,
+      "line": 35,
       "method": "GET",
       "path": "/dashboard",
       "handler": "CallExpression, hrController.getDashboard"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 35,
+      "line": 36,
       "method": "POST",
       "path": "/employees/register",
       "handler": "CallExpression, hrController.registerStaff"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 36,
+      "line": 37,
       "method": "POST",
       "path": "/staff/register",
       "handler": "CallExpression, hrController.registerStaff"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 37,
+      "line": 38,
       "method": "PUT",
       "path": "/employees/:id",
       "handler": "CallExpression, hrController.updateEmployee"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 38,
+      "line": 39,
       "method": "PUT",
       "path": "/employees/:id/status",
       "handler": "CallExpression, hrController.updateStaffStatus"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 39,
+      "line": 40,
       "method": "POST",
       "path": "/employees/:id/resend-invitation",
       "handler": "CallExpression, hrController.resendInvitation"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 40,
+      "line": 41,
       "method": "GET",
       "path": "/audit-logs",
       "handler": "CallExpression, hrController.getAuditLogs"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 41,
+      "line": 42,
       "method": "GET",
       "path": "/attendance",
       "handler": "CallExpression, hrController.getAttendance"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 42,
+      "line": 43,
       "method": "GET",
       "path": "/idle-events",
       "handler": "CallExpression, hrController.getIdleEvents"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 43,
+      "line": 44,
       "method": "GET",
       "path": "/leave",
       "handler": "CallExpression, hrController.getLeave"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 44,
+      "line": 45,
       "method": "PUT",
       "path": "/leave/:id/approve",
       "handler": "CallExpression, hrController.approveLeave"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 45,
+      "line": 46,
       "method": "PUT",
       "path": "/leave/:id/reject",
       "handler": "CallExpression, hrController.rejectLeave"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 46,
+      "line": 47,
       "method": "GET",
       "path": "/tasks",
       "handler": "CallExpression, hrController.getTasks"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 47,
+      "line": 48,
       "method": "POST",
       "path": "/tasks",
       "handler": "CallExpression, hrController.assignTask"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 48,
+      "line": 49,
       "method": "GET",
       "path": "/sos",
       "handler": "CallExpression, hrController.getSOS"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 49,
+      "line": 50,
       "method": "PUT",
       "path": "/sos/:id/acknowledge",
       "handler": "CallExpression, hrController.acknowledgeSOS"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 50,
+      "line": 51,
       "method": "PUT",
       "path": "/sos/:id/resolve",
       "handler": "CallExpression, hrController.resolveSOS"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 51,
+      "line": 52,
       "method": "POST",
       "path": "/ranks",
       "handler": "CallExpression, hrController.createRank"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 52,
+      "line": 53,
       "method": "PUT",
       "path": "/ranks/:id",
       "handler": "CallExpression, hrController.updateRank"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 53,
+      "line": 54,
       "method": "PUT",
       "path": "/organization/node/:id",
       "handler": "CallExpression, hrController.reassignOrganizationNode"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 54,
+      "line": 55,
       "method": "DELETE",
       "path": "/organization/node/:id",
       "handler": "CallExpression, hrController.deleteOrganizationNode"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 57,
+      "line": 58,
       "method": "POST",
       "path": "/announcements",
       "handler": "CallExpression, hrController.createAnnouncement"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 58,
+      "line": 59,
       "method": "PUT",
       "path": "/announcements/:id",
       "handler": "CallExpression, hrController.updateAnnouncement"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 59,
+      "line": 60,
       "method": "DELETE",
       "path": "/announcements/:id",
       "handler": "CallExpression, hrController.deleteAnnouncement"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 62,
+      "line": 63,
       "method": "PUT",
       "path": "/employees/:id/birthday",
       "handler": "CallExpression, hrController.updateBirthday"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 63,
+      "line": 64,
       "method": "POST",
       "path": "/birthdays/broadcast",
       "handler": "CallExpression, hrController.broadcastBirthday"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 66,
+      "line": 67,
       "method": "GET",
       "path": "/schedules",
       "handler": "CallExpression, scheduleController.getHRSchedules"
     },
     {
       "file": "server/src/routes/hrRoutes.js",
-      "line": 67,
+      "line": 68,
       "method": "PUT",
       "path": "/schedules/:id/review",
       "handler": "CallExpression, scheduleController.reviewHRSchedule"

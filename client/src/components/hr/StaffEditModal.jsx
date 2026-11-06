@@ -1,4 +1,4 @@
-import {AssignEmployeeNumber} from './StaffAdministrationPanel';
+import {AssignEmployeeNumber,CorrectEmployeeNumber} from './StaffAdministrationPanel';
 import React, { useState, useEffect } from 'react';
 import { X, Save, AlertCircle, CheckCircle2, ShieldCheck, User, Phone, Mail, Building, Briefcase, CreditCard, HeartPulse } from 'lucide-react';
 import { api } from '../../lib/api';
@@ -9,6 +9,7 @@ export default function StaffEditModal({
   onClose,
   onSaved,
   onAssignWorkplace,
+  canCorrectStaffId = false,
   ranks = [],
   departments = []
 }) {
@@ -279,6 +280,7 @@ export default function StaffEditModal({
               <span>Employment & Hierarchy</span>
             </div>
             <AssignEmployeeNumber employee={employee} onAssigned={async updated=>{await onSaved?.(updated);onClose();}}/>
+            {canCorrectStaffId&&<CorrectEmployeeNumber employee={employee} onCorrected={async updated=>{await onSaved?.(updated);onClose();}}/>}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div>
                 <label className="block text-[10px] font-bold uppercase text-zinc-500 mb-1">Official Staff ID</label>

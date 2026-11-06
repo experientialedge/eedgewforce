@@ -1899,6 +1899,7 @@ export default function HRDashboard({ user, initialTab = 'overview', onSelectTab
         isOpen={Boolean(selectedStaffForEdit)}
         onClose={() => setSelectedStaffForEdit(null)}
         onSaved={handleSaveEditedEmployee}
+        canCorrectStaffId={userRole==='SUPER_ADMIN'}
         onAssignWorkplace={isHrOrCeo ? emp => { setSelectedStaffForEdit(null); setWorkplaceEmployee(emp); } : undefined}
         ranks={ranks}
         departments={[...new Set(employees.map(e => e.department).filter(Boolean))]}

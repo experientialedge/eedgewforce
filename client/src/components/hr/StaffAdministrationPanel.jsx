@@ -4,6 +4,23 @@ import Modal from '../common/Modal';
 import {api} from '../../lib/api';
 
 export const NUMBERING_DEPARTMENTS={FIN:'Finance',HR:'Human Resources',IT:'Information Technology',SM:'Sales & Marketing',OPS:'Operations',STG:'Strategy',CRE:'Creative',CMP:'Compliance',PUR:'Procurement',EXE:'Executive'};
+export function CorrectEmployeeNumber({employee,onCorrected}){
+ const [open,setOpen]=useState(false),[number,setNumber]=useState(''),[reason,setReason]=useState(''),[confirmation,setConfirmation]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState('');
+ const current=employee.employee_code||employee.staff_id||'',valid=/^(FIN|HR|IT|SM|OPS|STG|CRE|CMP|PUR|EXE)(?:19|[2-9]\d)\d{2}(?!0000)\d{4}$/.test(number);
+ async function submit(e){e.preventDefault();setBusy(true);setError('');try{const updated=await api.put(`/hr/employees/${employee.id}/number`,{employee_number:number,reason,confirmation});await onCorrected?.(updated);setOpen(false);}catch(err){setError(err.message);}finally{setBusy(false);}}
+ return <section className="rounded-xl border border-orange-500/30 p-4 space-y-3">
+  <div className="flex items-start justify-between gap-3"><div><p className="text-sm font-bold">Super Admin · Staff ID correction</p><p className="text-xs text-zinc-500 mt-1">Correct an imported numbering mistake with a recorded reason. The old ID stays reserved.</p></div><button type="button" disabled={busy} onClick={()=>{setOpen(!open);setError('');}} className="shrink-0 rounded-lg border border-orange-500/40 px-3 py-2 text-xs font-bold">{open?'Cancel correction':'Correct staff ID'}</button></div>
+  {open&&<form onSubmit={submit} className="space-y-3">
+   <p className="text-xs text-zinc-500">Save any corrected hiring date before changing the ID. Use an approved department code, the saved hiring year and an unused four-digit sequence. This action updates only the staff ID; other unsaved profile edits are not included.</p>
+   <label className="block text-xs font-semibold">Corrected staff ID<input required maxLength={11} autoComplete="off" value={number} onChange={e=>setNumber(e.target.value.toUpperCase().trim())} placeholder="IT20260001" className="mt-1 w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent p-2 font-mono"/></label>
+   <label className="block text-xs font-semibold">Reason for correction<textarea required minLength={10} maxLength={500} value={reason} onChange={e=>setReason(e.target.value)} className="mt-1 w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent p-2"/></label>
+   <label className="block text-xs font-semibold">Type current ID {current} to confirm<input required autoComplete="off" value={confirmation} onChange={e=>setConfirmation(e.target.value)} className="mt-1 w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent p-2 font-mono"/></label>
+   <p className="text-xs text-zinc-500">The corrected ID becomes the staff member’s ID for sign-in. Their account, password and work history stay linked.</p>
+   {error&&<p role="alert" className="text-sm text-red-600">{error}</p>}
+   <button type="submit" disabled={busy||!valid||number===current||reason.trim().length<10||confirmation!==current} className="rounded-lg bg-orange-600 px-3 py-2 text-xs font-bold text-white disabled:opacity-40">{busy?'Saving correction…':'Save staff ID correction'}</button>
+  </form>}
+ </section>;
+}
 export function StaffDeletionDialog({employee,restore=false,onClose,onDone}){
  const [reason,setReason]=useState(''),[confirmation,setConfirmation]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState('');
  if(!employee)return null;
@@ -27,9 +44,9 @@ export function StaffDeletionDialog({employee,restore=false,onClose,onDone}){
 }
 export function AssignEmployeeNumber({employee,onAssigned}){
  const [code,setCode]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState('');
- if(employee.employee_number_assigned_at)return <p className="text-xs text-zinc-500">Permanent employee number. Department transfers and departure do not change it.</p>;
+ if(employee.employee_number_assigned_at)return <p className="text-xs text-zinc-500">Reserved employee number. Department transfers and departure do not change it. Corrections require an audited Super Admin action.</p>;
  return <section className="rounded-xl border border-orange-500/30 p-4 space-y-3">
-  <p className="text-sm font-bold">Assign a permanent employee number</p><p className="text-xs text-zinc-500">Save the correct hiring date first. The server assigns the next unused number; it cannot be edited afterwards.</p>
+  <p className="text-sm font-bold">Assign a permanent employee number</p><p className="text-xs text-zinc-500">Save the correct hiring date first. The server assigns the next unused number. Later corrections require a Super Admin and a recorded reason.</p>
   <label className="block text-xs font-semibold">Numbering department<select value={code} onChange={e=>setCode(e.target.value)} className="mt-1 w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent p-2"><option value="">Choose a code</option>{Object.entries(NUMBERING_DEPARTMENTS).map(([c,n])=><option key={c} value={c}>{c} · {n}</option>)}</select></label>
   <button type="button" disabled={!code||busy} className="rounded-lg bg-orange-600 px-3 py-2 text-xs font-bold text-white disabled:opacity-40" onClick={async()=>{setBusy(true);setError('');try{const result=await api.post(`/hr/employees/${employee.id}/number`,{department_code:code});await onAssigned?.(result);}catch(e){setError(e.message);}finally{setBusy(false);}}}>{busy?'Assigning…':'Assign permanent number'}</button>
   {error&&<p role="alert" className="text-xs text-red-600">{error}</p>}
