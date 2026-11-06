@@ -46,14 +46,15 @@ This example starts with empty IT/2026 and Finance/2026 counters. It does not cr
 ## Staff administration
 
 - **HR → Staff directory → Employee numbering:** preview unnumbered profiles, review their departments/years, and assign numbers to ready profiles.
-- **Edit staff:** the issued ID is read-only. Before issuance, HR can correct the hiring date and choose an approved numbering code for an unusual department label.
+- **Edit staff:** the issued ID is read-only during ordinary profile editing. Before issuance, HR can correct the hiring date and choose an approved numbering code for an unusual department label.
+- **Super Admin → Edit staff → Correct staff ID:** an active Super Admin can replace an incorrectly issued number. Save any corrected hiring date first, enter an unused valid number with the matching hiring year, record a 10–500 character reason and type the current ID. The API independently verifies the persisted administrator role and company. A transaction changes both displayed IDs and numbering metadata, advances the relevant counter and writes `EMPLOYEE_NUMBER_CORRECTED` with the old number, new number, actor and reason. The old reservation stays forever; it cannot be reused even for the same person. Account credentials and integer relationships remain unchanged. The new number is the staff-ID sign-in identifier; the retired number no longer signs in. Ordinary transfers still do not change numbers.
 - **Delete staff:** an authorised HR manager, administrator, super administrator or CEO selects a staff member, enters a reason and types the current employee number. This removes the profile from the current directory, disables the account, invalidates old application sessions and retains attendance, payroll and collaboration history.
 - **Removed staff → Restore:** restores the same record and number. Account access remains inactive until HR explicitly reactivates it.
 - Self-deletion and removal of the last administrator are blocked. Only super administrators can remove privileged administrator/CEO accounts. Every deletion, restoration and legacy-number issuance is audited.
 
 ## Deployment
 
-Apply `supabase/migrations/20261105_employee_numbering_and_archival.sql` before deploying the new API/UI. It is additive and safe to rerun; it does not bulk-renumber or delete employees. Back up profiles and use the preview/issuance operations to migrate current staff in a stable hiring-date/record-ID order. Resolve ambiguous departments and invalid dates rather than inventing them.
+Apply `supabase/migrations/20261105_employee_numbering_and_archival.sql` followed by `supabase/migrations/20261106_super_admin_employee_number_corrections.sql` before deploying the new API/UI. They are additive and safe to rerun in that order; they do not bulk-renumber or delete employees. Back up profiles and use the preview/issuance operations to migrate current staff in a stable hiring-date/record-ID order. Resolve ambiguous departments and invalid dates rather than inventing them.
 
 The approved application database function is `issue_employee_number(employee_id, company_id, actor_id, department_code)`. It is executable only by the server service role and rechecks the actor's authority and company. Ordinary browser/database users cannot directly invoke allocation or read the private legacy register.
 

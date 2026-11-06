@@ -1,4 +1,5 @@
 import {employeeNumberingService} from '../services/employeeNumberingService.js';
+import {employeeNumberCorrectionService} from '../services/employeeNumberCorrectionService.js';
 import {staffLifecycleService} from '../services/staffLifecycleService.js';
 import { sosService } from '../services/sosService.js';
 // ==============================================================================
@@ -9,6 +10,7 @@ import { hrService } from '../services/hrService.js';
 import { db } from '../config/database.js';
 
 export const hrController = {
+  async correctNumber(req,res,next){try{res.json({success:true,data:await employeeNumberCorrectionService.correct(req.params.id,req.body,req.user),message:'Staff ID corrected. The previous number remains reserved and the change has been audited.'});}catch(e){e.status=e.status||400;next(e);}},
   async numberingPreview(req,res,next){try{res.json({success:true,data:await employeeNumberingService.preview(req.user)});}catch(e){next(e);}},
   async assignNumbers(req,res,next){try{res.json({success:true,data:await employeeNumberingService.assignReady(req.user)});}catch(e){next(e);}},
   async assignNumber(req,res,next){try{res.json({success:true,data:await employeeNumberingService.assign(req.params.id,req.body.department_code,req.user)});}catch(e){e.status=e.status||400;next(e);}},

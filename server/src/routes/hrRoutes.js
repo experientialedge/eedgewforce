@@ -22,6 +22,7 @@ router.post('/employees/import', importAccess, staffImportUpload, staffImportCon
 router.get('/employees/numbering/preview',importAccess,hrController.numberingPreview);
 router.post('/employees/numbering/assign',importAccess,hrController.assignNumbers);
 router.post('/employees/:id/number',importAccess,hrController.assignNumber);
+router.put('/employees/:id/number',hasRole('SUPER_ADMIN'),hrController.correctNumber);
 router.delete('/employees/:id',hasRole('HR','HR_MANAGER','CEO','SUPER_ADMIN','ADMIN'),hrController.deleteStaff);
 router.post('/employees/:id/restore',hasRole('HR','HR_MANAGER','CEO','SUPER_ADMIN','ADMIN'),hrController.restoreStaff);
 router.get('/employees', hrController.getEmployees);

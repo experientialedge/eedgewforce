@@ -1,8 +1,8 @@
 # EdgeWForce complete application function and schema inventory
 
-{"files":209,"functions":3438,"routes":246,"databaseOperations":738,"pendingMigrations":0,"mismatches":0,"dynamic":24}
+{"files":211,"functions":3469,"routes":247,"databaseOperations":751,"pendingMigrations":0,"mismatches":0,"dynamic":24}
 
-Observed schema captured at 2026-11-05T20:57:03.891Z. Static matches verify referenced tables and literal fields against the observed Supabase schema. MIGRATION REQUIRED means referenced columns exist only in the committed target, so the observed database still needs an upgrade. They do not prove end-to-end behavior. Dynamic payloads require runtime verification. The no-direct-DAL category includes UI functions, delegates and SQL adapters; it does not assert that a function has no database effects. Tests and generated code are excluded.
+Observed schema captured at 2026-11-06T06:12:29.182Z. Static matches verify referenced tables and literal fields against the observed Supabase schema. MIGRATION REQUIRED means referenced columns exist only in the committed target, so the observed database still needs an upgrade. They do not prove end-to-end behavior. Dynamic payloads require runtime verification. The no-direct-DAL category includes UI functions, delegates and SQL adapters; it does not assert that a function has no database effects. Tests and generated code are excluded.
 
 ## Every application function
 
@@ -190,49 +190,50 @@ Observed schema captured at 2026-11-05T20:57:03.891Z. Static matches verify refe
 | server/src/controllers/fieldController.js:381 | overrideAttendance | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/fieldController.js:401 | generateDailyTeamSummary | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/fieldController.js:412 | getReports | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:12 | numberingPreview | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:13 | assignNumbers | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:14 | assignNumber | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:15 | deleteStaff | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:16 | restoreStaff | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:18 | getDashboard | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:27 | getEmployees | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:36 | registerStaff | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:50 | updateEmployee | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:59 | updateStaffStatus | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:69 | resendInvitation | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:78 | getAuditLogs | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:87 | getAttendance | SCHEMA MATCH (STATIC) | findAll:attendance, findAll:employees |
-| server/src/controllers/hrController.js:91 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:93 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:101 | getIdleEvents | SCHEMA MATCH (STATIC) | find:idle_alerts, find:employees |
-| server/src/controllers/hrController.js:105 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:107 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:115 | getLeave | SCHEMA MATCH (STATIC) | findAll:leave_requests, findAll:employees |
-| server/src/controllers/hrController.js:119 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:121 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:129 | approveLeave | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:138 | rejectLeave | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:147 | getTasks | SCHEMA MATCH (STATIC) | findAll:tasks, findAll:employees |
-| server/src/controllers/hrController.js:151 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:153 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:161 | assignTask | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:170 | getSOS | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:179 | acknowledgeSOS | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:188 | resolveSOS | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:197 | getRanks | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:206 | createRank | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:215 | updateRank | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:224 | getOrganization | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:233 | reassignOrganizationNode | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:242 | deleteOrganizationNode | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:251 | getAnnouncements | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:260 | createAnnouncement | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:269 | updateAnnouncement | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:278 | deleteAnnouncement | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:287 | getBirthdays | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:296 | updateBirthday | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/controllers/hrController.js:305 | broadcastBirthday | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:13 | correctNumber | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:14 | numberingPreview | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:15 | assignNumbers | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:16 | assignNumber | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:17 | deleteStaff | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:18 | restoreStaff | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:20 | getDashboard | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:29 | getEmployees | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:38 | registerStaff | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:52 | updateEmployee | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:61 | updateStaffStatus | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:71 | resendInvitation | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:80 | getAuditLogs | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:89 | getAttendance | SCHEMA MATCH (STATIC) | findAll:attendance, findAll:employees |
+| server/src/controllers/hrController.js:93 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:95 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:103 | getIdleEvents | SCHEMA MATCH (STATIC) | find:idle_alerts, find:employees |
+| server/src/controllers/hrController.js:107 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:109 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:117 | getLeave | SCHEMA MATCH (STATIC) | findAll:leave_requests, findAll:employees |
+| server/src/controllers/hrController.js:121 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:123 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:131 | approveLeave | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:140 | rejectLeave | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:149 | getTasks | SCHEMA MATCH (STATIC) | findAll:tasks, findAll:employees |
+| server/src/controllers/hrController.js:153 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:155 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:163 | assignTask | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:172 | getSOS | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:181 | acknowledgeSOS | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:190 | resolveSOS | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:199 | getRanks | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:208 | createRank | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:217 | updateRank | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:226 | getOrganization | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:235 | reassignOrganizationNode | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:244 | deleteOrganizationNode | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:253 | getAnnouncements | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:262 | createAnnouncement | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:271 | updateAnnouncement | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:280 | deleteAnnouncement | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:289 | getBirthdays | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:298 | updateBirthday | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/controllers/hrController.js:307 | broadcastBirthday | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/inventoryController.js:9 | getProducts | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/inventoryController.js:19 | getProductById | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/controllers/inventoryController.js:30 | createProduct | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
@@ -519,6 +520,11 @@ Observed schema captured at 2026-11-05T20:57:03.891Z. Static matches verify refe
 | server/src/services/emailService.js:145 | sendEscalationEmail | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/emailService.js:174 | sendIdleAlertEmail | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/emailService.js:203 | dispatchMail | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/employeeNumberCorrectionService.js:4 | fail | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/employeeNumberCorrectionService.js:5 | correctionInput | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/employeeNumberCorrectionService.js:14 | correct | SCHEMA MATCH (STATIC) | rpc:correct_employee_number |
+| server/src/services/employeeNumberCorrectionService.js:21 | callback:transaction | SCHEMA MATCH (STATIC) | findById:users, findById:employees, findById:employee_number_registry, find:employees, findOne:employee_number_registry, update:employee_number_registry, findById:employee_number_counters, update:employee_number_counters, insert:employee_number_counters, insert:employee_number_registry, update:employees, insert:audit_logs |
+| server/src/services/employeeNumberCorrectionService.js:31 | callback:some | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/employeeNumberingService.js:6 | allocate | SCHEMA MATCH (STATIC) | findById:employee_number_counters, findAll:employees, insert:employee_number_counters, update:employee_number_counters |
 | server/src/services/employeeNumberingService.js:21 | issueLocal | SCHEMA MATCH (STATIC) | findOne:employee_number_registry, insert:employee_number_registry, update:employees |
 | server/src/services/employeeNumberingService.js:29 | create | DYNAMIC REVIEW | insert:employees |
@@ -1923,40 +1929,47 @@ Observed schema captured at 2026-11-05T20:57:03.891Z. Static matches verify refe
 | client/src/components/hr/OrgChartTree.jsx:971 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/components/hr/OrgChartTree.jsx:990 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/components/hr/OrgChartTree.jsx:997 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:7 | StaffDeletionDialog | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:11 | submit | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:7 | CorrectEmployeeNumber | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:10 | submit | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:12 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:15 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:16 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/components/hr/StaffAdministrationPanel.jsx:17 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:21 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:22 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:28 | AssignEmployeeNumber | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:33 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:33 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:24 | StaffDeletionDialog | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:28 | submit | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/components/hr/StaffAdministrationPanel.jsx:34 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:38 | StaffAdministrationPanel | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:40 | open | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:40 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:41 | callback:useEffect | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:44 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:44 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:45 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:49 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:49 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:50 | callback:some | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:38 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:39 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:45 | AssignEmployeeNumber | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/components/hr/StaffAdministrationPanel.jsx:50 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:50 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:50 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:50 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:53 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffAdministrationPanel.jsx:53 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:50 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:51 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:55 | StaffAdministrationPanel | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:57 | open | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:57 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:58 | callback:useEffect | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:61 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:61 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:62 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:66 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:66 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:67 | callback:some | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:67 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:67 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:67 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:67 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:70 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffAdministrationPanel.jsx:70 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/components/hr/StaffEditModal.jsx:6 | StaffEditModal | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffEditModal.jsx:20 | callback:useEffect | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffEditModal.jsx:67 | handleChange | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffEditModal.jsx:69 | callback:setFormData | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffEditModal.jsx:75 | handleSave | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffEditModal.jsx:281 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffEditModal.jsx:317 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffEditModal.jsx:484 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/components/hr/StaffEditModal.jsx:503 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffEditModal.jsx:21 | callback:useEffect | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffEditModal.jsx:68 | handleChange | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffEditModal.jsx:70 | callback:setFormData | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffEditModal.jsx:76 | handleSave | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffEditModal.jsx:282 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffEditModal.jsx:283 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffEditModal.jsx:319 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffEditModal.jsx:486 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/components/hr/StaffEditModal.jsx:505 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/components/hr/StaffImportModal.jsx:7 | downloadCsv | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/components/hr/StaffImportModal.jsx:8 | escape | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/components/hr/StaffImportModal.jsx:9 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
@@ -2717,8 +2730,8 @@ Observed schema captured at 2026-11-05T20:57:03.891Z. Static matches verify refe
 | client/src/dashboards/HRDashboard.jsx:1893 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/dashboards/HRDashboard.jsx:1895 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/dashboards/HRDashboard.jsx:1900 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/HRDashboard.jsx:1902 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| client/src/dashboards/HRDashboard.jsx:1904 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/HRDashboard.jsx:1903 | anonymous | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| client/src/dashboards/HRDashboard.jsx:1905 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/dashboards/InventoryDashboard.jsx:39 | InventoryDashboard | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/dashboards/InventoryDashboard.jsx:110 | loadInventory | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | client/src/dashboards/InventoryDashboard.jsx:128 | callback:setCollectionForm | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
@@ -3445,6 +3458,24 @@ Observed schema captured at 2026-11-05T20:57:03.891Z. Static matches verify refe
 | deploy/mysql/verify-copy.mjs:16 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | deploy/nexus/gateway.mjs:7 | callback:createServer | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | deploy/nexus/gateway.mjs:28 | callback:listen | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:7 | hash | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:9 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:9 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:11 | isFn | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:12 | key | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:17 | walk | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:23 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:27 | callback:forEach | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:34 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:35 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:37 | esc | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:38 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:38 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:38 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:38 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:39 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:40 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| deploy/replica-inventory.mjs:40 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | app.cjs:5 | callback:catch | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 
 ## Every API route declaration
@@ -3578,41 +3609,42 @@ Observed schema captured at 2026-11-05T20:57:03.891Z. Static matches verify refe
 | GET | /employees/numbering/preview | server/src/routes/hrRoutes.js:22 | importAccess, hrController.numberingPreview |
 | POST | /employees/numbering/assign | server/src/routes/hrRoutes.js:23 | importAccess, hrController.assignNumbers |
 | POST | /employees/:id/number | server/src/routes/hrRoutes.js:24 | importAccess, hrController.assignNumber |
-| DELETE | /employees/:id | server/src/routes/hrRoutes.js:25 | CallExpression, hrController.deleteStaff |
-| POST | /employees/:id/restore | server/src/routes/hrRoutes.js:26 | CallExpression, hrController.restoreStaff |
-| GET | /employees | server/src/routes/hrRoutes.js:27 | hrController.getEmployees |
-| GET | /ranks | server/src/routes/hrRoutes.js:28 | hrController.getRanks |
-| GET | /announcements | server/src/routes/hrRoutes.js:29 | hrController.getAnnouncements |
-| GET | /birthdays | server/src/routes/hrRoutes.js:30 | hrController.getBirthdays |
-| GET | /organization | server/src/routes/hrRoutes.js:31 | hrController.getOrganization |
-| GET | /dashboard | server/src/routes/hrRoutes.js:34 | CallExpression, hrController.getDashboard |
-| POST | /employees/register | server/src/routes/hrRoutes.js:35 | CallExpression, hrController.registerStaff |
-| POST | /staff/register | server/src/routes/hrRoutes.js:36 | CallExpression, hrController.registerStaff |
-| PUT | /employees/:id | server/src/routes/hrRoutes.js:37 | CallExpression, hrController.updateEmployee |
-| PUT | /employees/:id/status | server/src/routes/hrRoutes.js:38 | CallExpression, hrController.updateStaffStatus |
-| POST | /employees/:id/resend-invitation | server/src/routes/hrRoutes.js:39 | CallExpression, hrController.resendInvitation |
-| GET | /audit-logs | server/src/routes/hrRoutes.js:40 | CallExpression, hrController.getAuditLogs |
-| GET | /attendance | server/src/routes/hrRoutes.js:41 | CallExpression, hrController.getAttendance |
-| GET | /idle-events | server/src/routes/hrRoutes.js:42 | CallExpression, hrController.getIdleEvents |
-| GET | /leave | server/src/routes/hrRoutes.js:43 | CallExpression, hrController.getLeave |
-| PUT | /leave/:id/approve | server/src/routes/hrRoutes.js:44 | CallExpression, hrController.approveLeave |
-| PUT | /leave/:id/reject | server/src/routes/hrRoutes.js:45 | CallExpression, hrController.rejectLeave |
-| GET | /tasks | server/src/routes/hrRoutes.js:46 | CallExpression, hrController.getTasks |
-| POST | /tasks | server/src/routes/hrRoutes.js:47 | CallExpression, hrController.assignTask |
-| GET | /sos | server/src/routes/hrRoutes.js:48 | CallExpression, hrController.getSOS |
-| PUT | /sos/:id/acknowledge | server/src/routes/hrRoutes.js:49 | CallExpression, hrController.acknowledgeSOS |
-| PUT | /sos/:id/resolve | server/src/routes/hrRoutes.js:50 | CallExpression, hrController.resolveSOS |
-| POST | /ranks | server/src/routes/hrRoutes.js:51 | CallExpression, hrController.createRank |
-| PUT | /ranks/:id | server/src/routes/hrRoutes.js:52 | CallExpression, hrController.updateRank |
-| PUT | /organization/node/:id | server/src/routes/hrRoutes.js:53 | CallExpression, hrController.reassignOrganizationNode |
-| DELETE | /organization/node/:id | server/src/routes/hrRoutes.js:54 | CallExpression, hrController.deleteOrganizationNode |
-| POST | /announcements | server/src/routes/hrRoutes.js:57 | CallExpression, hrController.createAnnouncement |
-| PUT | /announcements/:id | server/src/routes/hrRoutes.js:58 | CallExpression, hrController.updateAnnouncement |
-| DELETE | /announcements/:id | server/src/routes/hrRoutes.js:59 | CallExpression, hrController.deleteAnnouncement |
-| PUT | /employees/:id/birthday | server/src/routes/hrRoutes.js:62 | CallExpression, hrController.updateBirthday |
-| POST | /birthdays/broadcast | server/src/routes/hrRoutes.js:63 | CallExpression, hrController.broadcastBirthday |
-| GET | /schedules | server/src/routes/hrRoutes.js:66 | CallExpression, scheduleController.getHRSchedules |
-| PUT | /schedules/:id/review | server/src/routes/hrRoutes.js:67 | CallExpression, scheduleController.reviewHRSchedule |
+| PUT | /employees/:id/number | server/src/routes/hrRoutes.js:25 | CallExpression, hrController.correctNumber |
+| DELETE | /employees/:id | server/src/routes/hrRoutes.js:26 | CallExpression, hrController.deleteStaff |
+| POST | /employees/:id/restore | server/src/routes/hrRoutes.js:27 | CallExpression, hrController.restoreStaff |
+| GET | /employees | server/src/routes/hrRoutes.js:28 | hrController.getEmployees |
+| GET | /ranks | server/src/routes/hrRoutes.js:29 | hrController.getRanks |
+| GET | /announcements | server/src/routes/hrRoutes.js:30 | hrController.getAnnouncements |
+| GET | /birthdays | server/src/routes/hrRoutes.js:31 | hrController.getBirthdays |
+| GET | /organization | server/src/routes/hrRoutes.js:32 | hrController.getOrganization |
+| GET | /dashboard | server/src/routes/hrRoutes.js:35 | CallExpression, hrController.getDashboard |
+| POST | /employees/register | server/src/routes/hrRoutes.js:36 | CallExpression, hrController.registerStaff |
+| POST | /staff/register | server/src/routes/hrRoutes.js:37 | CallExpression, hrController.registerStaff |
+| PUT | /employees/:id | server/src/routes/hrRoutes.js:38 | CallExpression, hrController.updateEmployee |
+| PUT | /employees/:id/status | server/src/routes/hrRoutes.js:39 | CallExpression, hrController.updateStaffStatus |
+| POST | /employees/:id/resend-invitation | server/src/routes/hrRoutes.js:40 | CallExpression, hrController.resendInvitation |
+| GET | /audit-logs | server/src/routes/hrRoutes.js:41 | CallExpression, hrController.getAuditLogs |
+| GET | /attendance | server/src/routes/hrRoutes.js:42 | CallExpression, hrController.getAttendance |
+| GET | /idle-events | server/src/routes/hrRoutes.js:43 | CallExpression, hrController.getIdleEvents |
+| GET | /leave | server/src/routes/hrRoutes.js:44 | CallExpression, hrController.getLeave |
+| PUT | /leave/:id/approve | server/src/routes/hrRoutes.js:45 | CallExpression, hrController.approveLeave |
+| PUT | /leave/:id/reject | server/src/routes/hrRoutes.js:46 | CallExpression, hrController.rejectLeave |
+| GET | /tasks | server/src/routes/hrRoutes.js:47 | CallExpression, hrController.getTasks |
+| POST | /tasks | server/src/routes/hrRoutes.js:48 | CallExpression, hrController.assignTask |
+| GET | /sos | server/src/routes/hrRoutes.js:49 | CallExpression, hrController.getSOS |
+| PUT | /sos/:id/acknowledge | server/src/routes/hrRoutes.js:50 | CallExpression, hrController.acknowledgeSOS |
+| PUT | /sos/:id/resolve | server/src/routes/hrRoutes.js:51 | CallExpression, hrController.resolveSOS |
+| POST | /ranks | server/src/routes/hrRoutes.js:52 | CallExpression, hrController.createRank |
+| PUT | /ranks/:id | server/src/routes/hrRoutes.js:53 | CallExpression, hrController.updateRank |
+| PUT | /organization/node/:id | server/src/routes/hrRoutes.js:54 | CallExpression, hrController.reassignOrganizationNode |
+| DELETE | /organization/node/:id | server/src/routes/hrRoutes.js:55 | CallExpression, hrController.deleteOrganizationNode |
+| POST | /announcements | server/src/routes/hrRoutes.js:58 | CallExpression, hrController.createAnnouncement |
+| PUT | /announcements/:id | server/src/routes/hrRoutes.js:59 | CallExpression, hrController.updateAnnouncement |
+| DELETE | /announcements/:id | server/src/routes/hrRoutes.js:60 | CallExpression, hrController.deleteAnnouncement |
+| PUT | /employees/:id/birthday | server/src/routes/hrRoutes.js:63 | CallExpression, hrController.updateBirthday |
+| POST | /birthdays/broadcast | server/src/routes/hrRoutes.js:64 | CallExpression, hrController.broadcastBirthday |
+| GET | /schedules | server/src/routes/hrRoutes.js:67 | CallExpression, scheduleController.getHRSchedules |
+| PUT | /schedules/:id/review | server/src/routes/hrRoutes.js:68 | CallExpression, scheduleController.reviewHRSchedule |
 | GET | /products | server/src/routes/inventoryRoutes.js:35 | inventoryController.getProducts |
 | GET | /products/:id | server/src/routes/inventoryRoutes.js:36 | inventoryController.getProductById |
 | POST | /products | server/src/routes/inventoryRoutes.js:37 | CallExpression, inventoryController.createProduct |
@@ -3704,14 +3736,14 @@ Observed schema captured at 2026-11-05T20:57:03.891Z. Static matches verify refe
 |---|---|---|---|---|---|
 | server/src/controllers/fieldController.js:53 | find | employees | company_id |  | SCHEMA MATCH |
 | server/src/controllers/fieldController.js:81 | find | location_alerts | company_id, employee_id, created_at |  | SCHEMA MATCH |
-| server/src/controllers/hrController.js:89 | findAll | attendance | company_id, id |  | SCHEMA MATCH |
-| server/src/controllers/hrController.js:90 | findAll | employees | company_id |  | SCHEMA MATCH |
-| server/src/controllers/hrController.js:103 | find | idle_alerts | company_id, created_at |  | SCHEMA MATCH |
-| server/src/controllers/hrController.js:104 | find | employees | company_id |  | SCHEMA MATCH |
-| server/src/controllers/hrController.js:117 | findAll | leave_requests | company_id, id |  | SCHEMA MATCH |
-| server/src/controllers/hrController.js:118 | findAll | employees | company_id |  | SCHEMA MATCH |
-| server/src/controllers/hrController.js:149 | findAll | tasks | company_id, id |  | SCHEMA MATCH |
-| server/src/controllers/hrController.js:150 | findAll | employees | company_id |  | SCHEMA MATCH |
+| server/src/controllers/hrController.js:91 | findAll | attendance | company_id, id |  | SCHEMA MATCH |
+| server/src/controllers/hrController.js:92 | findAll | employees | company_id |  | SCHEMA MATCH |
+| server/src/controllers/hrController.js:105 | find | idle_alerts | company_id, created_at |  | SCHEMA MATCH |
+| server/src/controllers/hrController.js:106 | find | employees | company_id |  | SCHEMA MATCH |
+| server/src/controllers/hrController.js:119 | findAll | leave_requests | company_id, id |  | SCHEMA MATCH |
+| server/src/controllers/hrController.js:120 | findAll | employees | company_id |  | SCHEMA MATCH |
+| server/src/controllers/hrController.js:151 | findAll | tasks | company_id, id |  | SCHEMA MATCH |
+| server/src/controllers/hrController.js:152 | findAll | employees | company_id |  | SCHEMA MATCH |
 | server/src/index.js:140 | rpc | application_release_readiness |  |  | SCHEMA MATCH |
 | server/src/index.js:145 | rpc | hr_reporting_readiness |  |  | SCHEMA MATCH |
 | server/src/index.js:146 | find | users |  |  | SCHEMA MATCH |
@@ -3917,6 +3949,19 @@ Observed schema captured at 2026-11-05T20:57:03.891Z. Static matches verify refe
 | server/src/services/deliveryService.js:111 | update | deliveries | delivery_status, failure_reason |  | SCHEMA MATCH |
 | server/src/services/deliveryService.js:116 | update | orders | delivery_status |  | SCHEMA MATCH |
 | server/src/services/deliveryService.js:125 | find | deliveries | company_id |  | SCHEMA MATCH |
+| server/src/services/employeeNumberCorrectionService.js:18 | rpc | correct_employee_number | p_employee_id, p_company_id, p_actor_id, p_employee_number, p_reason, p_confirmation |  | SCHEMA MATCH |
+| server/src/services/employeeNumberCorrectionService.js:23 | findById | users |  |  | SCHEMA MATCH |
+| server/src/services/employeeNumberCorrectionService.js:25 | findById | employees |  |  | SCHEMA MATCH |
+| server/src/services/employeeNumberCorrectionService.js:31 | findById | employee_number_registry |  |  | SCHEMA MATCH |
+| server/src/services/employeeNumberCorrectionService.js:31 | find | employees |  |  | SCHEMA MATCH |
+| server/src/services/employeeNumberCorrectionService.js:32 | findOne | employee_number_registry | employee_id |  | SCHEMA MATCH |
+| server/src/services/employeeNumberCorrectionService.js:33 | update | employee_number_registry | employee_id |  | SCHEMA MATCH |
+| server/src/services/employeeNumberCorrectionService.js:35 | findById | employee_number_counters |  |  | SCHEMA MATCH |
+| server/src/services/employeeNumberCorrectionService.js:36 | update | employee_number_counters | last_value |  | SCHEMA MATCH |
+| server/src/services/employeeNumberCorrectionService.js:37 | insert | employee_number_counters | id, department_code, hiring_year, last_value |  | SCHEMA MATCH |
+| server/src/services/employeeNumberCorrectionService.js:38 | insert | employee_number_registry | id, company_id, employee_id, department_code, hiring_year, sequence, legacy_employee_code, legacy_staff_id, issued_at, issued_by |  | SCHEMA MATCH |
+| server/src/services/employeeNumberCorrectionService.js:39 | update | employees | employee_code, staff_id, numbering_department_code, numbering_hire_year, employee_number_assigned_at |  | SCHEMA MATCH |
+| server/src/services/employeeNumberCorrectionService.js:40 | insert | audit_logs | company_id, actor_id, actor_email, action, entity, entity_id, metadata, created_at |  | SCHEMA MATCH |
 | server/src/services/employeeNumberingService.js:8 | findById | employee_number_counters |  |  | SCHEMA MATCH |
 | server/src/services/employeeNumberingService.js:11 | findAll | employees |  |  | SCHEMA MATCH |
 | server/src/services/employeeNumberingService.js:15 | insert | employee_number_counters | id, department_code, hiring_year, last_value |  | SCHEMA MATCH |

@@ -20,6 +20,8 @@ import {hrService} from '../services/hrService.js';
 import {staffLifecycleService} from '../services/staffLifecycleService.js';
 import {employeeService} from '../services/employeeService.js';
 import {reviewLeave} from '../services/leaveReviewService.js';
+import {employeeNumberingService} from '../services/employeeNumberingService.js';
+import {employeeNumberCorrectionService} from '../services/employeeNumberCorrectionService.js';
 
 test('Real MySQL: transactions, staff sign-in, workplace attendance, collaboration and Excel', {skip:process.env.MYSQL_TESTS!=='true'}, async t=>{
   const config=mysqlConfiguration();
@@ -119,6 +121,19 @@ test('Real MySQL: transactions, staff sign-in, workplace attendance, collaborati
       const idle=await idleService.startIdleSession({duration_seconds:600},identity);
       await idleService.explainIdleSession(idle.id,{reason:'Break',reason_details:'SQL explanation'},identity);
       assert.equal((await idleService.getIdleSessions({},identity)).find(r=>r.id===idle.id).reason_details,'SQL explanation');
+    });
+    await t.test('Super Admin ID corrections reserve old numbers, audit and serialize concurrent claims',async()=>{
+      const targets=await Promise.all([1,2].map(()=>employeeNumberingService.create({company_id:1,department:'Creative',hire_date:'2027-01-01',first_name:'SQL',last_name:'Correction',status:'active'})));
+      const make=e=>({employee_number:'IT20270045',confirmation:e.employee_code,reason:'Correct the imported SQL staff record.'});
+      await assert.rejects(employeeNumberCorrectionService.correct(targets[0].id,make(targets[0]),staff),/Super Admin/);
+      const results=await Promise.allSettled(targets.map(e=>employeeNumberCorrectionService.correct(e.id,make(e),actor)));
+      assert.equal(results.filter(r=>r.status==='fulfilled').length,1);
+      const winner=results.findIndex(r=>r.status==='fulfilled'),old=targets[winner];
+      assert.equal((await db.findById('employee_number_registry',old.employee_code)).employee_id,null);
+      assert.equal((await db.findById('employees',old.id)).staff_id,'IT20270045');
+      assert.equal((await db.findOne('audit_logs',{action:'EMPLOYEE_NUMBER_CORRECTED',entity_id:String(old.id)})).metadata.previous_employee_number,old.employee_code);
+      assert.equal((await employeeNumberingService.create({company_id:1,department:'IT',hire_date:'2027-01-01',first_name:'Next',last_name:'Hire'})).employee_code,'IT20270046');
+      await assert.rejects(employeeNumberCorrectionService.correct(old.id,{...make(old),employee_number:old.employee_code,confirmation:'IT20270045'},actor),/already reserved/);
     });
     await t.test('Excel and binary attachments are generated from the internal database',async()=>{
       const workbook=await hrDailyReportService.download(actor,'2026-11-03');assert.equal(Buffer.from(workbook).subarray(0,2).toString(),'PK');
