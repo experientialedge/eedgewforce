@@ -41,7 +41,7 @@ export default function StaffEditModal({
         position: employee.position || '',
         department: employee.department || 'Operations',
         department_id: employee.department_id || 1,
-        date_of_joining: employee.date_of_joining || employee.hire_date || '',
+        date_of_joining: String(employee.date_of_joining || employee.hire_date || '').slice(0,10),
         work_location: employee.work_location || 'Not assigned',
         supervisor_name: employee.supervisor_name || '',
         rank_code: employee.rank_code || 'STAFF',
@@ -279,6 +279,10 @@ export default function StaffEditModal({
               <Briefcase size={14} className="text-orange-500" />
               <span>Employment & Hierarchy</span>
             </div>
+            <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300">Hiring date / date of joining
+              <input type="date" name="date_of_joining" value={formData.date_of_joining} onChange={handleChange} className="mt-1 block w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100"/>
+              <span className="mt-1 block text-xs font-normal text-zinc-500">Use the actual hiring date. Save profile changes before assigning or correcting the staff ID; saving this date does not automatically renumber an issued ID.</span>
+            </label>
             <AssignEmployeeNumber employee={employee} onAssigned={async updated=>{await onSaved?.(updated);onClose();}}/>
             {canCorrectStaffId&&<CorrectEmployeeNumber employee={employee} onCorrected={async updated=>{await onSaved?.(updated);onClose();}}/>}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">

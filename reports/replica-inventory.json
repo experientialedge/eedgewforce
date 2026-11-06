@@ -3,7 +3,7 @@
   "reference": "Source snapshot accompanying REPLICA_MASTER_PROMPT.md. Hashes describe files, not runtime verification.",
   "summary": {
     "sourceFiles": 322,
-    "functions": 4137,
+    "functions": 4138,
     "runtimeFunctions": 3412,
     "routeDeclarations": 247,
     "routerMounts": 28,
@@ -289,8 +289,8 @@
     },
     {
       "file": "client/src/components/hr/StaffEditModal.jsx",
-      "bytes": 26556,
-      "sha256": "942c3cbaf2617fa0aa8a9c3e5461c032f85e40a6fba263bd5fd331247cce2446"
+      "bytes": 27233,
+      "sha256": "f30b27d9aaf265ad44e780cc956719e0255934fed9dbe6e93bcc5d91227ee2af"
     },
     {
       "file": "client/src/components/hr/StaffImportModal.jsx",
@@ -1059,8 +1059,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "bytes": 36717,
-      "sha256": "f8e697d20844aa4b2d2b84c5f058714583964b8a6e7ef9031da15742cc410df5"
+      "bytes": 36942,
+      "sha256": "02023226ecc49893272700f2125ce7838fca44df551517fb7b24835675d3d73f"
     },
     {
       "file": "server/src/services/idleService.js",
@@ -1239,8 +1239,8 @@
     },
     {
       "file": "server/src/tests/employee_number_corrections.test.js",
-      "bytes": 7248,
-      "sha256": "5eded616a5dc4f3f17c450a198e1eebb5790ba3b4b5be3ffe299b7da9b529477"
+      "bytes": 8321,
+      "sha256": "e1f1ea481aed4827306349b63acba0b061ef75b2712195ea761b65605d2957e7"
     },
     {
       "file": "server/src/tests/employee_numbering.test.js",
@@ -6964,10 +6964,10 @@
     {
       "file": "client/src/components/hr/StaffEditModal.jsx",
       "line": 6,
-      "endLine": 518,
+      "endLine": 522,
       "name": "StaffEditModal",
       "kind": "FunctionDeclaration",
-      "sha256": "5253e11acbd2d498a6e7f23a6cb857377531dbc52885d1298704673c161ea6f6",
+      "sha256": "ac56797301aefad03df2013e966fbbcb3f83dd03c5e3b038b384ab4d005b7f3f",
       "category": "runtime"
     },
     {
@@ -6976,7 +6976,7 @@
       "endLine": 64,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
-      "sha256": "eb6762a7e334c0b1f8e0e907dc5d6e0798bec77bdaa56055628b29d6a89119c9",
+      "sha256": "e3ab78f054da4217814e7a3048314f9f837fc09fa30488cb1f2be0b55b778c02",
       "category": "runtime"
     },
     {
@@ -7008,8 +7008,8 @@
     },
     {
       "file": "client/src/components/hr/StaffEditModal.jsx",
-      "line": 282,
-      "endLine": 282,
+      "line": 286,
+      "endLine": 286,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "e7df9037bf4ff5f9ef38ac4082b8a6057a20ada5b1a2b4768f412179fb143d07",
@@ -7017,8 +7017,8 @@
     },
     {
       "file": "client/src/components/hr/StaffEditModal.jsx",
-      "line": 283,
-      "endLine": 283,
+      "line": 287,
+      "endLine": 287,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "e7df9037bf4ff5f9ef38ac4082b8a6057a20ada5b1a2b4768f412179fb143d07",
@@ -7026,8 +7026,8 @@
     },
     {
       "file": "client/src/components/hr/StaffEditModal.jsx",
-      "line": 319,
-      "endLine": 319,
+      "line": 323,
+      "endLine": 323,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "acdd81759ec5a7df84be5fc648f58a2becc4e6867714cb6f5020e4414baea4f7",
@@ -7035,8 +7035,8 @@
     },
     {
       "file": "client/src/components/hr/StaffEditModal.jsx",
-      "line": 486,
-      "endLine": 486,
+      "line": 490,
+      "endLine": 490,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "a068f016fa05cca0636efd5a5667a870a10f820376a0abb0ce50e7bbd9b36528",
@@ -7044,8 +7044,8 @@
     },
     {
       "file": "client/src/components/hr/StaffEditModal.jsx",
-      "line": 505,
-      "endLine": 505,
+      "line": 509,
+      "endLine": 509,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "2023263a01acc605667d916e3c86f2e5a31c5d8f926565c65d231be1995dd027",
@@ -28456,16 +28456,16 @@
     {
       "file": "server/src/services/hrService.js",
       "line": 169,
-      "endLine": 238,
+      "endLine": 239,
       "name": "updateEmployee",
       "kind": "ObjectMethod",
-      "sha256": "3203b4c11c5659b1ee59229a13b39f17833663b49b2beabedeca72e3f08d4c59",
+      "sha256": "491df3e6bdbc832537816af728e367aca509c70443ad2d5eae8b9323634d748c",
       "category": "runtime"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 243,
-      "endLine": 265,
+      "line": 244,
+      "endLine": 266,
       "name": "updateStaffStatus",
       "kind": "ObjectMethod",
       "sha256": "2a37c5c9ff2e6cd3bc8c3f0f545f23c378dee6963845e448a4f7a97c86ae36f5",
@@ -28473,8 +28473,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 270,
-      "endLine": 288,
+      "line": 271,
+      "endLine": 289,
       "name": "resendInvitation",
       "kind": "ObjectMethod",
       "sha256": "beb74f4a98c60c4bcb168c5b3c9f24bd94810b6936e9879de00a49af83b46c91",
@@ -28482,8 +28482,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 293,
-      "endLine": 295,
+      "line": 294,
+      "endLine": 296,
       "name": "getAuditLogs",
       "kind": "ObjectMethod",
       "sha256": "f23a26883443a4a27a394218018968d1d3467876b7fb9bf042cf79b3d202b13d",
@@ -28491,8 +28491,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 300,
-      "endLine": 302,
+      "line": 301,
+      "endLine": 303,
       "name": "approveLeave",
       "kind": "ObjectMethod",
       "sha256": "6ca1779bea20d65ac384c8c24f5612ce9e6dade5c9021d9185f054bc98f90aad",
@@ -28500,8 +28500,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 303,
-      "endLine": 305,
+      "line": 304,
+      "endLine": 306,
       "name": "rejectLeave",
       "kind": "ObjectMethod",
       "sha256": "5b8063c111ceb21cb4be26c1f928a7bc0b4266f0b35a03bd530a0cb1d99af829",
@@ -28509,20 +28509,11 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 307,
-      "endLine": 350,
+      "line": 308,
+      "endLine": 351,
       "name": "assignTask",
       "kind": "ObjectMethod",
       "sha256": "324a3d8c6aec59e47e240c1e4f7d24621387370ec25c60bb48d1847c1a290517",
-      "category": "runtime"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 319,
-      "endLine": 319,
-      "name": "anonymous",
-      "kind": "ArrowFunctionExpression",
-      "sha256": "f53fb92080a6872c1d7bdfb28c83c1995cb986b3713d775361638188dddcb633",
       "category": "runtime"
     },
     {
@@ -28531,13 +28522,22 @@
       "endLine": 320,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
+      "sha256": "f53fb92080a6872c1d7bdfb28c83c1995cb986b3713d775361638188dddcb633",
+      "category": "runtime"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 321,
+      "endLine": 321,
+      "name": "anonymous",
+      "kind": "ArrowFunctionExpression",
       "sha256": "e9ced6facae6c8c47bc40c68be4ad90d9c2f9e9227ea789422927e6d9a2c0e5b",
       "category": "runtime"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 355,
-      "endLine": 357,
+      "line": 356,
+      "endLine": 358,
       "name": "acknowledgeSOS",
       "kind": "ObjectMethod",
       "sha256": "c682afc62763955c55dfc7837d10bfa9d5bd1a1ed656268fe1b262c8a5d3a9ef",
@@ -28545,8 +28545,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 359,
-      "endLine": 361,
+      "line": 360,
+      "endLine": 362,
       "name": "resolveSOS",
       "kind": "ObjectMethod",
       "sha256": "a2460a314b3e7822047d8876888775e9d2e717bc6e49ad1fa1de3687f311d2e3",
@@ -28554,8 +28554,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 366,
-      "endLine": 368,
+      "line": 367,
+      "endLine": 369,
       "name": "getRanks",
       "kind": "ObjectMethod",
       "sha256": "fb058223a989c1f0304b2a226cb05e9bf6458421b38a9caaeb6b7f043655bf8c",
@@ -28563,8 +28563,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 370,
-      "endLine": 384,
+      "line": 371,
+      "endLine": 385,
       "name": "createRank",
       "kind": "ObjectMethod",
       "sha256": "5ca61c9564aaa7933aa89394a06d2c538bb6823bef52670a63b05e9141ac20f2",
@@ -28572,8 +28572,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 386,
-      "endLine": 391,
+      "line": 387,
+      "endLine": 392,
       "name": "updateRank",
       "kind": "ObjectMethod",
       "sha256": "babdd51d1d087a33a8aa0e7fab430d802cf39bf89f8e1a605606b974de399e93",
@@ -28581,8 +28581,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 396,
-      "endLine": 448,
+      "line": 397,
+      "endLine": 449,
       "name": "getOrganizationTree",
       "kind": "ObjectMethod",
       "sha256": "391c9a101164f63a98770b8eea955f29a0ceb6c7ff070dbb7f0de87d2e83d75c",
@@ -28590,20 +28590,11 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 402,
-      "endLine": 416,
+      "line": 403,
+      "endLine": 417,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "96a6fbfce0272ea2851011361ffce5cf1bc77c655befa037f24a936c2386a47e",
-      "category": "runtime"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 403,
-      "endLine": 403,
-      "name": "anonymous",
-      "kind": "ArrowFunctionExpression",
-      "sha256": "e963ee499b137543642c8f29bb554845fa331cb860b9908baac811f16051c27e",
       "category": "runtime"
     },
     {
@@ -28612,7 +28603,7 @@
       "endLine": 404,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
-      "sha256": "8104fb4da4fb1d5a4d26cffe2550eb75c32b1deb004dab795f78de9860907439",
+      "sha256": "e963ee499b137543642c8f29bb554845fa331cb860b9908baac811f16051c27e",
       "category": "runtime"
     },
     {
@@ -28621,7 +28612,7 @@
       "endLine": 405,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
-      "sha256": "db4904d49cf16432ead63826df1c0cf05c60f5fa89fb553117ab5c9c089da9b5",
+      "sha256": "8104fb4da4fb1d5a4d26cffe2550eb75c32b1deb004dab795f78de9860907439",
       "category": "runtime"
     },
     {
@@ -28630,13 +28621,22 @@
       "endLine": 406,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
+      "sha256": "db4904d49cf16432ead63826df1c0cf05c60f5fa89fb553117ab5c9c089da9b5",
+      "category": "runtime"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 407,
+      "endLine": 407,
+      "name": "anonymous",
+      "kind": "ArrowFunctionExpression",
       "sha256": "cae973f8d018c3bc00ea4aa78cc65243fc9131cb5f7dbf1aabad060d581a0ff1",
       "category": "runtime"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 414,
-      "endLine": 414,
+      "line": 415,
+      "endLine": 415,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "2f5418ace7bd4b1c80df1879476c0873528a4b461d586dddc4080c0a71a87e9b",
@@ -28644,20 +28644,11 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 418,
-      "endLine": 418,
+      "line": 419,
+      "endLine": 419,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "96cf9205a43b12c0d92eeb25f695681575619f3e010062815128f9a37da1fa70",
-      "category": "runtime"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 421,
-      "endLine": 421,
-      "name": "anonymous",
-      "kind": "ArrowFunctionExpression",
-      "sha256": "e13ece96fe2b6e8879377df42e302fa1f95e5522fa44d79ca785f485b1e562e1",
       "category": "runtime"
     },
     {
@@ -28666,7 +28657,7 @@
       "endLine": 422,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
-      "sha256": "663000ef2d50c150b9b3d1aa938673a59c752e1d435ca8a4407225ea0b3ac82a",
+      "sha256": "e13ece96fe2b6e8879377df42e302fa1f95e5522fa44d79ca785f485b1e562e1",
       "category": "runtime"
     },
     {
@@ -28675,7 +28666,7 @@
       "endLine": 423,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
-      "sha256": "94eaa3d26e0d7f5c0609c7c829b8c01c16fea84a88e7bb3e09a8f395431dd164",
+      "sha256": "663000ef2d50c150b9b3d1aa938673a59c752e1d435ca8a4407225ea0b3ac82a",
       "category": "runtime"
     },
     {
@@ -28684,7 +28675,7 @@
       "endLine": 424,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
-      "sha256": "d1d3e98b17e4c322aff54838ed3a5de880e342adde87284368f8839c444acbe4",
+      "sha256": "94eaa3d26e0d7f5c0609c7c829b8c01c16fea84a88e7bb3e09a8f395431dd164",
       "category": "runtime"
     },
     {
@@ -28693,13 +28684,22 @@
       "endLine": 425,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
+      "sha256": "d1d3e98b17e4c322aff54838ed3a5de880e342adde87284368f8839c444acbe4",
+      "category": "runtime"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 426,
+      "endLine": 426,
+      "name": "anonymous",
+      "kind": "ArrowFunctionExpression",
       "sha256": "70aa2eb8e770d3db5749d921518d65696a9e05b3074cff06cee2da315e7f62e2",
       "category": "runtime"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 444,
-      "endLine": 444,
+      "line": 445,
+      "endLine": 445,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "4cc126eb712c00ce461a97d851572c019e3cedf94a7284b3e2fc2eb1004006c1",
@@ -28707,8 +28707,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 453,
-      "endLine": 481,
+      "line": 454,
+      "endLine": 482,
       "name": "reassignOrganizationNode",
       "kind": "ObjectMethod",
       "sha256": "8d9283d4c7519564fe0fa6b8910b8afae1389ed4d679771c4187518089e7f489",
@@ -28716,8 +28716,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 486,
-      "endLine": 503,
+      "line": 487,
+      "endLine": 504,
       "name": "deleteOrganizationNode",
       "kind": "ObjectMethod",
       "sha256": "36cd8425657276650d694c7b21c9600fb0f0235b2c9a9c44ea46a3501c5d2e45",
@@ -28725,8 +28725,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 509,
-      "endLine": 582,
+      "line": 510,
+      "endLine": 583,
       "name": "registerStaff",
       "kind": "ObjectMethod",
       "sha256": "3df3e1534e7a51240ce2042e033ec774a155ddd9b01a775ed9720c1a8a76b464",
@@ -28734,8 +28734,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 541,
-      "endLine": 570,
+      "line": 542,
+      "endLine": 571,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "2d43ff2c727a56999cae675a039a7e6515f0a81b7f692a2d010afea9401cfb39",
@@ -28743,20 +28743,11 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 574,
-      "endLine": 574,
+      "line": 575,
+      "endLine": 575,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "a4a348b6f4e91da9c77bf69cf56383647597fdf2b7a64d71ae214a0261892537",
-      "category": "runtime"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 574,
-      "endLine": 574,
-      "name": "anonymous",
-      "kind": "ArrowFunctionExpression",
-      "sha256": "5fa8c711247d70f5c653bac436acb6b2959231e50344d054ff9cf6093cc71a2c",
       "category": "runtime"
     },
     {
@@ -28770,8 +28761,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 577,
-      "endLine": 577,
+      "line": 576,
+      "endLine": 576,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "5fa8c711247d70f5c653bac436acb6b2959231e50344d054ff9cf6093cc71a2c",
@@ -28779,8 +28770,17 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 588,
-      "endLine": 591,
+      "line": 578,
+      "endLine": 578,
+      "name": "anonymous",
+      "kind": "ArrowFunctionExpression",
+      "sha256": "5fa8c711247d70f5c653bac436acb6b2959231e50344d054ff9cf6093cc71a2c",
+      "category": "runtime"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 589,
+      "endLine": 592,
       "name": "getAnnouncements",
       "kind": "ObjectMethod",
       "sha256": "59cb7b2196c93fc66871cc03baea946ffd3efd5900ba2c6b2adbc88821fd0f17",
@@ -28788,8 +28788,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 596,
-      "endLine": 616,
+      "line": 597,
+      "endLine": 617,
       "name": "createAnnouncement",
       "kind": "ObjectMethod",
       "sha256": "72f1fd18c72719dae4452cb71de303ee78821bf12a15c59c9d4f4540b8be40b7",
@@ -28797,8 +28797,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 621,
-      "endLine": 636,
+      "line": 622,
+      "endLine": 637,
       "name": "updateAnnouncement",
       "kind": "ObjectMethod",
       "sha256": "610ea21e98040316184a6d07fa2cf2d53ee331eb6d0f1398060993c9395daef0",
@@ -28806,8 +28806,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 641,
-      "endLine": 648,
+      "line": 642,
+      "endLine": 649,
       "name": "deleteAnnouncement",
       "kind": "ObjectMethod",
       "sha256": "6c273ad0270f026f238753793815ecffdb18732c8db015ef8263282556afe454",
@@ -28815,8 +28815,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 653,
-      "endLine": 711,
+      "line": 654,
+      "endLine": 712,
       "name": "getStaffBirthdays",
       "kind": "ObjectMethod",
       "sha256": "a6546ff2c21c7799d7faf5d5e34d77b56cfaea9b14a183845bf975bf27242ffe",
@@ -28824,8 +28824,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 659,
-      "endLine": 699,
+      "line": 660,
+      "endLine": 700,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "59b18e6dd5b4f141f249a10f86ccdffe8b04fadfd3efd367fcef34167c1aca09",
@@ -28833,20 +28833,11 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 701,
-      "endLine": 701,
+      "line": 702,
+      "endLine": 702,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "fce4725577157c1615950adabb60a315e588b5c8664d7a2991d07bbab35bd27f",
-      "category": "runtime"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 703,
-      "endLine": 703,
-      "name": "anonymous",
-      "kind": "ArrowFunctionExpression",
-      "sha256": "a5371920cabfcd7e480dfd5497d929e25146a8dedca423309064e9465017ae94",
       "category": "runtime"
     },
     {
@@ -28855,13 +28846,22 @@
       "endLine": 704,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
+      "sha256": "a5371920cabfcd7e480dfd5497d929e25146a8dedca423309064e9465017ae94",
+      "category": "runtime"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 705,
+      "endLine": 705,
+      "name": "anonymous",
+      "kind": "ArrowFunctionExpression",
       "sha256": "eebc31b0b5a3a9261b99d43a3b1aa52fc1490883b231603a4cadb1d4c55365f2",
       "category": "runtime"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 716,
-      "endLine": 727,
+      "line": 717,
+      "endLine": 728,
       "name": "updateStaffBirthday",
       "kind": "ObjectMethod",
       "sha256": "7f50ddca08a489154a16c7adf61111c9437284aae96e6d6e327bf534b0d6d696",
@@ -28869,8 +28869,8 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 732,
-      "endLine": 760,
+      "line": 733,
+      "endLine": 761,
       "name": "broadcastBirthday",
       "kind": "ObjectMethod",
       "sha256": "804efee52d949569013b53d3b73f574bcdf7ec5117309c8a48ab586914f028cb",
@@ -33756,8 +33756,8 @@
     },
     {
       "file": "server/src/tests/employee_number_corrections.test.js",
-      "line": 9,
-      "endLine": 9,
+      "line": 10,
+      "endLine": 10,
       "name": "record",
       "kind": "ArrowFunctionExpression",
       "sha256": "fd29c0313387e093105a502850ae6ce9c8d0dbe97576d58a37d9243e137a0283",
@@ -33765,17 +33765,17 @@
     },
     {
       "file": "server/src/tests/employee_number_corrections.test.js",
-      "line": 10,
-      "endLine": 67,
+      "line": 11,
+      "endLine": 78,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
-      "sha256": "b8bc9368cce65f189d98982dccf5b8837721ee1912e9b8813bc8af1913d1db2b",
+      "sha256": "a259d183e6c67cf048c5ac436b2592961fe801ea263a0d881fbb15a77f2106d6",
       "category": "test"
     },
     {
       "file": "server/src/tests/employee_number_corrections.test.js",
-      "line": 17,
-      "endLine": 23,
+      "line": 18,
+      "endLine": 24,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "52727eaad4e88939584a4e3ba198644ebcd55b45be477f3b9aa57dbc21d8def5",
@@ -33783,8 +33783,8 @@
     },
     {
       "file": "server/src/tests/employee_number_corrections.test.js",
-      "line": 24,
-      "endLine": 30,
+      "line": 25,
+      "endLine": 31,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "85197cceed93b897b5c13cc222d0894ee45303a2b3922f5a11ecd853f4095920",
@@ -33792,8 +33792,8 @@
     },
     {
       "file": "server/src/tests/employee_number_corrections.test.js",
-      "line": 31,
-      "endLine": 39,
+      "line": 32,
+      "endLine": 40,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "3c2b5c2ee5df46df32b7231527f8b5fc9bd4e8d3d0c4e6ac0ad6469190f392a0",
@@ -33801,8 +33801,8 @@
     },
     {
       "file": "server/src/tests/employee_number_corrections.test.js",
-      "line": 40,
-      "endLine": 45,
+      "line": 41,
+      "endLine": 46,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "e79b0f48feac3777661712afc128405555ab63bd8c887709745078de129019b9",
@@ -33810,8 +33810,8 @@
     },
     {
       "file": "server/src/tests/employee_number_corrections.test.js",
-      "line": 46,
-      "endLine": 50,
+      "line": 47,
+      "endLine": 51,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "87c2e518b240e42745aeeb760dc1424fa959ec43e2ecec0285c7062675a85d93",
@@ -33819,20 +33819,11 @@
     },
     {
       "file": "server/src/tests/employee_number_corrections.test.js",
-      "line": 51,
-      "endLine": 60,
+      "line": 52,
+      "endLine": 61,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "3814c2dfea6a4a3fae361f064e02a5cc5553a931dc4904b1db16afa26ff61f4b",
-      "category": "test"
-    },
-    {
-      "file": "server/src/tests/employee_number_corrections.test.js",
-      "line": 52,
-      "endLine": 52,
-      "name": "anonymous",
-      "kind": "ArrowFunctionExpression",
-      "sha256": "9585b0e23bb89ecf8e5b04bd78d284cfc00028e3e15d92ecf2c3fc1cc7ba6723",
       "category": "test"
     },
     {
@@ -33841,7 +33832,7 @@
       "endLine": 53,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
-      "sha256": "8ac3e437ceae018ae4eeb98f1062f082fa4172130e75464d21cb513af8d22d89",
+      "sha256": "9585b0e23bb89ecf8e5b04bd78d284cfc00028e3e15d92ecf2c3fc1cc7ba6723",
       "category": "test"
     },
     {
@@ -33850,7 +33841,7 @@
       "endLine": 54,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
-      "sha256": "2178d4dcef2d66b3299b56ed5f2feb49bcde43bfcd20e30f5cfc5fbdcf28cce1",
+      "sha256": "8ac3e437ceae018ae4eeb98f1062f082fa4172130e75464d21cb513af8d22d89",
       "category": "test"
     },
     {
@@ -33859,13 +33850,22 @@
       "endLine": 55,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
+      "sha256": "2178d4dcef2d66b3299b56ed5f2feb49bcde43bfcd20e30f5cfc5fbdcf28cce1",
+      "category": "test"
+    },
+    {
+      "file": "server/src/tests/employee_number_corrections.test.js",
+      "line": 56,
+      "endLine": 56,
+      "name": "anonymous",
+      "kind": "ArrowFunctionExpression",
       "sha256": "d53479eb00d4e813490e551044de03002f07bbf8c70f07e46ac768360954e7dc",
       "category": "test"
     },
     {
       "file": "server/src/tests/employee_number_corrections.test.js",
-      "line": 57,
-      "endLine": 57,
+      "line": 58,
+      "endLine": 58,
       "name": "anonymous",
       "kind": "FunctionExpression",
       "sha256": "09f5e27e04b6330b5a38ca98f155d5bd20ed52cb04dbf6b6d961cb7362b2eb8b",
@@ -33873,11 +33873,20 @@
     },
     {
       "file": "server/src/tests/employee_number_corrections.test.js",
-      "line": 61,
-      "endLine": 66,
+      "line": 62,
+      "endLine": 67,
       "name": "anonymous",
       "kind": "ArrowFunctionExpression",
       "sha256": "69f9517d37b2661d4110f915af7d19f36109b06ca9dbfe3af05817fbdcdc2b0a",
+      "category": "test"
+    },
+    {
+      "file": "server/src/tests/employee_number_corrections.test.js",
+      "line": 68,
+      "endLine": 77,
+      "name": "anonymous",
+      "kind": "ArrowFunctionExpression",
+      "sha256": "7e83139e345c03f2e8f5c51c5c460325ab4dfc900569a0e4d87b3258a71c0f8f",
       "category": "test"
     },
     {

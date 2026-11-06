@@ -170,6 +170,7 @@ export const hrService = {
     const employee = await db.findById('employees', employeeId);
     if (!employee || Number(employee.company_id || 1) !== Number(actor?.company_id || 1)) throw new Error('Employee not found');
     if(employee.deleted_at)throw new Error('Restore this staff record before editing it.');
+    if(data.date_of_joining!==undefined&&data.date_of_joining!==employee.date_of_joining)hiringYear({...employee,date_of_joining:data.date_of_joining,hire_date:null,date_of_birth:data.date_of_birth??employee.date_of_birth});
     if(employee.employee_number_assigned_at&&data.staff_id!==undefined&&String(data.staff_id)!==String(employee.staff_id))throw new Error('Issued employee numbers are permanent and cannot be edited.');
 
     const payload = {
