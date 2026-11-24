@@ -1,7 +1,7 @@
 {
   "summary": {
     "files": 211,
-    "functions": 3469,
+    "functions": 3465,
     "routes": 247,
     "databaseOperations": 751,
     "pendingMigrations": 0,
@@ -11336,12 +11336,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 30,
+      "line": 29,
       "name": "getDashboardStats",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 32,
+          "line": 31,
           "method": "find",
           "table": "employees",
           "fields": [
@@ -11353,7 +11353,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 33,
+          "line": 32,
           "method": "find",
           "table": "attendance",
           "fields": [
@@ -11365,7 +11365,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 34,
+          "line": 33,
           "method": "find",
           "table": "idle_alerts",
           "fields": [
@@ -11376,7 +11376,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 35,
+          "line": 34,
           "method": "find",
           "table": "workforce_activity_events",
           "fields": [
@@ -11388,7 +11388,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 37,
+          "line": 36,
           "method": "find",
           "table": "leave_requests",
           "fields": [
@@ -11400,7 +11400,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 38,
+          "line": 37,
           "method": "find",
           "table": "tasks",
           "fields": [
@@ -11414,14 +11414,28 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 34,
+      "line": 33,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 34,
+      "line": 33,
+      "name": "callback:some",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 35,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 35,
       "name": "callback:some",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -11442,21 +11456,14 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 37,
+      "line": 38,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 37,
-      "name": "callback:some",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 39,
+      "line": 40,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
@@ -11477,36 +11484,36 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 43,
-      "name": "callback:filter",
+      "line": 46,
+      "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
       "line": 47,
-      "name": "callback:map",
+      "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 48,
-      "name": "callback:find",
+      "line": 53,
+      "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
       "line": 54,
-      "name": "callback:map",
+      "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 55,
-      "name": "callback:find",
+      "line": 65,
+      "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
@@ -11519,19 +11526,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 67,
-      "name": "callback:filter",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 81,
+      "line": 80,
       "name": "getEmployees",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 96,
+          "line": 95,
           "method": "find",
           "table": "employees",
           "fields": [
@@ -11542,7 +11542,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 97,
+          "line": 96,
           "method": "find",
           "table": "ranks",
           "fields": [],
@@ -11551,7 +11551,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 98,
+          "line": 97,
           "method": "find",
           "table": "departments",
           "fields": [],
@@ -11560,7 +11560,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 99,
+          "line": 98,
           "method": "find",
           "table": "users",
           "fields": [],
@@ -11572,15 +11572,22 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 96,
+      "line": 95,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 101,
+      "line": 100,
       "name": "callback:map",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 101,
+      "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
@@ -11600,19 +11607,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 104,
-      "name": "callback:find",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 169,
+      "line": 168,
       "name": "updateEmployee",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 170,
+          "line": 169,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -11621,7 +11621,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 215,
+          "line": 214,
           "method": "update",
           "table": "employees",
           "fields": [
@@ -11667,7 +11667,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 225,
+          "line": 224,
           "method": "update",
           "table": "users",
           "fields": [],
@@ -11679,12 +11679,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 244,
+      "line": 243,
       "name": "updateStaffStatus",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 248,
+          "line": 247,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -11693,7 +11693,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 252,
+          "line": 251,
           "method": "update",
           "table": "employees",
           "fields": [
@@ -11705,7 +11705,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 258,
+          "line": 257,
           "method": "update",
           "table": "users",
           "fields": [
@@ -11720,12 +11720,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 271,
+      "line": 270,
       "name": "resendInvitation",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 272,
+          "line": 271,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -11734,7 +11734,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 275,
+          "line": 274,
           "method": "update",
           "table": "employees",
           "fields": [
@@ -11746,7 +11746,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 281,
+          "line": 280,
           "method": "update",
           "table": "users",
           "fields": [
@@ -11761,12 +11761,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 294,
+      "line": 293,
       "name": "getAuditLogs",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 295,
+          "line": 294,
           "method": "find",
           "table": "audit_logs",
           "fields": [
@@ -11781,26 +11781,26 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 301,
+      "line": 300,
       "name": "approveLeave",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 304,
+      "line": 303,
       "name": "rejectLeave",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 308,
+      "line": 307,
       "name": "assignTask",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 315,
+          "line": 314,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -11809,16 +11809,16 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 319,
-          "method": "find",
-          "table": "ranks",
+          "line": 318,
+          "method": "findById",
+          "table": "users",
           "fields": [],
           "missing": [],
           "status": "SCHEMA MATCH"
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 328,
+          "line": 321,
           "method": "insert",
           "table": "tasks",
           "fields": [
@@ -11838,7 +11838,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 342,
+          "line": 335,
           "method": "insert",
           "table": "notifications",
           "fields": [
@@ -11855,40 +11855,26 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 320,
-      "name": "callback:find",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 321,
-      "name": "callback:find",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 356,
+      "line": 349,
       "name": "acknowledgeSOS",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 360,
+      "line": 353,
       "name": "resolveSOS",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 367,
+      "line": 360,
       "name": "getRanks",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 368,
+          "line": 361,
           "method": "find",
           "table": "ranks",
           "fields": [
@@ -11902,12 +11888,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 371,
+      "line": 364,
       "name": "createRank",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 373,
+          "line": 366,
           "method": "findOne",
           "table": "ranks",
           "fields": [
@@ -11918,7 +11904,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 376,
+          "line": 369,
           "method": "insert",
           "table": "ranks",
           "fields": [
@@ -11936,12 +11922,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 387,
+      "line": 380,
       "name": "updateRank",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 389,
+          "line": 382,
           "method": "update",
           "table": "ranks",
           "fields": [],
@@ -11953,12 +11939,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 397,
+      "line": 390,
       "name": "getOrganizationTree",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 399,
+          "line": 392,
           "method": "find",
           "table": "ranks",
           "fields": [],
@@ -11967,7 +11953,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 400,
+          "line": 393,
           "method": "find",
           "table": "departments",
           "fields": [],
@@ -11976,7 +11962,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 401,
+          "line": 394,
           "method": "find",
           "table": "users",
           "fields": [],
@@ -11988,103 +11974,103 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 403,
+      "line": 396,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 404,
+      "line": 397,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 405,
+      "line": 398,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 406,
+      "line": 399,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 407,
+      "line": 400,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 415,
+      "line": 408,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 419,
+      "line": 412,
       "name": "callback:sort",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 422,
+      "line": 415,
       "name": "callback:find",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 423,
+      "line": 416,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 424,
+      "line": 417,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 425,
+      "line": 418,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 426,
+      "line": 419,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 445,
+      "line": 438,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 454,
+      "line": 447,
       "name": "reassignOrganizationNode",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 455,
+          "line": 448,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -12093,7 +12079,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 478,
+          "line": 471,
           "method": "update",
           "table": "employees",
           "fields": [],
@@ -12105,12 +12091,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 487,
+      "line": 480,
       "name": "deleteOrganizationNode",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 488,
+          "line": 481,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -12119,7 +12105,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 492,
+          "line": 485,
           "method": "find",
           "table": "employees",
           "fields": [
@@ -12130,7 +12116,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 494,
+          "line": 487,
           "method": "update",
           "table": "employees",
           "fields": [
@@ -12141,7 +12127,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 497,
+          "line": 490,
           "method": "update",
           "table": "employees",
           "fields": [
@@ -12152,7 +12138,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 499,
+          "line": 492,
           "method": "update",
           "table": "users",
           "fields": [
@@ -12166,12 +12152,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 510,
+      "line": 503,
       "name": "registerStaff",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 520,
+          "line": 513,
           "method": "findOne",
           "table": "users",
           "fields": [
@@ -12182,7 +12168,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 521,
+          "line": 514,
           "method": "findOne",
           "table": "users",
           "fields": [
@@ -12193,7 +12179,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 521,
+          "line": 514,
           "method": "findOne",
           "table": "employees",
           "fields": [
@@ -12204,7 +12190,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 575,
+          "line": 568,
           "method": "find",
           "table": "leave_balances",
           "fields": [
@@ -12215,7 +12201,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 575,
+          "line": 568,
           "method": "delete",
           "table": "leave_balances",
           "fields": [],
@@ -12224,7 +12210,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 576,
+          "line": 569,
           "method": "delete",
           "table": "employees",
           "fields": [],
@@ -12233,7 +12219,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 578,
+          "line": 571,
           "method": "delete",
           "table": "users",
           "fields": [],
@@ -12245,12 +12231,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 542,
+      "line": 535,
       "name": "callback:transaction",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 543,
+          "line": 536,
           "method": "insert",
           "table": "users",
           "fields": [
@@ -12269,7 +12255,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 570,
+          "line": 563,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -12281,40 +12267,40 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 575,
+      "line": 568,
       "name": "callback:catch",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 575,
+      "line": 568,
       "name": "callback:catch",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 576,
+      "line": 569,
       "name": "callback:catch",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 578,
+      "line": 571,
       "name": "callback:catch",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 589,
+      "line": 582,
       "name": "getAnnouncements",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 590,
+          "line": 583,
           "method": "find",
           "table": "announcements",
           "fields": [
@@ -12329,12 +12315,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 597,
+      "line": 590,
       "name": "createAnnouncement",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 603,
+          "line": 596,
           "method": "insert",
           "table": "announcements",
           "fields": [
@@ -12356,12 +12342,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 622,
+      "line": 615,
       "name": "updateAnnouncement",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 623,
+          "line": 616,
           "method": "findById",
           "table": "announcements",
           "fields": [],
@@ -12370,7 +12356,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 626,
+          "line": 619,
           "method": "update",
           "table": "announcements",
           "fields": [
@@ -12389,12 +12375,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 642,
+      "line": 635,
       "name": "deleteAnnouncement",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 643,
+          "line": 636,
           "method": "findById",
           "table": "announcements",
           "fields": [],
@@ -12403,7 +12389,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 646,
+          "line": 639,
           "method": "delete",
           "table": "announcements",
           "fields": [],
@@ -12415,12 +12401,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 654,
+      "line": 647,
       "name": "getStaffBirthdays",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 655,
+          "line": 648,
           "method": "find",
           "table": "employees",
           "fields": [
@@ -12435,40 +12421,40 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 660,
+      "line": 653,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 702,
+      "line": 695,
       "name": "callback:sort",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 704,
+      "line": 697,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 705,
+      "line": 698,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 717,
+      "line": 710,
       "name": "updateStaffBirthday",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 718,
+          "line": 711,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -12477,7 +12463,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 721,
+          "line": 714,
           "method": "update",
           "table": "employees",
           "fields": [
@@ -12492,12 +12478,12 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 733,
+      "line": 726,
       "name": "broadcastBirthday",
       "operations": [
         {
           "file": "server/src/services/hrService.js",
-          "line": 734,
+          "line": 727,
           "method": "findById",
           "table": "employees",
           "fields": [],
@@ -12506,7 +12492,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 739,
+          "line": 732,
           "method": "insert",
           "table": "announcements",
           "fields": [
@@ -12525,7 +12511,7 @@
         },
         {
           "file": "server/src/services/hrService.js",
-          "line": 752,
+          "line": 745,
           "method": "insert",
           "table": "notifications",
           "fields": [
@@ -18204,16 +18190,16 @@
         },
         {
           "file": "server/src/services/taskService.js",
-          "line": 50,
-          "method": "find",
-          "table": "ranks",
+          "line": 49,
+          "method": "findById",
+          "table": "users",
           "fields": [],
           "missing": [],
           "status": "SCHEMA MATCH"
         },
         {
           "file": "server/src/services/taskService.js",
-          "line": 61,
+          "line": 54,
           "method": "insert",
           "table": "tasks",
           "fields": [
@@ -18245,26 +18231,12 @@
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 51,
-      "name": "callback:find",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/taskService.js",
-      "line": 52,
-      "name": "callback:find",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/taskService.js",
-      "line": 123,
+      "line": 116,
       "name": "getTasks",
       "operations": [
         {
           "file": "server/src/services/taskService.js",
-          "line": 124,
+          "line": 117,
           "method": "find",
           "table": "tasks",
           "fields": [
@@ -18276,7 +18248,7 @@
         },
         {
           "file": "server/src/services/taskService.js",
-          "line": 126,
+          "line": 119,
           "method": "findOne",
           "table": "employees",
           "fields": [
@@ -18287,7 +18259,7 @@
         },
         {
           "file": "server/src/services/taskService.js",
-          "line": 129,
+          "line": 122,
           "method": "find",
           "table": "employees",
           "fields": [],
@@ -18299,22 +18271,36 @@
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 127,
+      "line": 120,
       "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 132,
+      "line": 125,
       "name": "callback:map",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 133,
+      "line": 126,
       "name": "callback:find",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/taskService.js",
+      "line": 141,
+      "name": "callback:filter",
+      "operations": [],
+      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
+    },
+    {
+      "file": "server/src/services/taskService.js",
+      "line": 144,
+      "name": "callback:filter",
       "operations": [],
       "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
     },
@@ -18327,26 +18313,12 @@
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 151,
-      "name": "callback:filter",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/taskService.js",
-      "line": 155,
-      "name": "callback:filter",
-      "operations": [],
-      "status": "NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER)"
-    },
-    {
-      "file": "server/src/services/taskService.js",
-      "line": 164,
+      "line": 157,
       "name": "acknowledgeTask",
       "operations": [
         {
           "file": "server/src/services/taskService.js",
-          "line": 165,
+          "line": 158,
           "method": "findById",
           "table": "tasks",
           "fields": [],
@@ -18355,7 +18327,7 @@
         },
         {
           "file": "server/src/services/taskService.js",
-          "line": 169,
+          "line": 162,
           "method": "update",
           "table": "tasks",
           "fields": [
@@ -18370,12 +18342,12 @@
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 182,
+      "line": 175,
       "name": "completeTask",
       "operations": [
         {
           "file": "server/src/services/taskService.js",
-          "line": 183,
+          "line": 176,
           "method": "findById",
           "table": "tasks",
           "fields": [],
@@ -18384,7 +18356,7 @@
         },
         {
           "file": "server/src/services/taskService.js",
-          "line": 202,
+          "line": 195,
           "method": "update",
           "table": "tasks",
           "fields": [
@@ -18405,12 +18377,12 @@
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 228,
+      "line": 221,
       "name": "updateDeliveryStages",
       "operations": [
         {
           "file": "server/src/services/taskService.js",
-          "line": 229,
+          "line": 222,
           "method": "findById",
           "table": "tasks",
           "fields": [],
@@ -18419,7 +18391,7 @@
         },
         {
           "file": "server/src/services/taskService.js",
-          "line": 233,
+          "line": 226,
           "method": "update",
           "table": "tasks",
           "fields": [
@@ -39173,7 +39145,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 32,
+      "line": 31,
       "method": "find",
       "table": "employees",
       "fields": [
@@ -39185,7 +39157,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 33,
+      "line": 32,
       "method": "find",
       "table": "attendance",
       "fields": [
@@ -39197,7 +39169,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 34,
+      "line": 33,
       "method": "find",
       "table": "idle_alerts",
       "fields": [
@@ -39208,7 +39180,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 35,
+      "line": 34,
       "method": "find",
       "table": "workforce_activity_events",
       "fields": [
@@ -39220,7 +39192,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 37,
+      "line": 36,
       "method": "find",
       "table": "leave_requests",
       "fields": [
@@ -39232,7 +39204,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 38,
+      "line": 37,
       "method": "find",
       "table": "tasks",
       "fields": [
@@ -39243,7 +39215,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 96,
+      "line": 95,
       "method": "find",
       "table": "employees",
       "fields": [
@@ -39254,7 +39226,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 97,
+      "line": 96,
       "method": "find",
       "table": "ranks",
       "fields": [],
@@ -39263,7 +39235,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 98,
+      "line": 97,
       "method": "find",
       "table": "departments",
       "fields": [],
@@ -39272,7 +39244,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 99,
+      "line": 98,
       "method": "find",
       "table": "users",
       "fields": [],
@@ -39281,7 +39253,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 170,
+      "line": 169,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -39290,7 +39262,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 215,
+      "line": 214,
       "method": "update",
       "table": "employees",
       "fields": [
@@ -39336,7 +39308,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 225,
+      "line": 224,
       "method": "update",
       "table": "users",
       "fields": [],
@@ -39345,7 +39317,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 248,
+      "line": 247,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -39354,7 +39326,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 252,
+      "line": 251,
       "method": "update",
       "table": "employees",
       "fields": [
@@ -39366,7 +39338,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 258,
+      "line": 257,
       "method": "update",
       "table": "users",
       "fields": [
@@ -39378,7 +39350,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 272,
+      "line": 271,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -39387,7 +39359,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 275,
+      "line": 274,
       "method": "update",
       "table": "employees",
       "fields": [
@@ -39399,7 +39371,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 281,
+      "line": 280,
       "method": "update",
       "table": "users",
       "fields": [
@@ -39411,7 +39383,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 295,
+      "line": 294,
       "method": "find",
       "table": "audit_logs",
       "fields": [
@@ -39423,7 +39395,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 315,
+      "line": 314,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -39432,16 +39404,16 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 319,
-      "method": "find",
-      "table": "ranks",
+      "line": 318,
+      "method": "findById",
+      "table": "users",
       "fields": [],
       "missing": [],
       "status": "SCHEMA MATCH"
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 328,
+      "line": 321,
       "method": "insert",
       "table": "tasks",
       "fields": [
@@ -39461,7 +39433,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 342,
+      "line": 335,
       "method": "insert",
       "table": "notifications",
       "fields": [
@@ -39475,7 +39447,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 368,
+      "line": 361,
       "method": "find",
       "table": "ranks",
       "fields": [
@@ -39486,7 +39458,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 373,
+      "line": 366,
       "method": "findOne",
       "table": "ranks",
       "fields": [
@@ -39497,7 +39469,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 376,
+      "line": 369,
       "method": "insert",
       "table": "ranks",
       "fields": [
@@ -39512,7 +39484,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 389,
+      "line": 382,
       "method": "update",
       "table": "ranks",
       "fields": [],
@@ -39521,7 +39493,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 399,
+      "line": 392,
       "method": "find",
       "table": "ranks",
       "fields": [],
@@ -39530,7 +39502,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 400,
+      "line": 393,
       "method": "find",
       "table": "departments",
       "fields": [],
@@ -39539,7 +39511,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 401,
+      "line": 394,
       "method": "find",
       "table": "users",
       "fields": [],
@@ -39548,7 +39520,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 455,
+      "line": 448,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -39557,7 +39529,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 478,
+      "line": 471,
       "method": "update",
       "table": "employees",
       "fields": [],
@@ -39566,49 +39538,49 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 488,
+      "line": 481,
       "method": "findById",
       "table": "employees",
       "fields": [],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 485,
+      "method": "find",
+      "table": "employees",
+      "fields": [
+        "reporting_manager_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 487,
+      "method": "update",
+      "table": "employees",
+      "fields": [
+        "reporting_manager_id"
+      ],
+      "missing": [],
+      "status": "SCHEMA MATCH"
+    },
+    {
+      "file": "server/src/services/hrService.js",
+      "line": 490,
+      "method": "update",
+      "table": "employees",
+      "fields": [
+        "status"
+      ],
       "missing": [],
       "status": "SCHEMA MATCH"
     },
     {
       "file": "server/src/services/hrService.js",
       "line": 492,
-      "method": "find",
-      "table": "employees",
-      "fields": [
-        "reporting_manager_id"
-      ],
-      "missing": [],
-      "status": "SCHEMA MATCH"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 494,
-      "method": "update",
-      "table": "employees",
-      "fields": [
-        "reporting_manager_id"
-      ],
-      "missing": [],
-      "status": "SCHEMA MATCH"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 497,
-      "method": "update",
-      "table": "employees",
-      "fields": [
-        "status"
-      ],
-      "missing": [],
-      "status": "SCHEMA MATCH"
-    },
-    {
-      "file": "server/src/services/hrService.js",
-      "line": 499,
       "method": "update",
       "table": "users",
       "fields": [
@@ -39619,7 +39591,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 520,
+      "line": 513,
       "method": "findOne",
       "table": "users",
       "fields": [
@@ -39630,7 +39602,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 521,
+      "line": 514,
       "method": "findOne",
       "table": "users",
       "fields": [
@@ -39641,7 +39613,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 521,
+      "line": 514,
       "method": "findOne",
       "table": "employees",
       "fields": [
@@ -39652,7 +39624,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 543,
+      "line": 536,
       "method": "insert",
       "table": "users",
       "fields": [
@@ -39671,7 +39643,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 570,
+      "line": 563,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -39680,7 +39652,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 575,
+      "line": 568,
       "method": "find",
       "table": "leave_balances",
       "fields": [
@@ -39691,7 +39663,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 575,
+      "line": 568,
       "method": "delete",
       "table": "leave_balances",
       "fields": [],
@@ -39700,7 +39672,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 576,
+      "line": 569,
       "method": "delete",
       "table": "employees",
       "fields": [],
@@ -39709,7 +39681,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 578,
+      "line": 571,
       "method": "delete",
       "table": "users",
       "fields": [],
@@ -39718,7 +39690,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 590,
+      "line": 583,
       "method": "find",
       "table": "announcements",
       "fields": [
@@ -39730,7 +39702,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 603,
+      "line": 596,
       "method": "insert",
       "table": "announcements",
       "fields": [
@@ -39749,7 +39721,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 623,
+      "line": 616,
       "method": "findById",
       "table": "announcements",
       "fields": [],
@@ -39758,7 +39730,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 626,
+      "line": 619,
       "method": "update",
       "table": "announcements",
       "fields": [
@@ -39774,7 +39746,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 643,
+      "line": 636,
       "method": "findById",
       "table": "announcements",
       "fields": [],
@@ -39783,7 +39755,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 646,
+      "line": 639,
       "method": "delete",
       "table": "announcements",
       "fields": [],
@@ -39792,7 +39764,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 655,
+      "line": 648,
       "method": "find",
       "table": "employees",
       "fields": [
@@ -39804,7 +39776,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 718,
+      "line": 711,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -39813,7 +39785,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 721,
+      "line": 714,
       "method": "update",
       "table": "employees",
       "fields": [
@@ -39825,7 +39797,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 734,
+      "line": 727,
       "method": "findById",
       "table": "employees",
       "fields": [],
@@ -39834,7 +39806,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 739,
+      "line": 732,
       "method": "insert",
       "table": "announcements",
       "fields": [
@@ -39853,7 +39825,7 @@
     },
     {
       "file": "server/src/services/hrService.js",
-      "line": 752,
+      "line": 745,
       "method": "insert",
       "table": "notifications",
       "fields": [
@@ -42734,16 +42706,16 @@
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 50,
-      "method": "find",
-      "table": "ranks",
+      "line": 49,
+      "method": "findById",
+      "table": "users",
       "fields": [],
       "missing": [],
       "status": "SCHEMA MATCH"
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 61,
+      "line": 54,
       "method": "insert",
       "table": "tasks",
       "fields": [
@@ -42772,7 +42744,7 @@
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 124,
+      "line": 117,
       "method": "find",
       "table": "tasks",
       "fields": [
@@ -42784,7 +42756,7 @@
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 126,
+      "line": 119,
       "method": "findOne",
       "table": "employees",
       "fields": [
@@ -42795,7 +42767,7 @@
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 129,
+      "line": 122,
       "method": "find",
       "table": "employees",
       "fields": [],
@@ -42804,7 +42776,7 @@
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 165,
+      "line": 158,
       "method": "findById",
       "table": "tasks",
       "fields": [],
@@ -42813,7 +42785,7 @@
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 169,
+      "line": 162,
       "method": "update",
       "table": "tasks",
       "fields": [
@@ -42825,7 +42797,7 @@
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 183,
+      "line": 176,
       "method": "findById",
       "table": "tasks",
       "fields": [],
@@ -42834,7 +42806,7 @@
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 202,
+      "line": 195,
       "method": "update",
       "table": "tasks",
       "fields": [
@@ -42852,7 +42824,7 @@
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 229,
+      "line": 222,
       "method": "findById",
       "table": "tasks",
       "fields": [],
@@ -42861,7 +42833,7 @@
     },
     {
       "file": "server/src/services/taskService.js",
-      "line": 233,
+      "line": 226,
       "method": "update",
       "table": "tasks",
       "fields": [

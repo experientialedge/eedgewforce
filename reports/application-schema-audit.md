@@ -1,6 +1,6 @@
 # EdgeWForce complete application function and schema inventory
 
-{"files":211,"functions":3469,"routes":247,"databaseOperations":751,"pendingMigrations":0,"mismatches":0,"dynamic":24}
+{"files":211,"functions":3465,"routes":247,"databaseOperations":751,"pendingMigrations":0,"mismatches":0,"dynamic":24}
 
 Observed schema captured at 2026-11-06T06:12:29.182Z. Static matches verify referenced tables and literal fields against the observed Supabase schema. MIGRATION REQUIRED means referenced columns exist only in the committed target, so the observed database still needs an upgrade. They do not prove end-to-end behavior. Dynamic payloads require runtime verification. The no-direct-DAL category includes UI functions, delegates and SQL adapters; it does not assert that a function has no database effects. Tests and generated code are excluded.
 
@@ -851,76 +851,74 @@ Observed schema captured at 2026-11-06T06:12:29.182Z. Static matches verify refe
 | server/src/services/hrDailyReportService.js:138 | sendOne | DYNAMIC REVIEW | update:hr_report_deliveries |
 | server/src/services/hrDailyReportService.js:149 | send | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/hrDailyReportService.js:150 | daily | SCHEMA MATCH (STATIC) | findAll:hr_report_settings |
-| server/src/services/hrService.js:30 | getDashboardStats | SCHEMA MATCH (STATIC) | find:employees, find:attendance, find:idle_alerts, find:workforce_activity_events, find:leave_requests, find:tasks |
-| server/src/services/hrService.js:34 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:34 | callback:some | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:29 | getDashboardStats | SCHEMA MATCH (STATIC) | find:employees, find:attendance, find:idle_alerts, find:workforce_activity_events, find:leave_requests, find:tasks |
+| server/src/services/hrService.js:33 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:33 | callback:some | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:35 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:35 | callback:some | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/hrService.js:36 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/hrService.js:36 | callback:some | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:37 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:37 | callback:some | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:39 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:38 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:40 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/hrService.js:41 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/hrService.js:42 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:43 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:47 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:48 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:54 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:55 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:46 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:47 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:53 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:54 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:65 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/hrService.js:66 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:67 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:81 | getEmployees | SCHEMA MATCH (STATIC) | find:employees, find:ranks, find:departments, find:users |
-| server/src/services/hrService.js:96 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:101 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:80 | getEmployees | SCHEMA MATCH (STATIC) | find:employees, find:ranks, find:departments, find:users |
+| server/src/services/hrService.js:95 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:100 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:101 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/hrService.js:102 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/hrService.js:103 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:104 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:169 | updateEmployee | SCHEMA MATCH (STATIC) | findById:employees, update:employees, update:users |
-| server/src/services/hrService.js:244 | updateStaffStatus | SCHEMA MATCH (STATIC) | findById:employees, update:employees, update:users |
-| server/src/services/hrService.js:271 | resendInvitation | SCHEMA MATCH (STATIC) | findById:employees, update:employees, update:users |
-| server/src/services/hrService.js:294 | getAuditLogs | SCHEMA MATCH (STATIC) | find:audit_logs |
-| server/src/services/hrService.js:301 | approveLeave | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:304 | rejectLeave | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:308 | assignTask | SCHEMA MATCH (STATIC) | findById:employees, find:ranks, insert:tasks, insert:notifications |
-| server/src/services/hrService.js:320 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:321 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:356 | acknowledgeSOS | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:360 | resolveSOS | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:367 | getRanks | SCHEMA MATCH (STATIC) | find:ranks |
-| server/src/services/hrService.js:371 | createRank | SCHEMA MATCH (STATIC) | findOne:ranks, insert:ranks |
-| server/src/services/hrService.js:387 | updateRank | DYNAMIC REVIEW | update:ranks |
-| server/src/services/hrService.js:397 | getOrganizationTree | SCHEMA MATCH (STATIC) | find:ranks, find:departments, find:users |
-| server/src/services/hrService.js:403 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:404 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:405 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:406 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:407 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:415 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:419 | callback:sort | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:422 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:423 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:424 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:425 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:426 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:445 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:454 | reassignOrganizationNode | SCHEMA MATCH (STATIC) | findById:employees, update:employees |
-| server/src/services/hrService.js:487 | deleteOrganizationNode | SCHEMA MATCH (STATIC) | findById:employees, find:employees, update:employees, update:employees, update:users |
-| server/src/services/hrService.js:510 | registerStaff | SCHEMA MATCH (STATIC) | findOne:users, findOne:users, findOne:employees, find:leave_balances, delete:leave_balances, delete:employees, delete:users |
-| server/src/services/hrService.js:542 | callback:transaction | SCHEMA MATCH (STATIC) | insert:users, findById:employees |
-| server/src/services/hrService.js:575 | callback:catch | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:575 | callback:catch | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:576 | callback:catch | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:578 | callback:catch | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:589 | getAnnouncements | SCHEMA MATCH (STATIC) | find:announcements |
-| server/src/services/hrService.js:597 | createAnnouncement | SCHEMA MATCH (STATIC) | insert:announcements |
-| server/src/services/hrService.js:622 | updateAnnouncement | SCHEMA MATCH (STATIC) | findById:announcements, update:announcements |
-| server/src/services/hrService.js:642 | deleteAnnouncement | SCHEMA MATCH (STATIC) | findById:announcements, delete:announcements |
-| server/src/services/hrService.js:654 | getStaffBirthdays | SCHEMA MATCH (STATIC) | find:employees |
-| server/src/services/hrService.js:660 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:702 | callback:sort | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:704 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:705 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/hrService.js:717 | updateStaffBirthday | SCHEMA MATCH (STATIC) | findById:employees, update:employees |
-| server/src/services/hrService.js:733 | broadcastBirthday | SCHEMA MATCH (STATIC) | findById:employees, insert:announcements, insert:notifications |
+| server/src/services/hrService.js:168 | updateEmployee | SCHEMA MATCH (STATIC) | findById:employees, update:employees, update:users |
+| server/src/services/hrService.js:243 | updateStaffStatus | SCHEMA MATCH (STATIC) | findById:employees, update:employees, update:users |
+| server/src/services/hrService.js:270 | resendInvitation | SCHEMA MATCH (STATIC) | findById:employees, update:employees, update:users |
+| server/src/services/hrService.js:293 | getAuditLogs | SCHEMA MATCH (STATIC) | find:audit_logs |
+| server/src/services/hrService.js:300 | approveLeave | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:303 | rejectLeave | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:307 | assignTask | SCHEMA MATCH (STATIC) | findById:employees, findById:users, insert:tasks, insert:notifications |
+| server/src/services/hrService.js:349 | acknowledgeSOS | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:353 | resolveSOS | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:360 | getRanks | SCHEMA MATCH (STATIC) | find:ranks |
+| server/src/services/hrService.js:364 | createRank | SCHEMA MATCH (STATIC) | findOne:ranks, insert:ranks |
+| server/src/services/hrService.js:380 | updateRank | DYNAMIC REVIEW | update:ranks |
+| server/src/services/hrService.js:390 | getOrganizationTree | SCHEMA MATCH (STATIC) | find:ranks, find:departments, find:users |
+| server/src/services/hrService.js:396 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:397 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:398 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:399 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:400 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:408 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:412 | callback:sort | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:415 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:416 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:417 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:418 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:419 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:438 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:447 | reassignOrganizationNode | SCHEMA MATCH (STATIC) | findById:employees, update:employees |
+| server/src/services/hrService.js:480 | deleteOrganizationNode | SCHEMA MATCH (STATIC) | findById:employees, find:employees, update:employees, update:employees, update:users |
+| server/src/services/hrService.js:503 | registerStaff | SCHEMA MATCH (STATIC) | findOne:users, findOne:users, findOne:employees, find:leave_balances, delete:leave_balances, delete:employees, delete:users |
+| server/src/services/hrService.js:535 | callback:transaction | SCHEMA MATCH (STATIC) | insert:users, findById:employees |
+| server/src/services/hrService.js:568 | callback:catch | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:568 | callback:catch | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:569 | callback:catch | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:571 | callback:catch | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:582 | getAnnouncements | SCHEMA MATCH (STATIC) | find:announcements |
+| server/src/services/hrService.js:590 | createAnnouncement | SCHEMA MATCH (STATIC) | insert:announcements |
+| server/src/services/hrService.js:615 | updateAnnouncement | SCHEMA MATCH (STATIC) | findById:announcements, update:announcements |
+| server/src/services/hrService.js:635 | deleteAnnouncement | SCHEMA MATCH (STATIC) | findById:announcements, delete:announcements |
+| server/src/services/hrService.js:647 | getStaffBirthdays | SCHEMA MATCH (STATIC) | find:employees |
+| server/src/services/hrService.js:653 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:695 | callback:sort | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:697 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:698 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/hrService.js:710 | updateStaffBirthday | SCHEMA MATCH (STATIC) | findById:employees, update:employees |
+| server/src/services/hrService.js:726 | broadcastBirthday | SCHEMA MATCH (STATIC) | findById:employees, insert:announcements, insert:notifications |
 | server/src/services/idleService.js:18 | startIdleSession | SCHEMA MATCH (STATIC) | insert:employee_idle_sessions, insert:idle_alerts, find:users, findOne:employees, findOne:employees |
 | server/src/services/idleService.js:66 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/idleService.js:80 | callback:catch | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
@@ -1308,19 +1306,17 @@ Observed schema captured at 2026-11-06T06:12:29.182Z. Static matches verify refe
 | server/src/services/supabaseAuthService.js:61 | updatePassword | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/supabaseAuthService.js:79 | getUserFromToken | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/taskService.js:13 | assertTaskAccess | SCHEMA MATCH (STATIC) | findById:employees |
-| server/src/services/taskService.js:24 | createTask | SCHEMA MATCH (STATIC) | findById:employees, find:ranks, insert:tasks |
-| server/src/services/taskService.js:51 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/taskService.js:52 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/taskService.js:123 | getTasks | SCHEMA MATCH (STATIC) | find:tasks, findOne:employees, find:employees |
-| server/src/services/taskService.js:127 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/taskService.js:132 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/taskService.js:133 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/taskService.js:24 | createTask | SCHEMA MATCH (STATIC) | findById:employees, findById:users, insert:tasks |
+| server/src/services/taskService.js:116 | getTasks | SCHEMA MATCH (STATIC) | find:tasks, findOne:employees, find:employees |
+| server/src/services/taskService.js:120 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/taskService.js:125 | callback:map | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/taskService.js:126 | callback:find | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/taskService.js:141 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
+| server/src/services/taskService.js:144 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/taskService.js:148 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/taskService.js:151 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/taskService.js:155 | callback:filter | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
-| server/src/services/taskService.js:164 | acknowledgeTask | SCHEMA MATCH (STATIC) | findById:tasks, update:tasks |
-| server/src/services/taskService.js:182 | completeTask | SCHEMA MATCH (STATIC) | findById:tasks, update:tasks |
-| server/src/services/taskService.js:228 | updateDeliveryStages | SCHEMA MATCH (STATIC) | findById:tasks, update:tasks |
+| server/src/services/taskService.js:157 | acknowledgeTask | SCHEMA MATCH (STATIC) | findById:tasks, update:tasks |
+| server/src/services/taskService.js:175 | completeTask | SCHEMA MATCH (STATIC) | findById:tasks, update:tasks |
+| server/src/services/taskService.js:221 | updateDeliveryStages | SCHEMA MATCH (STATIC) | findById:tasks, update:tasks |
 | server/src/services/whatsappService.js:14 | sendMessage | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/whatsappService.js:92 | formatTaskReminder | NO DIRECT DAL CALL (UI/DELEGATE/ADAPTER) |  |
 | server/src/services/workforceNoticeService.js:4 | list | DYNAMIC REVIEW | find:(dynamic) |
@@ -4155,65 +4151,65 @@ Observed schema captured at 2026-11-06T06:12:29.182Z. Static matches verify refe
 | server/src/services/hrDailyReportService.js:134 | findOne | hr_report_settings | company_id |  | SCHEMA MATCH |
 | server/src/services/hrDailyReportService.js:144 | update | hr_report_deliveries | updated_at |  | DYNAMIC FIELDS |
 | server/src/services/hrDailyReportService.js:150 | findAll | hr_report_settings | enabled |  | SCHEMA MATCH |
-| server/src/services/hrService.js:32 | find | employees | status, company_id |  | SCHEMA MATCH |
-| server/src/services/hrService.js:33 | find | attendance | date, company_id |  | SCHEMA MATCH |
-| server/src/services/hrService.js:34 | find | idle_alerts | company_id |  | SCHEMA MATCH |
-| server/src/services/hrService.js:35 | find | workforce_activity_events | company_id, detected_at |  | SCHEMA MATCH |
-| server/src/services/hrService.js:37 | find | leave_requests | status, company_id |  | SCHEMA MATCH |
-| server/src/services/hrService.js:38 | find | tasks | company_id |  | SCHEMA MATCH |
-| server/src/services/hrService.js:96 | find | employees | company_id |  | SCHEMA MATCH |
-| server/src/services/hrService.js:97 | find | ranks |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:98 | find | departments |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:99 | find | users |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:170 | findById | employees |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:215 | update | employees | first_name, last_name, full_name, phone, personal_email, work_email, date_of_birth, marital_status, nationality, address, home_address, city_lga, state_of_origin, state_of_residence, landmark, staff_id, department, department_id, position, date_of_joining, work_location, supervisor_name, rank_code, emergency_contact_name, emergency_contact_relationship, emergency_contact_phone, blood_group, bank_name, account_number, hobbies_interests, base_salary, housing_allowance, transport_allowance, status, flagged_for_review, review_reason |  | SCHEMA MATCH |
-| server/src/services/hrService.js:225 | update | users |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:248 | findById | employees |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:252 | update | employees | status, onboarding_status |  | SCHEMA MATCH |
-| server/src/services/hrService.js:258 | update | users | status, onboarding_status |  | SCHEMA MATCH |
-| server/src/services/hrService.js:272 | findById | employees |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:275 | update | employees | onboarding_status, invitation_sent_at |  | SCHEMA MATCH |
-| server/src/services/hrService.js:281 | update | users | onboarding_status, requires_password_change |  | SCHEMA MATCH |
-| server/src/services/hrService.js:295 | find | audit_logs | company_id, created_at |  | SCHEMA MATCH |
-| server/src/services/hrService.js:315 | findById | employees |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:319 | find | ranks |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:328 | insert | tasks | company_id, title, description, assigned_to, assigned_by, department, priority, due_date, progress, status |  | SCHEMA MATCH |
-| server/src/services/hrService.js:342 | insert | notifications | employee_id, type, title, body |  | SCHEMA MATCH |
-| server/src/services/hrService.js:368 | find | ranks | level |  | SCHEMA MATCH |
-| server/src/services/hrService.js:373 | findOne | ranks | code |  | SCHEMA MATCH |
-| server/src/services/hrService.js:376 | insert | ranks | code, name, level, description, active |  | SCHEMA MATCH |
-| server/src/services/hrService.js:389 | update | ranks |  |  | DYNAMIC FIELDS |
-| server/src/services/hrService.js:399 | find | ranks |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:400 | find | departments |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:401 | find | users |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:455 | findById | employees |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:478 | update | employees |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:488 | findById | employees |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:492 | find | employees | reporting_manager_id |  | SCHEMA MATCH |
-| server/src/services/hrService.js:494 | update | employees | reporting_manager_id |  | SCHEMA MATCH |
-| server/src/services/hrService.js:497 | update | employees | status |  | SCHEMA MATCH |
-| server/src/services/hrService.js:499 | update | users | status |  | SCHEMA MATCH |
-| server/src/services/hrService.js:520 | findOne | users | email |  | SCHEMA MATCH |
-| server/src/services/hrService.js:521 | findOne | users | phone |  | SCHEMA MATCH |
-| server/src/services/hrService.js:521 | findOne | employees | phone |  | SCHEMA MATCH |
-| server/src/services/hrService.js:543 | insert | users | company_id, auth_user_id, full_name, email, phone, password_hash, role_code, status, requires_password_change |  | SCHEMA MATCH |
-| server/src/services/hrService.js:570 | findById | employees |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:575 | find | leave_balances | employee_id |  | SCHEMA MATCH |
-| server/src/services/hrService.js:575 | delete | leave_balances |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:576 | delete | employees |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:578 | delete | users |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:590 | find | announcements | company_id, created_at |  | SCHEMA MATCH |
-| server/src/services/hrService.js:603 | insert | announcements | company_id, title, message, category, priority, target_audience, author_name, pinned, created_at |  | SCHEMA MATCH |
-| server/src/services/hrService.js:623 | findById | announcements |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:626 | update | announcements | title, message, category, priority, target_audience, pinned |  | SCHEMA MATCH |
-| server/src/services/hrService.js:643 | findById | announcements |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:646 | delete | announcements |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:655 | find | employees | status, company_id |  | SCHEMA MATCH |
-| server/src/services/hrService.js:718 | findById | employees |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:721 | update | employees | date_of_birth, hire_date |  | SCHEMA MATCH |
-| server/src/services/hrService.js:734 | findById | employees |  |  | SCHEMA MATCH |
-| server/src/services/hrService.js:739 | insert | announcements | company_id, title, message, category, priority, target_audience, author_name, pinned, created_at |  | SCHEMA MATCH |
-| server/src/services/hrService.js:752 | insert | notifications | employee_id, type, title, body |  | SCHEMA MATCH |
+| server/src/services/hrService.js:31 | find | employees | status, company_id |  | SCHEMA MATCH |
+| server/src/services/hrService.js:32 | find | attendance | date, company_id |  | SCHEMA MATCH |
+| server/src/services/hrService.js:33 | find | idle_alerts | company_id |  | SCHEMA MATCH |
+| server/src/services/hrService.js:34 | find | workforce_activity_events | company_id, detected_at |  | SCHEMA MATCH |
+| server/src/services/hrService.js:36 | find | leave_requests | status, company_id |  | SCHEMA MATCH |
+| server/src/services/hrService.js:37 | find | tasks | company_id |  | SCHEMA MATCH |
+| server/src/services/hrService.js:95 | find | employees | company_id |  | SCHEMA MATCH |
+| server/src/services/hrService.js:96 | find | ranks |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:97 | find | departments |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:98 | find | users |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:169 | findById | employees |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:214 | update | employees | first_name, last_name, full_name, phone, personal_email, work_email, date_of_birth, marital_status, nationality, address, home_address, city_lga, state_of_origin, state_of_residence, landmark, staff_id, department, department_id, position, date_of_joining, work_location, supervisor_name, rank_code, emergency_contact_name, emergency_contact_relationship, emergency_contact_phone, blood_group, bank_name, account_number, hobbies_interests, base_salary, housing_allowance, transport_allowance, status, flagged_for_review, review_reason |  | SCHEMA MATCH |
+| server/src/services/hrService.js:224 | update | users |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:247 | findById | employees |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:251 | update | employees | status, onboarding_status |  | SCHEMA MATCH |
+| server/src/services/hrService.js:257 | update | users | status, onboarding_status |  | SCHEMA MATCH |
+| server/src/services/hrService.js:271 | findById | employees |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:274 | update | employees | onboarding_status, invitation_sent_at |  | SCHEMA MATCH |
+| server/src/services/hrService.js:280 | update | users | onboarding_status, requires_password_change |  | SCHEMA MATCH |
+| server/src/services/hrService.js:294 | find | audit_logs | company_id, created_at |  | SCHEMA MATCH |
+| server/src/services/hrService.js:314 | findById | employees |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:318 | findById | users |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:321 | insert | tasks | company_id, title, description, assigned_to, assigned_by, department, priority, due_date, progress, status |  | SCHEMA MATCH |
+| server/src/services/hrService.js:335 | insert | notifications | employee_id, type, title, body |  | SCHEMA MATCH |
+| server/src/services/hrService.js:361 | find | ranks | level |  | SCHEMA MATCH |
+| server/src/services/hrService.js:366 | findOne | ranks | code |  | SCHEMA MATCH |
+| server/src/services/hrService.js:369 | insert | ranks | code, name, level, description, active |  | SCHEMA MATCH |
+| server/src/services/hrService.js:382 | update | ranks |  |  | DYNAMIC FIELDS |
+| server/src/services/hrService.js:392 | find | ranks |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:393 | find | departments |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:394 | find | users |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:448 | findById | employees |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:471 | update | employees |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:481 | findById | employees |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:485 | find | employees | reporting_manager_id |  | SCHEMA MATCH |
+| server/src/services/hrService.js:487 | update | employees | reporting_manager_id |  | SCHEMA MATCH |
+| server/src/services/hrService.js:490 | update | employees | status |  | SCHEMA MATCH |
+| server/src/services/hrService.js:492 | update | users | status |  | SCHEMA MATCH |
+| server/src/services/hrService.js:513 | findOne | users | email |  | SCHEMA MATCH |
+| server/src/services/hrService.js:514 | findOne | users | phone |  | SCHEMA MATCH |
+| server/src/services/hrService.js:514 | findOne | employees | phone |  | SCHEMA MATCH |
+| server/src/services/hrService.js:536 | insert | users | company_id, auth_user_id, full_name, email, phone, password_hash, role_code, status, requires_password_change |  | SCHEMA MATCH |
+| server/src/services/hrService.js:563 | findById | employees |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:568 | find | leave_balances | employee_id |  | SCHEMA MATCH |
+| server/src/services/hrService.js:568 | delete | leave_balances |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:569 | delete | employees |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:571 | delete | users |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:583 | find | announcements | company_id, created_at |  | SCHEMA MATCH |
+| server/src/services/hrService.js:596 | insert | announcements | company_id, title, message, category, priority, target_audience, author_name, pinned, created_at |  | SCHEMA MATCH |
+| server/src/services/hrService.js:616 | findById | announcements |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:619 | update | announcements | title, message, category, priority, target_audience, pinned |  | SCHEMA MATCH |
+| server/src/services/hrService.js:636 | findById | announcements |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:639 | delete | announcements |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:648 | find | employees | status, company_id |  | SCHEMA MATCH |
+| server/src/services/hrService.js:711 | findById | employees |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:714 | update | employees | date_of_birth, hire_date |  | SCHEMA MATCH |
+| server/src/services/hrService.js:727 | findById | employees |  |  | SCHEMA MATCH |
+| server/src/services/hrService.js:732 | insert | announcements | company_id, title, message, category, priority, target_audience, author_name, pinned, created_at |  | SCHEMA MATCH |
+| server/src/services/hrService.js:745 | insert | notifications | employee_id, type, title, body |  | SCHEMA MATCH |
 | server/src/services/idleService.js:39 | insert | employee_idle_sessions | company_id, employee_id, start_time, end_time, idle_duration_minutes, reason, status, created_at |  | SCHEMA MATCH |
 | server/src/services/idleService.js:54 | insert | idle_alerts | company_id, employee_id, alert_type, duration_seconds, reason, explanation, status |  | SCHEMA MATCH |
 | server/src/services/idleService.js:65 | find | users | company_id, status |  | SCHEMA MATCH |
@@ -4444,17 +4440,17 @@ Observed schema captured at 2026-11-06T06:12:29.182Z. Static matches verify refe
 | server/src/services/staffLifecycleService.js:24 | insert | audit_logs | company_id, actor_id, actor_email, action, entity, entity_id, metadata, created_at |  | SCHEMA MATCH |
 | server/src/services/taskService.js:16 | findById | employees |  |  | SCHEMA MATCH |
 | server/src/services/taskService.js:43 | findById | employees |  |  | SCHEMA MATCH |
-| server/src/services/taskService.js:50 | find | ranks |  |  | SCHEMA MATCH |
-| server/src/services/taskService.js:61 | insert | tasks | company_id, assigned_to, assigned_by, supervisor_id, department_id, title, description, client_name, project_name, priority, task_type, status, delivery_stages, due_at, due_date, acknowledged_at, acknowledged_by, completed_at, created_at |  | SCHEMA MATCH |
-| server/src/services/taskService.js:124 | find | tasks | company_id, due_at |  | SCHEMA MATCH |
-| server/src/services/taskService.js:126 | findOne | employees | user_id |  | SCHEMA MATCH |
-| server/src/services/taskService.js:129 | find | employees |  |  | SCHEMA MATCH |
-| server/src/services/taskService.js:165 | findById | tasks |  |  | SCHEMA MATCH |
-| server/src/services/taskService.js:169 | update | tasks | acknowledged_at, acknowledged_by |  | SCHEMA MATCH |
-| server/src/services/taskService.js:183 | findById | tasks |  |  | SCHEMA MATCH |
-| server/src/services/taskService.js:202 | update | tasks | status, completed_at, completed_by, completion_notes, evidence_url, evidence_name, delivery_stages, progress |  | SCHEMA MATCH |
-| server/src/services/taskService.js:229 | findById | tasks |  |  | SCHEMA MATCH |
-| server/src/services/taskService.js:233 | update | tasks | delivery_stages |  | SCHEMA MATCH |
+| server/src/services/taskService.js:49 | findById | users |  |  | SCHEMA MATCH |
+| server/src/services/taskService.js:54 | insert | tasks | company_id, assigned_to, assigned_by, supervisor_id, department_id, title, description, client_name, project_name, priority, task_type, status, delivery_stages, due_at, due_date, acknowledged_at, acknowledged_by, completed_at, created_at |  | SCHEMA MATCH |
+| server/src/services/taskService.js:117 | find | tasks | company_id, due_at |  | SCHEMA MATCH |
+| server/src/services/taskService.js:119 | findOne | employees | user_id |  | SCHEMA MATCH |
+| server/src/services/taskService.js:122 | find | employees |  |  | SCHEMA MATCH |
+| server/src/services/taskService.js:158 | findById | tasks |  |  | SCHEMA MATCH |
+| server/src/services/taskService.js:162 | update | tasks | acknowledged_at, acknowledged_by |  | SCHEMA MATCH |
+| server/src/services/taskService.js:176 | findById | tasks |  |  | SCHEMA MATCH |
+| server/src/services/taskService.js:195 | update | tasks | status, completed_at, completed_by, completion_notes, evidence_url, evidence_name, delivery_stages, progress |  | SCHEMA MATCH |
+| server/src/services/taskService.js:222 | findById | tasks |  |  | SCHEMA MATCH |
+| server/src/services/taskService.js:226 | update | tasks | delivery_stages |  | SCHEMA MATCH |
 | server/src/services/workforceNoticeService.js:9 | find | (dynamic) | company_id, user_id, created_at |  | DYNAMIC |
 | server/src/services/workforceNoticeService.js:16 | findById | (dynamic) |  |  | DYNAMIC |
 | server/src/services/workforceNoticeService.js:18 | update | (dynamic) | read_at |  | DYNAMIC |
