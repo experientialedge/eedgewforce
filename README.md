@@ -1,6 +1,6 @@
 # EDGEWFORCE
 
-For WhoGoHost / GO54 or another Node.js-enabled cPanel account, use [the cPanel deployment guide](CPANEL_SETUP.md). The upload package serves the responsive website and API together and keeps the existing Supabase database.
+For Node.js-enabled cPanel account, use [the cPanel deployment guide](CPANEL_SETUP.md). The upload package serves the responsive website and API together and keeps the existing Supabase database.
 
 ## Enterprise Commercial Sales, Field Operations & Workforce Automation Platform
 **Powered by Experiential Edge / Integrated Marketing Solutions**
@@ -12,9 +12,9 @@ For WhoGoHost / GO54 or another Node.js-enabled cPanel account, use [the cPanel 
 
 The platform eliminates operational blind spots by unifying:
 1. **Commercial Sales Force Automation**: 12-section cockpit, POS order execution with Nigerian **7.5% VAT**, merchant credit control, receipt printing, debt collections, and an automated **5% Take-Home Commission Engine**.
-2. **Field Operations & GPS Telemetry**: Route manifests, Leaflet OpenStreetMap telemetry with radar markers, **Strict 150-Meter Geofence Verification** (Haversine formula), store audits with HTML5 canvas customer signatures, and an unmutable **Emergency SOS Panic Beacon**.
+2. **Field Operations & GPS Telemetry**: Route manifests, Leaflet OpenStreetMap telemetry with radar markers, **Strict 150-Meter Geofence Verification** (Haversine formula), store audits with HTML5 canvas customer signatures, and an unmutable **Emergency SOS Panic Beacon**. © Nexfeild
 3. **Corporate Employee Self-Service**: GPS attendance timesheet clock-in, biometric facial verification with confidence scoring, leave applications with working days calculation (excluding weekends), official downloadable payslips (Basic + Housing + Transport − PAYE & 8% Pension), and OKRs.
-4. **HR Command Center & Governance**: Real-time workforce overview, live attendance monitoring, **10-minute non-invasive browser inactivity monitoring**, leave approvals, hierarchical task assignments (preventing upward assignment), SOS emergency queue, and an interactive organization chart.
+4. **HR Command Center & Governance**: Real-time workforce overview, live attendance monitoring, **10-minute non-invasive browser inactivity monitoring**, leave approvals, hierarchical task assignments (preventing upward assignment), SOS emergency queue, and an interactive organization chart. ©Nexfeild
 5. **Sales AI Copilot**: Real-time tactical assistant for objection handling, cross-selling bundles, competitive pricing intelligence, and debt recovery dialogue.
 
 ---
@@ -72,7 +72,7 @@ To create your first administrator, set `BOOTSTRAP_ADMIN_EMAIL` and `BOOTSTRAP_A
 node server/scripts/bootstrapAdmin.js
 ```
 
-The bootstrap only works when the users table is empty and creates no employee record or inventory. For Supabase, use `supabase/install_empty_database.sql` (the app-compatible schema and migrations 006, 007, 009, 010 and 011), and configure `SUPABASE_SERVICE_ROLE_KEY`. No predefined login credentials are supplied.
+The bootstrap only works when the users table is empty and creates no employee record or inventory. For Supabase, use `supabase/install_empty_database.sql` and configure `SUPABASE_SERVICE_ROLE_KEY`. No predefined login credentials are supplied.
 
 To reset a local database, stop the server and run `node server/scripts/cleanDatabase.js`. This clears all local accounts and operational records while retaining structural configuration. `EDGEWFORCE_DATA_DIR` can select a different local store directory.
 
@@ -86,7 +86,7 @@ See [PRODUCTION_SETUP.md](PRODUCTION_SETUP.md) for production configuration, dat
 
 ## 📐 Core Business Rules & Formulas
 
-### 1. Strict 150-Meter Geofence Verification
+### 1. Strict 150-Meter Geofence Verification ©Nexfeild
 Field check-ins require proximity verified mathematically using the **Haversine formula** with Earth Radius $R = 6,371,000\text{ m}$:
 $$a = \sin^2\left(\frac{\Delta\phi}{2}\right) + \cos(\phi_1)\cos(\phi_2)\sin^2\left(\frac{\Delta\lambda}{2}\right)$$
 $$d = 2R \cdot \operatorname{atan2}\left(\sqrt{a}, \sqrt{1-a}\right)$$
@@ -102,13 +102,13 @@ $$\text{Taxable Amount} = \max(0, \text{Subtotal} - \text{Discount})$$
 $$\text{VAT (7.5\%)} = \text{Taxable Amount} \times 0.075$$
 $$\text{Grand Total} = \text{Taxable Amount} + \text{VAT}$$
 
-### 4. Employee Payroll Deductions (Nigerian Labour & Tax Law)
+### 4. Employee Payroll Deductions (Nigerian Labour & Tax Law) ©Nexfeild
 - **Gross Pay**: $\text{Basic Salary} + \text{Housing} + \text{Transport} + \text{Other Allowances}$
 - **Pension Contribution**: $8\%$ of $(\text{Basic} + \text{Housing} + \text{Transport})$
 - **PAYE Income Tax**: Progressive tax bands with statutory consolidated relief
 - **Net Pay**: $\text{Gross Pay} - (\text{PAYE} + \text{Pension} + \text{Other Deductions})$
 
-### 5. 10-Minute Non-Invasive Workstation Idle Monitoring
+### 5. 10-Minute Non-Invasive Workstation Idle Monitoring  ©Experiential Edge
 - Workstation inactivity is tracked at 10 minutes (600,000 ms).
 - **Ethics Guarantee**: No keylogging, no screen captures, no webcam recording.
 - Non-invasive prompt allows staff to categorize inactive periods (*Break, Meeting, Field Work, Reading/Research, System Issue, Other*) with optional explanation for management review.
@@ -136,11 +136,11 @@ The database layer is located in `supabase/migrations/`:
 - **Offline Idempotency**: Queue keys (`IDEMP-ACTION-...`) ensure offline order bookings and check-ins never duplicate on network recovery.
 
 ---
-*© 2026 Experiential Edge Nigeria Limited. All rights reserved.*
+*© 2026 Nexfeild & Experiential Edge Nigeria Limited. All rights reserved.*
 
 ## Shared projects and task scheduling
 
 Open **Projects & team chat** for private team projects, channels, message threads, mentions, shared task boards and daily/weekly schedules. Project reminders run every minute in Supabase. Existing operational modules remain available. See [FEATURES.md](FEATURES.md) for the complete guide.
 
 
-NEXUS Intelligence is embedded in the existing application. See [NEXUS_SETUP.md](NEXUS_SETUP.md) for evidence definitions, permissions and private model hosting. It needs no OpenAI account. Apply the preserving upgrade for a populated project; never use historical cleanup migration 008 on retained staff data.
+NEXUS Intelligence is embedded in the existing application. See [NEXUS_SETUP.md](NEXUS_SETUP.md) for evidence definitions, permissions and private model hosting. It needs no OpenAI account. Apply the preserving upgrade for a populated project.
