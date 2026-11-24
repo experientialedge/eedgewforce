@@ -169,7 +169,7 @@ export const emailService = {
   },
 
   /**
-   * Sends 10-minute inactivity telemetry alert email to IT & HR.
+   * Sends 60-minute inactivity telemetry alert email to IT & HR.
    */
   async sendIdleAlertEmail(recipientEmail, session, employeeName, department = 'Operations') {
     const fromAddress = process.env.EMAIL_FROM || process.env.SMTP_USER || 'no-reply@edgewforce.com';
@@ -180,11 +180,11 @@ export const emailService = {
     const htmlContent = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 540px; margin: 0 auto; padding: 20px; background: #ffffff; border-radius: 10px; border: 1px solid #e4e4e7;">
         <div style="background: #fef3c7; color: #92400e; padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 12px; margin-bottom: 12px;">
-          Workstation Inactivity Alert (10m+)
+          Workstation Inactivity Alert (60m+)
         </div>
         <h4 style="margin: 0 0 8px 0; color: #18181b;">${employeeName} — ${department}</h4>
         <p style="color: #52525b; font-size: 12px; line-height: 1.5;">
-          The system detected no active user interaction on the EdgeWForce portal for over 10 minutes.
+          The system detected no active user interaction on the EdgeWForce portal for over 60 minutes.
         </p>
         <div style="background: #fafafa; padding: 10px; border-radius: 6px; font-size: 11px; margin: 12px 0;">
           <div><strong>Detected:</strong> ${new Date(session.detected_at || Date.now()).toLocaleTimeString()}</div>

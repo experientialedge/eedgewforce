@@ -38,7 +38,7 @@ INSERT INTO permissions (code, name, category, description) VALUES
 ('manage_payroll', 'Manage Payroll', 'Finance', 'Generate and publish monthly payslips'),
 ('view_attendance', 'View Attendance', 'HR', 'View team attendance and timesheets'),
 ('manage_attendance', 'Manage Attendance', 'HR', 'Correct or verify attendance anomalies'),
-('view_idle_reports', 'View Idle Reports', 'HR', 'Review 10-minute inactivity reports and explanations'),
+('view_idle_reports', 'View Idle Reports', 'HR', 'Review 60-minute inactivity reports and explanations'),
 ('manage_ranks', 'Manage Ranks', 'HR', 'Configure organizational ranks and levels'),
 ('view_sales', 'View Sales', 'Sales', 'Access commercial sales metrics and POS orders'),
 ('create_orders', 'Create Orders', 'Sales', 'Book POS sales orders with stock deduction'),

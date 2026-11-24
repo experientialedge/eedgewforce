@@ -224,8 +224,7 @@ test('EdgeWForce Core Workflow Tests', async (t) => {
     assert.equal(balance.annual, 13); // 18 - 5 = 13
   });
 
-  await t.test('8. HR: Hierarchy enforcement rejects upward task assignment', async () => {
-    // Operations staff (Level 8) attempting to assign task to CEO (Level 1)
+  await t.test('8. HR: Task assignment rejects an account outside the company', async () => {
     const staffUser = { id: 8, role_code: 'EMPLOYEE', rank: { code: 'STAFF', level: 8 } };
 
     await assert.rejects(async () => {
@@ -234,6 +233,6 @@ test('EdgeWForce Core Workflow Tests', async (t) => {
         assigned_to: 2, // CEO employee ID
         priority: 'Normal'
       }, staffUser);
-    }, /Organizational hierarchy violation/);
+    }, /Choose a colleague in your company/);
   });
 });

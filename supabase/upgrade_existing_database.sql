@@ -1593,7 +1593,7 @@ BEGIN
  SELECT * INTO emp FROM employees WHERE user_id=u.id AND company_id=u.company_id AND status='active' LIMIT 1;
  SELECT max(last_activity_at),max(last_seen_at) INTO last_active,last_seen
  FROM workforce_activity_presence WHERE user_id=u.id AND company_id=u.company_id AND stopped_at IS NULL;
- IF u.status IS DISTINCT FROM 'active' OR emp.id IS NULL OR last_active IS NULL OR last_active>p_now-interval '10 minutes' THEN
+ IF u.status IS DISTINCT FROM 'active' OR emp.id IS NULL OR last_active IS NULL OR last_active>p_now-interval '60 minutes' THEN
   UPDATE workforce_activity_events SET ended_at=p_now WHERE user_id=u.id AND ended_at IS NULL;
  ELSE
   INSERT INTO workforce_activity_events(company_id,user_id,employee_id,last_activity_at,last_seen_at,detected_at,kind)
@@ -1607,8 +1607,8 @@ CREATE OR REPLACE FUNCTION workforce_activity_deliver(p_company_id INTEGER DEFAU
 RETURNS VOID LANGUAGE sql SET search_path=public AS $$
  INSERT INTO workforce_activity_notices(company_id,user_id,event_id,title,body)
  SELECT ev.company_id,u.id,ev.id,'Staff activity needs review: '||emp.first_name||' '||emp.last_name,
- CASE WHEN ev.kind='connection_lost' THEN 'No app activity for 10 minutes; connection was lost. Confirm with the staff member.'
- ELSE 'No app interaction for 10 minutes. Review the staff member’s context.' END
+ CASE WHEN ev.kind='connection_lost' THEN 'No app activity for 60 minutes; connection was lost. Confirm with the staff member.'
+ ELSE 'No app interaction for 60 minutes. Review the staff member’s context.' END
  FROM workforce_activity_events ev JOIN employees emp ON emp.id=ev.employee_id
  JOIN users u ON u.company_id=ev.company_id AND u.status='active'
  WHERE ev.reviewed_at IS NULL AND (p_company_id IS NULL OR ev.company_id=p_company_id)
@@ -1637,7 +1637,7 @@ BEGIN
  PERFORM pg_advisory_xact_lock(78921,p_user_id);
  IF NOT EXISTS(SELECT 1 FROM users WHERE id=p_user_id AND company_id=p_company_id AND status='active') THEN RAISE EXCEPTION 'Account is not active'; END IF;
  SELECT * INTO emp FROM employees WHERE user_id=p_user_id AND company_id=p_company_id AND status='active' LIMIT 1;
- IF emp.id IS NULL THEN RETURN jsonb_build_object('enabled',false,'threshold_seconds',600,'event',NULL); END IF;
+ IF emp.id IS NULL THEN RETURN jsonb_build_object('enabled',false,'threshold_seconds',3600,'event',NULL); END IF;
  IF p_sequence IS NULL OR p_sequence<0 OR p_client_id IS NULL THEN RAISE EXCEPTION 'Invalid activity session'; END IF;
  PERFORM workforce_activity_process_user(p_user_id,time_now);
  SELECT * INTO existing FROM workforce_activity_presence WHERE user_id=p_user_id AND client_id=p_client_id;
@@ -1652,7 +1652,7 @@ BEGIN
  PERFORM workforce_activity_deliver(p_company_id);
  SELECT to_jsonb(e) INTO current_event FROM workforce_activity_events e
  WHERE e.user_id=p_user_id AND e.company_id=p_company_id AND e.reason IS NULL ORDER BY e.detected_at DESC LIMIT 1;
- RETURN jsonb_build_object('enabled',true,'threshold_seconds',600,'server_time',time_now,'event',current_event);
+ RETURN jsonb_build_object('enabled',true,'threshold_seconds',3600,'server_time',time_now,'event',current_event);
 END; $$;
 
 DO $$ DECLARE t TEXT; BEGIN

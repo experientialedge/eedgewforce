@@ -134,7 +134,7 @@ export function LandingPage({ onNavigate }) {
             <div className="p-3 w-fit rounded-xl bg-emerald-500/10 text-emerald-500"><Clock size={24} /></div>
             <h3 className="text-lg font-bold text-white">Workforce Intelligence</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              10-minute non-invasive inactivity telemetry, GPS timesheet clock-in, leave approval workflow with working days logic, and payslip generation.
+              60-minute non-invasive inactivity telemetry, GPS timesheet clock-in, leave approval workflow with working days logic, and payslip generation.
             </p>
           </div>
         </div>
@@ -213,7 +213,7 @@ export function PrivacyPage({ onNavigate }) {
         </p>
         <h3 className="text-base font-bold text-white">1. Inactivity Tracking Philosophy</h3>
         <p>
-          Our 10-minute idle tracker does not log keystrokes, capture screen screenshots, or record video. It merely prompts the employee for a brief reason when the browser has been inactive, fostering two-way accountability.
+          Our 60-minute idle tracker does not log keystrokes, capture screen screenshots, or record video. It merely prompts the employee for a brief reason when the browser has been inactive, fostering two-way accountability.
         </p>
         <h3 className="text-base font-bold text-white">2. GPS Telemetry Scope</h3>
         <p>

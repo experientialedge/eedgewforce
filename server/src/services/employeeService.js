@@ -286,7 +286,7 @@ export const employeeService = {
   },
 
   /**
-   * Logs 10-minute browser inactivity event with employee explanation.
+   * Logs 60-minute browser inactivity event with employee explanation.
    */
   async logIdleEvent(employeeId, data, req = null) {
     const { started_at, ended_at, duration_seconds, reason, explanation, workstation_snapshot } = data;

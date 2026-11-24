@@ -1,7 +1,7 @@
 import { createNotification } from './notificationRepository.js';
 // ==============================================================================
 // EDGEWFORCE - EMPLOYEE INACTIVITY TELEMETRY & IDLE MONITOR SERVICE
-// Detects 10-minute workstation idle events, notifies IT and HR immediately,
+// Detects 60-minute workstation idle events, notifies IT and HR immediately,
 // and records employee operational explanations.
 // ==============================================================================
 
@@ -13,14 +13,14 @@ import { activityService } from './activityService.js';
 
 export const idleService = {
   /**
-   * Logs a 10-minute inactivity event and triggers immediate IT + HR telemetry alerts.
+   * Logs a 60-minute inactivity event and triggers immediate IT + HR telemetry alerts.
    */
   async startIdleSession(data, actor = null, req = null) {
     const {
       employee_id,
       user_id,
       started_at,
-      duration_seconds = 600,
+      duration_seconds = 3600,
       reason = null,
       explanation = null,
       workstation_snapshot = {}
@@ -29,7 +29,7 @@ export const idleService = {
     const { user, employee } = await activityService.identity(actor);
     if (!employee) throw Object.assign(new Error('A linked active staff profile is required.'), { status: 403 });
     if ((employee_id && Number(employee_id) !== Number(employee.id)) || (user_id && Number(user_id) !== Number(user.id))) throw Object.assign(new Error('You can only report your own activity.'), { status: 403 });
-    if (!Number.isFinite(Number(duration_seconds)) || Number(duration_seconds) < 600 || Number(duration_seconds) > 86400) throw new Error('Idle duration must be between 10 minutes and 24 hours.');
+    if (!Number.isFinite(Number(duration_seconds)) || Number(duration_seconds) < 3600 || Number(duration_seconds) > 86400) throw new Error('Idle duration must be between 60 minutes and 24 hours.');
     if (started_at && (!Number.isFinite(Date.parse(started_at)) || Date.parse(started_at) > Date.now() || Date.parse(started_at) < Date.now() - 86400000)) throw new Error('Invalid inactivity start time.');
     if (String(reason || '').length > 100 || String(explanation || '').length > 2000) throw new Error('Activity explanation is too long.');
 
@@ -39,7 +39,7 @@ export const idleService = {
     const stored = await db.insert('employee_idle_sessions', {
       company_id: Number(actor?.company_id || employee?.company_id || 1),
       employee_id: employee?.id ? Number(employee.id) : null,
-      start_time: started_at || new Date(Date.now() - 600000).toISOString(),
+      start_time: started_at || new Date(Date.now() - 3600000).toISOString(),
       end_time: new Date().toISOString(),
       idle_duration_minutes: Math.round(Number(duration_seconds) / 60),
       reason: reason || 'Awaiting Explanation',
@@ -48,7 +48,7 @@ export const idleService = {
     });
 
     const session = { ...stored, user_id: user.id, idle_started_at: stored.start_time, detected_at: stored.end_time,
-      duration_seconds: Number(duration_seconds), reason_details: explanation || 'Workstation telemetry noted 10m+ inactivity', workstation_snapshot };
+      duration_seconds: Number(duration_seconds), reason_details: explanation || 'Workstation telemetry noted 60m+ inactivity', workstation_snapshot };
 
     // Also populate legacy idle_alerts table for backward compatibility
     await db.insert('idle_alerts', {
@@ -103,7 +103,7 @@ export const idleService = {
       department: dept, workstation_snapshot
     }, req);
 
-    logger.info(`[IDLE TELEMETRY] Logged 10m inactivity for ${empName} (${dept}). IT and HR alerted.`);
+    logger.info(`[IDLE TELEMETRY] Logged 60m inactivity for ${empName} (${dept}). IT and HR alerted.`);
     return session;
   },
 
@@ -179,8 +179,8 @@ export const idleService = {
       reasons[r] = (reasons[r] || 0) + 1;
     });
 
-    const totalSeconds = sessions.reduce((sum, s) => sum + Number(s.duration_seconds || 600), 0);
-    const avgDurationMins = total > 0 ? Math.round(totalSeconds / total / 60) : 10;
+    const totalSeconds = sessions.reduce((sum, s) => sum + Number(s.duration_seconds || 3600), 0);
+    const avgDurationMins = total > 0 ? Math.round(totalSeconds / total / 60) : 60;
 
     return {
       total_idle_events: total,

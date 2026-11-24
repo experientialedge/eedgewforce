@@ -8,7 +8,7 @@ import { createNotification } from './notificationRepository.js';
 import { db } from '../config/database.js';
 import { recordAudit } from '../middleware/auditLogger.js';
 import { reminderService } from './reminderService.js';
-import { validateHierarchyAssignment, isManagementUser } from '../middleware/rbac.js';
+import { isManagementUser } from '../middleware/rbac.js';
 
 async function assertTaskAccess(task, actor) {
   if (!actor) return;
@@ -44,17 +44,10 @@ export const taskService = {
     if (!targetEmployee) {
       throw new Error('Assigned employee not found.');
     }
-    if (Number(targetEmployee.company_id || 1) !== Number(actor?.company_id || 1)) throw new Error('Assigned employee is outside your company.');
-
-    // Enforce rank hierarchy unless CEO/Super Admin
-    const ranks = await db.find('ranks');
-    const assignerRank = ranks.find(r => r.code === actor.rank?.code) || { level: 8 };
-    const targetRank = ranks.find(r => r.code === targetEmployee.rank_code) || { level: 8 };
-
-    const isAuthorized = validateHierarchyAssignment(assignerRank.level, targetRank.level);
-    if (!isAuthorized && !['CEO', 'SUPER_ADMIN', 'HR_MANAGER', 'HR'].includes(actor.role_code)) {
-      throw new Error(`Hierarchy violation: Level ${assignerRank.level} cannot assign tasks upward to Level ${targetRank.level}.`);
-    }
+    if (!actor?.id || !actor.company_id) throw new Error('Sign in to assign a task.');
+    if (Number(targetEmployee.company_id) !== Number(actor.company_id)) throw new Error('Assigned employee is outside your company.');
+    const recipient = targetEmployee.user_id ? await db.findById('users', targetEmployee.user_id) : null;
+    if (targetEmployee.status !== 'active' || targetEmployee.deleted_at || !recipient || recipient.status !== 'active' || Number(recipient.company_id) !== Number(actor.company_id)) throw new Error('Choose an active colleague with an active account.');
 
     const dueTimestamp = due_at || due_date ? new Date(due_at || due_date).toISOString() : new Date(Date.now() + 4 * 3600000).toISOString();
 

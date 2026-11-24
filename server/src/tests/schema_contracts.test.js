@@ -63,13 +63,13 @@ test('Production column contracts: emergencies, notifications, inactivity, sched
     await notificationService.markRead(notice.id, employee.id);
     assert.equal((await notificationService.getNotifications(employee.id)).unreadCount, 0);
   });
-  await t.test('Ten-minute inactivity records and employee explanations persist in actual columns', async () => {
-    const session = await idleService.startIdleSession({ duration_seconds: 600, explanation: 'Fixture explanation' }, identity, req);
-    assert.equal((await db.findById('employee_idle_sessions', session.id)).idle_duration_minutes, 10);
+  await t.test('One-hour inactivity records and employee explanations persist in actual columns', async () => {
+    const session = await idleService.startIdleSession({ duration_seconds: 3600, explanation: 'Fixture explanation' }, identity, req);
+    assert.equal((await db.findById('employee_idle_sessions', session.id)).idle_duration_minutes, 60);
     await idleService.explainIdleSession(session.id, { reason: 'Break', reason_details: 'Fixture returned' }, identity, req);
     const records = await idleService.getIdleSessions({}, identity);
     assert.equal(records.find(r => r.id === session.id).reason_details, 'Fixture returned');
-    assert.equal(records.find(r => r.id === session.id).duration_seconds, 600);
+    assert.equal(records.find(r => r.id === session.id).duration_seconds, 3600);
     await assert.rejects(idleService.explainIdleSession(session.id, { reason: 'Other' }, { ...actor, employee: hr }), /own activity/);
   });
   await t.test('Schedules preserve task JSON, supervisor status and HR status after the additive upgrade', async () => {

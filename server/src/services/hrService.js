@@ -13,7 +13,6 @@ import bcrypt from 'bcryptjs';
 import { randomBytes } from 'node:crypto';
 import { db, supabase, supabaseAdmin } from '../config/database.js';
 import { supabaseAuthService } from './supabaseAuthService.js';
-import { validateHierarchyAssignment } from '../middleware/rbac.js';
 import { recordAudit } from '../middleware/auditLogger.js';
 import { normalizePhone, normalizeEmail, isEmail } from '../utils/phoneNormalizer.js';
 import { locationService } from './locationService.js';
@@ -315,15 +314,9 @@ export const hrService = {
     const targetEmployee = await db.findById('employees', assigned_to);
     if (!targetEmployee) throw new Error('Selected employee does not exist.');
 
-    // Enforce organizational authority hierarchy
-    const ranks = await db.find('ranks');
-    const assignerRank = ranks.find(r => r.code === assignerUser.rank?.code) || { level: 8 };
-    const targetRank = ranks.find(r => r.code === targetEmployee.rank_code) || { level: 8 };
-
-    const isAuthorized = validateHierarchyAssignment(assignerRank.level, targetRank.level);
-    if (!isAuthorized && assignerUser.role_code !== 'CEO') {
-      throw new Error(`Organizational hierarchy violation: Level ${assignerRank.level} cannot assign tasks upward to Level ${targetRank.level}.`);
-    }
+    if (!assignerUser?.id || !assignerUser.company_id || Number(targetEmployee.company_id) !== Number(assignerUser.company_id)) throw new Error('Choose a colleague in your company.');
+    const recipient = targetEmployee.user_id ? await db.findById('users', targetEmployee.user_id) : null;
+    if (targetEmployee.status !== 'active' || targetEmployee.deleted_at || !recipient || recipient.status !== 'active') throw new Error('Choose an active colleague with an active account.');
 
     const task = await db.insert('tasks', {
       company_id: assignerUser.company_id || 1,

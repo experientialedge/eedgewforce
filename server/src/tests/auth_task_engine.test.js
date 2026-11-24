@@ -177,6 +177,13 @@ describe('2. Flexible Email or Phone Registration & Authentication Tests', () =>
 describe('3. Task Intelligence & 4-Stage Client Delivery Protection Tests', () => {
   let createdTaskId = null;
 
+  it('allows a staff member to assign work to a more senior colleague in the same company', async () => {
+    const colleague = await db.findById('employees', 2);
+    const task = await taskService.createTask({ title: 'Review team proposal', assigned_to: colleague.id }, await db.findById('users', 8));
+    assert.equal(task.assigned_to, colleague.id);
+    assert.equal(task.assigned_by, 8);
+  });
+
   it('should create client deliverable task with custom client and project parameters', async () => {
     const actor = { id: 7, role_code: 'SUPERVISOR', rank: { code: 'SUPERVISOR', level: 7 }, company_id: 1 };
     const task = await taskService.createTask({
@@ -239,7 +246,7 @@ describe('3. Task Intelligence & 4-Stage Client Delivery Protection Tests', () =
   });
 });
 
-describe('4. Background Reminder Worker & 10m Inactivity Telemetry Tests', () => {
+describe('4. Background Reminder Worker & 60m Inactivity Telemetry Tests', () => {
   it('should execute reminder worker cycle with idempotency and log deliveries', async () => {
     // Create an active pending task for reminder worker testing
     const pendingTask = await taskService.createTask({
@@ -248,7 +255,7 @@ describe('4. Background Reminder Worker & 10m Inactivity Telemetry Tests', () =>
       assigned_to: 4,
       client_name: 'Carex Nigeria',
       due_at: new Date(Date.now() + 3600000).toISOString()
-    }, { id: 7, role_code: 'SUPERVISOR' });
+    }, await db.findById('users', 7));
 
     // Schedule a due test reminder
     const testRem = await reminderService.scheduleReminder({
@@ -274,16 +281,16 @@ describe('4. Background Reminder Worker & 10m Inactivity Telemetry Tests', () =>
     assert.ok(logs.length > 0);
   });
 
-  it('should log 10-minute workstation inactivity telemetry and alert IT and HR', async () => {
+  it('should log 60-minute workstation inactivity telemetry and alert IT and HR', async () => {
     const session = await idleService.startIdleSession({
       employee_id: 1,
       user_id: 1,
-      duration_seconds: 600,
+      duration_seconds: 3600,
       workstation_snapshot: { window_state: 'MINIMIZED_BACKGROUND', screen_resolution: '1920x1080' }
     }, await db.findById('users', 1));
 
     assert.ok(session.id);
-    assert.strictEqual(session.duration_seconds, 600);
+    assert.strictEqual(session.duration_seconds, 3600);
     assert.strictEqual(session.status, 'pending');
 
     // Submit explanation

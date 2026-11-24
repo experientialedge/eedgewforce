@@ -24,7 +24,7 @@ export default function ActivityReviewPanel() {
   return (
     <section className="surface-card rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden" aria-label="Staff activity review">
       <div className="p-5 border-b border-zinc-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3"><span className="p-2 rounded-xl bg-orange-500/10 text-orange-600"><Activity size={20} /></span><div><h3 className="font-bold">Staff activity review <span className="ml-1 text-orange-600">{pending}</span></h3><p className="text-xs text-zinc-500 mt-1">10-minute app inactivity flags · checked every minute</p></div></div>
+        <div className="flex items-center gap-3"><span className="p-2 rounded-xl bg-orange-500/10 text-orange-600"><Activity size={20} /></span><div><h3 className="font-bold">Staff activity review <span className="ml-1 text-orange-600">{pending}</span></h3><p className="text-xs text-zinc-500 mt-1">60-minute app inactivity flags · checked every minute</p></div></div>
         <div className="flex gap-2"><button onClick={() => setFilter(filter === 'pending' ? 'all' : 'pending')} className="text-xs font-semibold px-3 py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800">{filter === 'pending' ? 'Show history' : 'Needs review'}</button><button aria-label="Refresh activity reports" className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800" onClick={load}><RefreshCw size={16} /></button></div>
       </div>
       <p className="px-5 pt-4 text-xs text-zinc-500 leading-relaxed">A flag records app interaction only. Meetings, reading, field work and connection issues can explain a gap. Confirm the context with staff before taking action.</p>

@@ -47,7 +47,7 @@ Passwords are never committed to source. A separate administrator is explicitly 
 ## Staff activity and HR review
 
 - Authenticated active staff profiles report app interaction counts every 30 seconds. No typed text, screenshots, camera, device applications or operating-system activity are collected.
-- After 600 seconds without observed interaction, the server records one flag per inactivity period. A Supabase job checks every minute, including when browsers are suspended or closed. The notification bell refreshes every 30 seconds.
+- After 3600 seconds without observed interaction, the server records one flag per inactivity period. A Supabase job checks every minute, including when browsers are suspended or closed. The notification bell refreshes every 30 seconds.
 - Recent heartbeats distinguish app inactivity from an unconfirmed lost connection. Activity in any signed-in tab counts, and returning closes the open period without deleting its history.
 - HR/HR_MANAGER users in the same company receive an in-app notice, even without an employee profile. Administrators receive fallback notices if no active HR account exists.
 - HR Overview has an activity review queue with explanations, resumed activity, Lagos timestamps, acknowledgement and history. Staff can explain their own events and continue working; review access is limited to authorized company managers.

@@ -194,7 +194,7 @@ export default function Shell({
 
       {activity.status !== 'disabled' && <div className="px-4 py-2 text-[11px] border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 flex flex-wrap gap-x-3 gap-y-1" role="status">
         <span className={activity.status === 'connected' ? 'text-emerald-600 font-semibold' : 'text-amber-600 font-semibold'}>{activity.status === 'connected' ? 'App activity monitoring connected' : activity.status === 'connecting' ? 'Connecting activity monitor…' : 'Activity monitor disconnected — reconnect to sync'}</span>
-        <span>HR is flagged after 10 minutes without app interaction. Connection gaps are marked unconfirmed.</span>
+        <span>HR is flagged after 60 minutes without app interaction. Connection gaps are marked unconfirmed.</span>
       </div>}
       {workplaceFence && <div role="status" className={`px-4 py-2 text-xs border-b ${workplaceFence.ok ? "text-emerald-600 border-emerald-500/20" : "text-amber-600 border-amber-500/20"}`}>{workplaceFence.message}</div>}
       {/* Sync Success Toast Banner */}
@@ -275,7 +275,7 @@ export default function Shell({
       {/* Inactivity Telemetry 10-Minute Idle Prompt Modal */}
       <Modal
         title="App activity check"
-        subtitle="A 10-minute gap has been flagged for HR review"
+        subtitle="A 60-minute gap has been flagged for HR review"
         isOpen={idleModalOpen}
         onClose={activity.dismiss}
         maxWidth="max-w-md"

@@ -232,7 +232,7 @@ export default function ExecutiveDashboard({ user, onNavigate }) {
             <div className="p-3 rounded-xl surface-card-subtle flex justify-between items-center">
               <div>
                 <b className="text-zinc-900 dark:text-zinc-100">Non-Invasive Inactivity Tracking</b>
-                <div className="text-[10px] text-zinc-400">10-minute workstation idle prompt & explanation</div>
+                <div className="text-[10px] text-zinc-400">60-minute workstation idle prompt & explanation</div>
               </div>
               <span className="text-base font-black text-blue-500">Active</span>
             </div>

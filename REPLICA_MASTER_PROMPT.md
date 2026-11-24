@@ -123,7 +123,7 @@ You are the lead engineer rebuilding EdgeWForce, an enterprise workforce, HR, fi
 ## 14. App activity and executive factual reports
 
 - Authenticated active employees report app interaction counts at the source interval (approximately 30 seconds). Collect activity timestamps/counts, not typed content, screenshots, OS applications or keylogging.
-- At 600 seconds without observed app interaction, record/deduplicate an inactivity period and notify same-company HR/HR_MANAGER; source-defined active admin fallback applies when no HR recipient exists. Supabase scheduler scans independently of browser timers.
+- At 3600 seconds without observed app interaction, record/deduplicate an inactivity period and notify same-company HR/HR_MANAGER; source-defined active admin fallback applies when no HR recipient exists. Supabase scheduler scans independently of browser timers.
 - Distinguish observed app inactivity, resumed activity and an unconfirmed connection gap. Activity across tabs counts; explicit sign-out stops monitoring. A closed browser without logout can create a connection-gap flag. Flags require human review; they do not prove work stopped.
 - Staff may explain their own events. HR/authorized managers can view, acknowledge/review and retain history, reasons and Lagos times. Preserve server authorization for telemetry, review and worker routes.
 - Executive factual summaries aggregate attendance, lateness, movement, app activity and shared tasks with evidence links. Preserve the existing optional provider adapter separately from private NEXUS. If no AI provider is configured, show factual summaries honestly; no invented AI analysis.

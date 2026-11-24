@@ -1,6 +1,6 @@
 import { db } from '../config/database.js';
 
-export const ACTIVITY_THRESHOLD_SECONDS = 600;
+export const ACTIVITY_THRESHOLD_SECONDS = 3600;
 export const ACTIVITY_REVIEW_ROLES = ['HR', 'HR_MANAGER', 'SUPER_ADMIN', 'ADMIN', 'CEO', 'CTO', 'IT_ADMIN', 'MANAGER'];
 const fail = (message, status = 400) => { throw Object.assign(new Error(message), { status }); };
 const iso = value => new Date(value).toISOString();
@@ -17,7 +17,7 @@ export const activityService = {
   canReview(actor) { return ACTIVITY_REVIEW_ROLES.includes(String(actor?.role_code || '').toUpperCase()); },
   async heartbeat(actor, input, now = Date.now()) {
     const { user, employee } = await this.identity(actor);
-    if (!employee) return { enabled: false, threshold_seconds: 600, event: null };
+    if (!employee) return { enabled: false, threshold_seconds: ACTIVITY_THRESHOLD_SECONDS, event: null };
     if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(input.client_id || '')) fail('Invalid activity session.');
     if (!Number.isSafeInteger(input.sequence) || input.sequence < 0 || input.sequence > 2147483647) fail('Invalid activity sequence.');
     if (db.isCloud) return db.rpc('workforce_activity_heartbeat', { p_user_id: user.id, p_company_id: user.company_id, p_client_id: input.client_id, p_sequence: input.sequence, p_stop: input.stop === true });
@@ -31,7 +31,7 @@ export const activityService = {
       if (input.stop === true) for (const row of await db.find('workforce_activity_presence', { user_id: user.id, company_id: user.company_id })) await db.update('workforce_activity_presence', row.id, { stopped_at: time });
       await this.processUser(user, now);
       const events = await db.find('workforce_activity_events', { user_id: user.id, company_id: user.company_id }, { order: { column: 'detected_at', ascending: false }, limit: 20 });
-      return { enabled: true, threshold_seconds: 600, server_time: time, event: events.find(e => !e.reason) || null };
+      return { enabled: true, threshold_seconds: ACTIVITY_THRESHOLD_SECONDS, server_time: time, event: events.find(e => !e.reason) || null };
     });
   },
   // Local durable-store implementation. Hosted processing uses the same rules in an atomic PostgreSQL RPC.
@@ -42,7 +42,7 @@ export const activityService = {
     const events = await db.find('workforce_activity_events', { user_id: user.id, company_id: user.company_id });
     const open = events.find(e => !e.ended_at);
     const lastActivity = newest(active, 'last_activity_at');
-    if (!active.length || user.status !== 'active' || employee?.status !== 'active' || now - lastActivity < 600000) {
+    if (!active.length || user.status !== 'active' || employee?.status !== 'active' || now - lastActivity < ACTIVITY_THRESHOLD_SECONDS * 1000) {
       if (open) await db.update('workforce_activity_events', open.id, { ended_at: iso(now) });
       return;
     }
@@ -57,7 +57,7 @@ export const activityService = {
     const recipients = hr.length ? hr : users.filter(u => ['SUPER_ADMIN', 'ADMIN'].includes(String(u.role_code).toUpperCase()));
     for (const user of recipients) {
       if (await db.findOne('workforce_activity_notices', { user_id: user.id, event_id: event.id })) continue;
-      await db.insert('workforce_activity_notices', { company_id: companyId, user_id: user.id, event_id: event.id, title: 'Staff activity needs review', body: event.kind === 'connection_lost' ? 'No app activity for 10 minutes; connection was lost. Confirm with the staff member.' : 'No app interaction for 10 minutes. Review the staff member’s context.', read_at: null, created_at: iso(Date.now()) });
+      await db.insert('workforce_activity_notices', { company_id: companyId, user_id: user.id, event_id: event.id, title: 'Staff activity needs review', body: event.kind === 'connection_lost' ? 'No app activity for 60 minutes; connection was lost. Confirm with the staff member.' : 'No app interaction for 60 minutes. Review the staff member’s context.', read_at: null, created_at: iso(Date.now()) });
     }
   },
   async processDue(actor, now = Date.now()) {
@@ -75,7 +75,7 @@ export const activityService = {
       db.find('workforce_activity_events', { company_id: Number(actor.company_id) }, { order: { column: 'detected_at', ascending: false }, limit: 200 }),
       db.find('employees', { company_id: Number(actor.company_id) })
     ]);
-    return events.map(e => { const employee = employees.find(p => Number(p.id) === Number(e.employee_id)); return { ...e, employee_name: employee ? `${employee.first_name} ${employee.last_name}` : 'Staff member', department: employee?.department || '', duration_seconds: Math.max(600, Math.floor((Date.parse(e.ended_at || new Date().toISOString()) - Date.parse(e.last_activity_at)) / 1000)) }; });
+    return events.map(e => { const employee = employees.find(p => Number(p.id) === Number(e.employee_id)); return { ...e, employee_name: employee ? `${employee.first_name} ${employee.last_name}` : 'Staff member', department: employee?.department || '', duration_seconds: Math.max(ACTIVITY_THRESHOLD_SECONDS, Math.floor((Date.parse(e.ended_at || new Date().toISOString()) - Date.parse(e.last_activity_at)) / 1000)) }; });
   },
   async updateEvent(actor, eventId, input, review = false) {
     const { user } = await this.identity(actor);
